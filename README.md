@@ -1,29 +1,31 @@
 # claude-code-bootstrap-commands
 
-A disciplined workflow for Claude Code when opening an existing codebase. Gives you three slash commands that handle everything from a quick one-file fix to a full multi-week migration — without a bloated CLAUDE.md that drifts over time.
+A disciplined workflow for Claude Code covering every project scenario: opening an existing codebase, starting from scratch, or making a small targeted fix — without a bloated CLAUDE.md that drifts over time.
 
 ## What it does
 
 Instead of generating a massive `CLAUDE.md` that gets stale, this workflow keeps `CLAUDE.md` minimal and stores all project-specific state in `docs/ai/` files alongside your code. Claude reads those files on each session — they stay current because they live in the repo.
 
-Three commands cover every scenario:
+Four commands cover every scenario:
 
 | Command | When to use |
 |---|---|
 | `/quick-change <description>` | Small change: 1-3 files, follows an existing pattern (add auth to a page, fix a bug, add a field). No planning overhead. |
-| `/bootstrap-existing <initiative>` | Medium or large change: new feature, migration, architectural work. Discovers the stack, maps scope, creates scaled `docs/ai/` planning docs, defines the first safe slice. Does not implement. |
-| `/continue-work <initiative>` | Resume after bootstrap. Reads `docs/ai/` state, picks the next slice, implements narrowly, verifies, updates docs. |
+| `/bootstrap-existing <initiative>` | Existing codebase, medium or large change. Discovers the stack, maps scope, creates scaled `docs/ai/` planning docs, defines the first safe slice. Does not implement. |
+| `/bootstrap-new <what you're building>` | Greenfield project. Gathers requirements, picks an opinionated stack, scaffolds the project, creates `docs/ai/` planning docs. Does not implement. |
+| `/continue-work <initiative>` | Resume after either bootstrap. Reads `docs/ai/` state, picks the next slice, implements narrowly, verifies, updates docs. |
 
-One agent:
+Two agents:
 
 | Agent | When | What it does |
 |---|---|---|
 | `architecture-discovery` | Invoked by `bootstrap-existing` for large changes | Deep structural analysis: stack, entry points, data models, auth patterns, integration contracts, migration risk map |
+| `stack-advisor` | Invoked by `bootstrap-new` | Opinionated stack recommendation based on requirements. One confident pick with rationale, not a menu of options. |
 
 ## Design principles
 
 - **No CLAUDE.md in target repos.** Your global `~/.claude/CLAUDE.md` covers universal principles. `docs/ai/` covers initiative state. A repo-level CLAUDE.md loads context every session and drifts — so this workflow never writes one.
-- **Scale to change size.** Small change → no docs overhead. Medium → 3 docs/ai files. Large → 7 docs/ai files + architecture discovery.
+- **Scale to change size.** Small change → no docs overhead. Medium → 3 docs/ai files. Large → 7 docs/ai files + architecture discovery. New project → 5 docs/ai files starting from requirements.
 - **ECC-native.** References [everything-claude-code](https://github.com/affaan-m/everything-claude-code) agents and language-specific skills instead of duplicating them locally.
 - **Stale check on resume.** Before trusting `docs/ai/`, the execution loop checks recent git commits against doc dates and flags drift.
 
