@@ -95,21 +95,46 @@ Do not invoke agents unless they materially help the current slice.
 
 ## Step 7: Update Docs
 
-After a completed or partially completed slice:
-- `docs/ai/<initiative>-status.md` — always update
+After a completed or partially completed slice, update all relevant docs:
+
 - `docs/ai/<initiative>-decisions.md` — update if a decision was made
 - `docs/ai/<initiative>-slices.md` — update only if slice definitions changed
 - `docs/ai/<initiative>-plan.md` — update only if the plan materially changed
+
+**`docs/ai/<initiative>-status.md` — MANDATORY after every slice attempt, using this exact format:**
+
+```
+## Slice <N>: <name>
+Status: <Not Started | In Progress | Complete | Blocked>
+Last updated: <date>
+
+### What was implemented
+<concrete list of files changed and what each does>
+
+### What was validated
+<exact commands run and their pass/fail result>
+
+### What remains unverified
+<anything not tested or confirmed — be honest>
+
+### Blockers
+<any issues blocking completion, or "None">
+
+### Next recommended step
+<exact action: "Run /continue-work <initiative> to start Slice N+1" or specific blocker resolution>
+```
+
+Do not summarize vaguely. A fresh session reading only this file must be able to determine the true state without inspecting the codebase.
 
 ---
 
 ## Step 8: Stop Cleanly
 
-End with:
+Output a brief stop summary to the user matching the status.md content:
 - What changed
 - What was validated
 - What remains
-- Next recommended slice
+- Next recommended slice and command
 
 ---
 
