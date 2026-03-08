@@ -68,10 +68,17 @@ The agent will:
 
 Take the agent's output and:
 - Write the decision record to `docs/ai/<initiative>-decisions.md`
-- Confirm the recommendation with the user before scaffolding
-- If the user overrides, update the decisions.md rationale and continue
+- Present the recommendation to the user using this exact format and **wait for explicit confirmation before continuing**:
 
-Do not proceed to Step 3 until the stack decision is confirmed.
+```
+Recommended stack: <stack summary>
+Rationale: <1-2 sentences>
+Scaffold source: <CLI command or URL>
+
+Reply YES to proceed with scaffolding, or tell me what to change.
+```
+
+Do not proceed to Step 3 until the user confirms. If the user overrides, update decisions.md with the new rationale and continue.
 
 ---
 
@@ -85,9 +92,8 @@ Prefer in this order:
 3. Well-maintained community template (check last commit date — skip anything stale)
 
 After scaffolding:
-- Remove boilerplate the stack-advisor flagged
 - Verify the project builds and tests run (even if there are no real tests yet)
-- Record the scaffold source in decisions.md
+- Record the scaffold source in decisions.md:
 
 ```markdown
 ## Decision: Scaffold
@@ -95,9 +101,11 @@ Date: <today>
 Status: Accepted
 
 **Source:** <URL or CLI command used>
-**Stripped:** <what was removed and why>
+**Boilerplate removed:** <list what was removed and why, or "none — applied as-is">
 **Verified:** build passes / test runner runs
 ```
+
+**On boilerplate removal:** Only remove files that the stack-advisor explicitly recommended removing. If stack-advisor made no specific recommendation, apply the scaffold as-is and document "none — applied as-is". Do not guess at what to strip.
 
 ---
 
@@ -146,37 +154,80 @@ Done when: <concrete observable criterion>
 First slice for a new project is almost always: **"Verify scaffold builds, tests run, CI passes"** — proving the foundation before building anything.
 
 ### `docs/ai/<initiative>-status.md`
+
+Write the completed bootstrap as Slice 0, then the first real slice as Not Started.
+Use the execution-loop format so `/continue-work` can read it without ambiguity:
+
 ```markdown
 # Status: <initiative>
 
-## Completed
-- Bootstrap: requirements captured, stack decided, scaffold created
+## Slice 0: Bootstrap
+Status: Complete
+Last updated: <today>
 
-## In progress
-- Slice 1: <name>
+### What was implemented
+- Requirements captured in docs/ai/<initiative>-requirements.md
+- Stack decided: <stack summary>
+- Scaffold created via: <CLI command or source>
+- docs/ai/ files created: requirements, decisions, plan, slices, status
 
-## Blocked
+### What was validated
+- <build command run>: pass
+- <test runner command>: pass (or "no tests yet — runner confirmed working")
+
+### What remains unverified
+<anything not confirmed, or "None">
+
+### Blockers
 None
 
-## Next
-- Slice 1: <name and goal>
+### Next recommended step
+Run /continue-work <initiative> to start Slice 1: <name>
 
-## Last validation
-- Command: <build/test command>
-- Result: <pass/fail>
-- Date: <today>
+---
+
+## Slice 1: <name>
+Status: Not Started
+Last updated: <today>
+
+### What was implemented
+N/A — not started
+
+### What was validated
+N/A
+
+### What remains unverified
+Everything — slice not started
+
+### Blockers
+None
+
+### Next recommended step
+Run /continue-work <initiative> to begin this slice
 ```
 
 ---
 
 ## Step 5: Wire ECC Skills Where Relevant
 
-Same as the existing-repo workflow — reference ECC's tools, don't duplicate them:
+ECC agents are available only if ECC is installed in the current project. Check before referencing:
 
-- TDD discipline → ECC `tdd-guide` agent
-- Code review → ECC `code-reviewer` agent
-- Security → ECC `security-reviewer` agent
-- Language-specific patterns → ECC's language skills (golang-patterns, python-patterns, etc.)
+```bash
+ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
+```
+
+If ECC is installed, invoke its agents according to these criteria — not ceremonially:
+
+| Agent | Invoke when |
+|---|---|
+| `tdd-guide` | Slice adds new testable behavior (functions, endpoints, components) |
+| `code-reviewer` | Slice touches more than one file and is non-trivial |
+| `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
+| `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
+
+Language-specific: Go → `golang-patterns` + `golang-testing`; Python → `python-patterns`; React/Next.js → `frontend-patterns`; Java/Spring → `springboot-patterns`; Postgres → `postgres-patterns`.
+
+If ECC is **not** installed: apply the discipline directly (write tests first, review your own code critically, check security manually). Do not skip the discipline — skip the agent invocation.
 
 ---
 
@@ -184,9 +235,9 @@ Same as the existing-repo workflow — reference ECC's tools, don't duplicate th
 
 Bootstrap is complete when:
 - Requirements documented
-- Stack decided and confirmed
+- Stack decided and confirmed by user
 - Scaffold exists and builds
-- docs/ai/ files created
+- docs/ai/ files created and status.md uses execution-loop format
 - First slice defined with done-criteria and validation command
 
 **Output to user:**
@@ -207,3 +258,5 @@ Next: /continue-work <initiative>
 - Pick a stack without documenting the rationale in decisions.md.
 - Skip the scaffold verification step — a scaffold that doesn't build is not a foundation.
 - Create a CLAUDE.md in the project repo. Use docs/ai/ for all project state.
+- Proceed to scaffolding without explicit user confirmation of the stack decision.
+- Remove boilerplate that was not explicitly recommended for removal.

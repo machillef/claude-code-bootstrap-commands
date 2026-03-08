@@ -22,8 +22,9 @@ Before trusting the docs, verify they reflect current repo state.
 
 - Check last-modified dates on docs/ai/ files
 - Run `git log --oneline -10` to see recent commits
-- If commits exist since the last docs/ai/ update that could affect scope, contracts, or plan: flag this explicitly before proceeding
-- If significant drift is detected, update the affected docs first, then continue
+- **Significant drift** = any commit since the last docs/ai/ update that modified a file listed in scope-map or slices touched-areas, OR added/removed a dependency, OR changed a contract (auth, API shape, config). A commit that only changes tests or docs is not drift.
+- If significant drift is detected: flag the affected docs explicitly, update them to reflect current reality, then continue
+- If no drift: proceed directly
 
 Do not implement on stale assumptions.
 
@@ -73,15 +74,24 @@ If test-first is not practical, explain why briefly and apply immediate verifica
 
 ---
 
-## Step 5: Use Bounded ECC Delegation When Useful
+## Step 5: Use Bounded ECC Delegation When Relevant
 
-Optionally delegate to ECC agents (already installed):
-- Planning refinement → ECC `planner` agent
-- Test design/TDD flow → ECC `tdd-guide` agent
-- Final review → ECC `code-reviewer` agent
-- Security concerns → ECC `security-reviewer` agent
+ECC agents are available only if ECC is installed. Check first:
 
-Do not invoke agents unless they materially help the current slice.
+```bash
+ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
+```
+
+If installed, invoke according to these criteria — not ceremonially:
+
+| Agent | Invoke when |
+|---|---|
+| `tdd-guide` | Slice adds new testable behavior (functions, endpoints, components) |
+| `code-reviewer` | Slice touches more than one file and is non-trivial |
+| `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
+| `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
+
+If ECC is **not** installed: apply the discipline directly (write tests first, review your own code, check security manually). Do not skip the discipline — skip only the agent invocation.
 
 ---
 

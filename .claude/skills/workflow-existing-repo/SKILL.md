@@ -114,17 +114,24 @@ Done when: <concrete observable criterion>
 
 ## Step 4: Wire ECC Skills Where Relevant
 
-Do not create local agent definitions. ECC is installed. Reference its tools:
+ECC agents are available only if ECC is installed in the target repo. Check before referencing:
 
-- Planning refinement → ECC `planner` agent
-- TDD discipline → ECC `tdd-guide` agent
-- Code review → ECC `code-reviewer` agent
-- Security concerns → ECC `security-reviewer` agent
-- Research before implementing → ECC `/search-first` command
+```bash
+ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
+```
+
+If installed, invoke according to these criteria — not ceremonially:
+
+| Agent | Invoke when |
+|---|---|
+| `tdd-guide` | Slice adds new testable behavior (functions, endpoints, components) |
+| `code-reviewer` | Slice touches more than one file and is non-trivial |
+| `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
+| `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 
 **Language-specific:** if the codebase uses Go → `golang-patterns` + `golang-testing`; Python/Django → `python-patterns` + `django-patterns`; React/Next.js → `frontend-patterns`; Java/Spring → `springboot-patterns`; Postgres → `postgres-patterns`.
 
-Only invoke these when they materially improve quality. Do not invoke agents ceremonially.
+If ECC is **not** installed: apply the discipline directly (write tests first, review your own code, check security manually). Do not skip the discipline — skip only the agent invocation.
 
 ---
 

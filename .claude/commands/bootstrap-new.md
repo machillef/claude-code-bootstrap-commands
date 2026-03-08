@@ -18,11 +18,11 @@ If truly greenfield: continue.
 ## Then follow the workflow-new-repo skill
 
 Steps in order:
-1. Requirements capture (4 questions max, skip what's already answered)
-2. Stack decision via `stack-advisor` agent — confirm with user before proceeding
+1. Requirements capture (ask all missing questions at once — max 4 questions, skip what's already answered)
+2. Stack decision via `stack-advisor` agent — present recommendation and **wait for explicit user confirmation** before proceeding
 3. Scaffold the project and verify it builds
-4. Create docs/ai/ files (requirements, decisions, plan, slices, status)
-5. Wire ECC skills where relevant
+4. Create docs/ai/ files (requirements, decisions, plan, slices, status) — status.md must use execution-loop format
+5. Wire ECC skills where relevant (check if ECC is installed first)
 6. Stop — hand off to `/continue-work`
 
 ## Output
@@ -42,4 +42,5 @@ Next: /continue-work <initiative>
 - Do not implement features during bootstrap.
 - Do not pick a stack without documenting rationale in decisions.md.
 - Do not create a CLAUDE.md in the project repo.
-- Confirm the stack decision with the user before scaffolding.
+- Confirm the stack decision with the user before scaffolding — wait for their reply.
+- Do not remove scaffold boilerplate unless stack-advisor explicitly recommended it.

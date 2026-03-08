@@ -71,7 +71,83 @@ What should have been different?
 
 ---
 
-## Test 2: Medium change — `/bootstrap-existing`
+## Test 2: New project — `/bootstrap-new`
+
+Pick something real to build from scratch. Examples:
+- A REST API service
+- A CLI tool
+- A web dashboard
+
+**Run:**
+```
+/bootstrap-new <your project name>
+```
+
+**Observe and fill in:**
+
+```
+Project given:
+
+
+Did it ask 4 or fewer questions (not interrogate you)?
+[ ] Yes   [ ] No — it asked:
+
+
+Were all missing questions asked at once (not one at a time)?
+[ ] Yes   [ ] No — it asked them one at a time
+
+
+Did the stack-advisor make ONE confident recommendation (not a menu of options)?
+[ ] Yes   [ ] No — it did:
+
+
+Was the recommendation appropriate for what you described?
+[ ] Yes   [ ] No — it recommended X but should have recommended Y because:
+
+
+Did it present the stack recommendation and WAIT for explicit confirmation before scaffolding?
+[ ] Yes   [ ] No — it proceeded immediately
+
+
+Did it find a real scaffold (official CLI or maintained template) rather than writing from scratch?
+[ ] Yes   [ ] No — it:
+
+
+Did the scaffold actually build (no errors)?
+[ ] Yes   [ ] No — error was:
+
+
+Did it create all 5 docs/ai/ files (requirements, decisions, plan, slices, status)?
+[ ] Yes   [ ] No — missing:
+
+
+Was the decisions.md rationale useful (would it help explain the stack choice to someone else)?
+[ ] Yes   [ ] No — because:
+
+
+Was the status.md in execution-loop format (Slice 0: Bootstrap with structured sections)?
+[ ] Yes   [ ] No — it used:
+
+
+Was the first real slice well-defined (goal, touched area, tests, done criteria)?
+[ ] Yes   [ ] No — what was wrong:
+
+
+Did it try to implement features during bootstrap (it should NOT)?
+[ ] No, stopped correctly   [ ] Yes — it started:
+
+
+Did it check whether ECC was installed before referencing ECC agents?
+[ ] Yes   [ ] No — it just referenced them
+
+
+What should have been different?
+
+```
+
+---
+
+## Test 3: Medium change — `/bootstrap-existing`
 
 Pick a real feature or change that would take 1-3 days. Examples:
 - Add OAuth / SSO to the app
@@ -126,9 +202,9 @@ What should have been different?
 
 ---
 
-## Test 3: Resume — `/continue-work`
+## Test 4: Resume — `/continue-work`
 
-Immediately after Test 2 (docs/ai/ files now exist):
+Immediately after Test 3 bootstrap-existing (docs/ai/ files now exist):
 
 **Run:**
 ```
@@ -173,7 +249,7 @@ What should have been different?
 
 ---
 
-## Test 4 (optional): Large change — `/bootstrap-existing` with architecture-discovery
+## Test 5 (optional): Large change — `/bootstrap-existing` with architecture-discovery
 
 Only if you have a large migration or architectural change handy. Examples:
 - Migrate backend framework
@@ -206,67 +282,6 @@ Were all 7 docs/ai/ files created?
 
 Was the migration risk map useful?
 [ ] Yes   [ ] No — because:
-
-
-What should have been different?
-
-```
-
----
-
-## Test 5 (optional): New project — `/bootstrap-new`
-
-Pick something you'd realistically build from scratch. Examples:
-- A REST API for a side project
-- A CLI tool
-- A web app with a database
-
-**Run:**
-```
-/bootstrap-new <what you're building>
-```
-
-**Observe and fill in:**
-
-```
-Brief given:
-
-
-Did it ask 4 or fewer questions (not interrogate you)?
-[ ] Yes   [ ] No — it asked:
-
-
-Did the stack-advisor agent make ONE confident recommendation (not a menu of options)?
-[ ] Yes   [ ] No — it did:
-
-
-Was the stack recommendation appropriate for what you described?
-[ ] Yes   [ ] No — it recommended X but should have recommended Y because:
-
-
-Did it confirm the stack with you before scaffolding?
-[ ] Yes   [ ] No
-
-
-Did it find a real scaffold (official CLI or maintained template) rather than writing from scratch?
-[ ] Yes   [ ] No — it:
-
-
-Did it verify the scaffold builds before moving on?
-[ ] Yes   [ ] No
-
-
-Were the correct 5 docs/ai/ files created?
-(requirements, decisions, plan, slices, status)
-[ ] Yes   [ ] No — missing:
-
-
-Was the decisions.md rationale useful (would it help you explain the stack choice to someone else)?
-[ ] Yes   [ ] No — because:
-
-
-Did it stop before implementing features?
-[ ] Yes   [ ] No — it started:
 
 
 What should have been different?
