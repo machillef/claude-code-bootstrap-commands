@@ -1,6 +1,6 @@
 # Testing the Bootstrap Workflow
 
-Use this file on Monday to run the workflow against a real repo and capture observations.
+Run this against a real existing repo to validate the workflow and capture what needs improving.
 When done, paste this file into a new Claude Code session and say:
 **"Read TESTING.md and improve the workflow based on the test results."**
 
@@ -12,11 +12,11 @@ Claude will read the capture sections and update the commands, skills, and agent
 
 ```bash
 # 1. Clone this repo (if not already done)
-git clone https://github.com/machillef/claude-code-bootstrap-commands ~/tools/claude-bootstrap
-cd ~/tools/claude-bootstrap && ./install.sh
+git clone https://github.com/YOUR_USERNAME/claude-code-bootstrap-commands ~/path/to/claude-bootstrap
+cd ~/path/to/claude-bootstrap && ./install.sh
 
 # 2. Install ECC in the target repo
-cd ~/work/<your-test-repo>
+cd ~/path/to/your-test-repo
 claude
 # inside Claude Code: /plugin add everything-claude-code
 ```

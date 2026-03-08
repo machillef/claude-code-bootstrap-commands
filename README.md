@@ -38,10 +38,10 @@ One agent:
 
 ```bash
 # 1. Clone this repo to a permanent location
-git clone https://github.com/machillef/claude-code-bootstrap-commands ~/tools/claude-bootstrap
+git clone https://github.com/YOUR_USERNAME/claude-code-bootstrap-commands ~/path/to/claude-bootstrap
 
 # 2. Run the installer
-cd ~/tools/claude-bootstrap
+cd ~/path/to/claude-bootstrap
 ./install.sh
 ```
 
@@ -64,7 +64,7 @@ If a file with the same name already exists and was not installed by this script
 ### Updating
 
 ```bash
-cd ~/tools/claude-bootstrap
+cd ~/path/to/claude-bootstrap
 git pull
 ./install.sh   # updates only the files it owns
 ```
