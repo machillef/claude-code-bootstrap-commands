@@ -99,6 +99,47 @@ For large changes, also save: `docs/ai/<initiative>-architecture-discovery.md`
 - Concise and factual — no speculative brainstorming
 - Status must reflect current reality, not aspirations
 
+After creating docs/ai/ files, check if `CLAUDE.md` exists in the project root:
+- **Does not exist:** create it with stable project facts discovered in Steps 1–2.
+- **Already exists:** read it. Add only missing sections — do not overwrite or reformat existing content.
+
+Minimal `CLAUDE.md` template:
+
+```markdown
+# <project-name>
+
+## Stack
+<language, framework, key libraries — one line>
+
+## Build & test
+<build command> | <test command>
+
+## Structure
+<entry point and key directories — 5–8 lines max>
+
+## Key patterns
+- Auth: <how auth is applied, e.g., "JWT middleware on all /api routes">
+- Errors: <how errors are handled, e.g., "Result<T, AppError> throughout">
+- Config: <how config is loaded, e.g., "dotenv via config/settings.py">
+
+## Source of truth
+- `docs/ai/` — initiative planning, status, and decisions
+- `~/.claude/CLAUDE.md` — global coding rules and workflow
+
+Do not store session state or evolving task notes here.
+
+## Start here
+1. Read `docs/ai/<initiative>-status.md` for current slice
+2. Read `docs/ai/<initiative>-slices.md` for scope
+3. Read the touched code paths
+```
+
+**Rules for this file:**
+- Stable facts only — stack, structure, build/test commands, observed patterns.
+- No rules that duplicate the global `~/.claude/CLAUDE.md` (no testing %, security rules, git workflow, code style).
+- 40 lines maximum.
+- Patterns section: only include what you actually observed in Step 1 — do not invent or speculate.
+
 **Slice format** (for slices.md):
 ```
 ## Slice N: <name>

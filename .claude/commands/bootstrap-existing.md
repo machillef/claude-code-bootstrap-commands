@@ -24,7 +24,7 @@ Steps in order:
 1. Triage (done above)
 2. Tech stack detection
 3. Map boundaries and contracts
-4. Create scaled docs/ai/ initiative files
+4. Create scaled docs/ai/ initiative files + minimal `CLAUDE.md` (if not already present): stack, build/test commands, structure, key patterns, pointer to docs/ai/ — stable facts only, 40 lines max
 5. Wire ECC skills where relevant
 6. Define the first safe slice
 7. Stop in a controlled state
@@ -44,6 +44,6 @@ Next: /continue-work <initiative>
 
 ## Rules
 
-- Do not create or modify CLAUDE.md in the target repo.
+- Do not add rules or session state to CLAUDE.md — only stable facts (stack, structure, build/test commands, observed patterns).
 - Do not implement during bootstrap.
 - Do not widen scope beyond what was stated.

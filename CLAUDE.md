@@ -25,7 +25,7 @@ Claude should prefer:
 
 Scale docs/ai/ to change size. See `docs/ai/README.md` for the full file set and scaling rules.
 
-Do not create or modify CLAUDE.md in target repos being bootstrapped. The global `~/.claude/CLAUDE.md` covers universal principles. `docs/ai/` covers initiative state. No repo-level CLAUDE.md is needed in target repos — it adds context overhead every session and drifts.
+Bootstrap commands create a minimal `CLAUDE.md` in target repos containing only stable project facts: stack, build/test commands, file structure, and a pointer to `docs/ai/`. Do not add rules, session state, or anything that duplicates the global `~/.claude/CLAUDE.md`. Keep it under 40 lines. If one already exists, add only missing sections — do not overwrite.
 
 ## Default execution behavior
 

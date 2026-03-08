@@ -107,6 +107,38 @@ Status: Accepted
 
 **On boilerplate removal:** Only remove files that the stack-advisor explicitly recommended removing. If stack-advisor made no specific recommendation, apply the scaffold as-is and document "none — applied as-is". Do not guess at what to strip.
 
+After verifying the scaffold, create a minimal `CLAUDE.md` in the project root:
+
+```markdown
+# <project-name>
+
+## Stack
+<one-line: language, framework, key libraries — e.g., "Rust CLI, clap 4, tokio async">
+
+## Build & test
+<build command> | <test command>
+
+## Structure
+<entry point and key directories — 5–8 lines max>
+
+## Source of truth
+- `docs/ai/` — initiative planning, status, and decisions
+- `~/.claude/CLAUDE.md` — global coding rules and workflow
+
+Do not store session state or evolving task notes here.
+
+## Start here
+1. Read `docs/ai/<initiative>-status.md` for current slice
+2. Read `docs/ai/<initiative>-slices.md` for scope
+3. Read the touched code paths
+```
+
+**Rules for this file:**
+- Stable facts only — stack, structure, build/test commands. Nothing time-sensitive.
+- No rules that duplicate the global `~/.claude/CLAUDE.md` (no testing %, security rules, git workflow, code style).
+- 30 lines maximum.
+- Do not create if `CLAUDE.md` already exists — append missing sections instead.
+
 ---
 
 ## Step 4: Create docs/ai/ Initiative Files
@@ -257,6 +289,6 @@ Next: /continue-work <initiative>
 - Start implementing features during bootstrap.
 - Pick a stack without documenting the rationale in decisions.md.
 - Skip the scaffold verification step — a scaffold that doesn't build is not a foundation.
-- Create a CLAUDE.md in the project repo. Use docs/ai/ for all project state.
+- Add rules or session state to CLAUDE.md. It must contain only stable project facts (stack, structure, build commands).
 - Proceed to scaffolding without explicit user confirmation of the stack decision.
 - Remove boilerplate that was not explicitly recommended for removal.
