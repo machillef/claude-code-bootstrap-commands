@@ -214,6 +214,67 @@ What should have been different?
 
 ---
 
+## Test 5 (optional): New project — `/bootstrap-new`
+
+Pick something you'd realistically build from scratch. Examples:
+- A REST API for a side project
+- A CLI tool
+- A web app with a database
+
+**Run:**
+```
+/bootstrap-new <what you're building>
+```
+
+**Observe and fill in:**
+
+```
+Brief given:
+
+
+Did it ask 4 or fewer questions (not interrogate you)?
+[ ] Yes   [ ] No — it asked:
+
+
+Did the stack-advisor agent make ONE confident recommendation (not a menu of options)?
+[ ] Yes   [ ] No — it did:
+
+
+Was the stack recommendation appropriate for what you described?
+[ ] Yes   [ ] No — it recommended X but should have recommended Y because:
+
+
+Did it confirm the stack with you before scaffolding?
+[ ] Yes   [ ] No
+
+
+Did it find a real scaffold (official CLI or maintained template) rather than writing from scratch?
+[ ] Yes   [ ] No — it:
+
+
+Did it verify the scaffold builds before moving on?
+[ ] Yes   [ ] No
+
+
+Were the correct 5 docs/ai/ files created?
+(requirements, decisions, plan, slices, status)
+[ ] Yes   [ ] No — missing:
+
+
+Was the decisions.md rationale useful (would it help you explain the stack choice to someone else)?
+[ ] Yes   [ ] No — because:
+
+
+Did it stop before implementing features?
+[ ] Yes   [ ] No — it started:
+
+
+What should have been different?
+
+```
+
+---
+
 ## Overall impressions
 
 ```

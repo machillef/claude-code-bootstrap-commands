@@ -95,7 +95,7 @@ Or at project scope to try it in one repo first:
 
 Finds the existing auth pattern, applies it minimally, verifies, logs one line to `docs/ai/quick-changes-log.md`.
 
-### Medium or large change
+### Medium or large change in an existing repo
 
 ```
 /bootstrap-existing migrate-to-react
@@ -109,21 +109,46 @@ Triages the request, detects the tech stack, maps scope boundaries, creates `doc
 
 Reads `docs/ai/` state, checks for drift since last session, picks the next slice, implements narrowly with TDD, verifies, updates docs, stops cleanly with the next recommended slice.
 
+### New project from scratch
+
+```
+/bootstrap-new task management API
+```
+
+Asks up to 4 questions (type of app, scale, constraints, team ecosystem), invokes the `stack-advisor` agent for an opinionated stack recommendation, scaffolds the project, creates `docs/ai/` planning files, defines the first slice. Stops before implementing features.
+
+```
+/continue-work task-management-api
+```
+
+Same execution loop as the existing-repo path — `docs/ai/` is the source of truth regardless of how the project started.
+
 ## docs/ai/ structure
 
-Created inside your target repo by the commands. Scale depends on change size:
+Created inside your target repo by the commands. Scale depends on scenario:
 
 ```
 docs/ai/
-  quick-changes-log.md              ← small changes only, append-only log
-  <initiative>-scope-map.md         ← medium+
-  <initiative>-slices.md            ← medium+
-  <initiative>-status.md            ← medium+
-  <initiative>-contracts.md         ← large only
-  <initiative>-risks.md             ← large only
-  <initiative>-plan.md              ← large only
-  <initiative>-decisions.md         ← large only
-  <initiative>-architecture-discovery.md  ← large only
+  quick-changes-log.md                   ← small changes, append-only log
+
+  ← existing repo, medium change:
+  <initiative>-scope-map.md
+  <initiative>-slices.md
+  <initiative>-status.md
+
+  ← existing repo, large change (all of the above plus):
+  <initiative>-contracts.md
+  <initiative>-risks.md
+  <initiative>-plan.md
+  <initiative>-decisions.md
+  <initiative>-architecture-discovery.md
+
+  ← new project:
+  <initiative>-requirements.md
+  <initiative>-decisions.md
+  <initiative>-plan.md
+  <initiative>-slices.md
+  <initiative>-status.md
 ```
 
 These files are committed alongside your code. They are the source of truth for resuming work across sessions — not conversation context, not CLAUDE.md.
