@@ -43,6 +43,7 @@ Systematically catalog before forming any opinions. Check in order:
 **Build & Test**
 - Build command: `package.json` scripts, `Makefile`, `justfile`, `taskfile.yml`
 - Test framework: identify from deps (Jest, Vitest, pytest, go test, xunit, RSpec) and from CI config
+- Test runner verification: confirm you can run a single test in isolation (needed for TDD cycle)
 - Lint/format tooling
 
 **CI/CD**
@@ -161,12 +162,12 @@ ECC agents are available only if ECC is installed in the target repo. Check befo
 ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
 ```
 
-If installed, invoke according to these criteria — not ceremonially:
+If installed, invoke according to these criteria:
 
 | Agent | Invoke when |
 |---|---|
-| `tdd-guide` | Slice adds new testable behavior (functions, endpoints, components) |
-| `code-reviewer` | Slice touches more than one file and is non-trivial |
+| `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
+| `code-reviewer` | Always after implementation — every slice gets a review |
 | `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 
@@ -199,22 +200,26 @@ Bootstrap is complete when:
 
 **Do not start implementing during bootstrap.**
 
-**Output to user:**
+**Always end with this exact structured output — do not end conversationally or with a question:**
 ```
 Initiative: <name>
 Size: <medium/large>
 Stack: <one-line summary>
 Scope boundary: <in-scope vs out-of-scope in one sentence>
+Test runner: <command to run a single test, or "needs setup — first slice should configure test framework">
 First slice: <slice name and goal>
 Validation command: <exact command>
+TDD: mandatory from Slice 1 — all behavioral changes require tests first
 Next: /continue-work <initiative>
 ```
+
+Do not replace this with a conversational summary. Do not end with "let me know if..." or any question. The structured output is mandatory.
 
 ---
 
 ## Do Not
 
-- Create or modify CLAUDE.md in the target repo. The global `~/.claude/CLAUDE.md` covers universal principles. `docs/ai/` covers initiative state. No repo-level CLAUDE.md is needed.
+- End with a conversational message — always use the structured stop output above.
 - Implement during bootstrap.
 - Modify unrelated code without explicit justification in decisions.md.
 - Store temporary findings in CLAUDE.md.

@@ -35,20 +35,30 @@ If the change requires more than 3 files or the pattern doesn't exist yet, **sto
 - Do not add features beyond what was asked.
 - Keep the diff small and reviewable.
 
-### Step 5: Verify
-Run the smallest relevant validation:
-- Targeted test for the changed file if one exists
-- If no test exists: build command to confirm no compilation errors
-- State clearly if no automated verification was possible
+### Step 5: Test the Change
 
-### Step 6: Create a Minimal Status Trace
+TDD applies even to small changes when behavior is added or modified:
+- If the change adds or modifies behavior: write a failing test first, then implement, then confirm it passes
+- If fixing a bug: write a test that reproduces the bug first, then fix it
+- If the change is purely structural (rename, move, config): run existing tests to confirm no regression
+- If no test framework exists: state this explicitly — do not silently skip
+
+### Step 6: Review Your Own Change
+
+Before finishing, review the diff critically:
+- Does the change do only what was asked?
+- Are there any security concerns (input validation, auth, data exposure)?
+- Does it follow the existing codebase patterns?
+
+### Step 7: Create a Minimal Status Trace
 Create or append to `docs/ai/quick-changes-log.md`:
 
 ```markdown
 ## <date> — <one-line description>
 - Changed: <file(s)>
 - Pattern followed: <where the pattern was found>
-- Verified: <test command run / or "build only" / or "not verified">
+- Tests: <test added/updated and command run, or "existing tests pass" with command, or "no test framework — build only">
+- Reviewed: <yes — self-review of diff>
 ```
 
 This keeps a lightweight audit trail without full initiative overhead.

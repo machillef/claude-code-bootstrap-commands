@@ -93,6 +93,8 @@ Prefer in this order:
 
 After scaffolding:
 - Verify the project builds and tests run (even if there are no real tests yet)
+- Verify the test framework supports running a single test in isolation (needed for TDD cycle in subsequent slices)
+- If no test framework is included in the scaffold, note it — the first slice should configure one
 - Record the scaffold source in decisions.md:
 
 ```markdown
@@ -248,12 +250,12 @@ ECC agents are available only if ECC is installed in the current project. Check 
 ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
 ```
 
-If ECC is installed, invoke its agents according to these criteria — not ceremonially:
+If ECC is installed, invoke its agents according to these criteria:
 
 | Agent | Invoke when |
 |---|---|
-| `tdd-guide` | Slice adds new testable behavior (functions, endpoints, components) |
-| `code-reviewer` | Slice touches more than one file and is non-trivial |
+| `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
+| `code-reviewer` | Always after implementation — every slice gets a review |
 | `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 
@@ -272,20 +274,25 @@ Bootstrap is complete when:
 - docs/ai/ files created and status.md uses execution-loop format
 - First slice defined with done-criteria and validation command
 
-**Output to user:**
+**Always end with this exact structured output — do not end conversationally or with a question:**
 ```
 Initiative: <name>
 Stack: <one-line summary>
 Scaffold: <source>
+Test runner: <command to run a single test, or "needs setup — first slice should configure test framework">
 First slice: <name and goal>
 Validation command: <exact command>
+TDD: mandatory from Slice 1 — all behavioral changes require tests first
 Next: /continue-work <initiative>
 ```
+
+Do not replace this with a conversational summary. Do not end with "let me know if..." or any question. The structured output is mandatory.
 
 ---
 
 ## Do Not
 
+- End with a conversational message — always use the structured stop output above.
 - Start implementing features during bootstrap.
 - Pick a stack without documenting the rationale in decisions.md.
 - Skip the scaffold verification step — a scaffold that doesn't build is not a foundation.

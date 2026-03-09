@@ -31,19 +31,26 @@ Steps in order:
 
 ## Output
 
+**Always end with this exact structured output — do not end conversationally or with a question:**
+
 ```
 Initiative: <name>
 Size: <medium/large>
 Stack: <one-line summary>
 Scope boundary: <in-scope vs out-of-scope>
 docs/ai/ files created: <list>
+Test runner: <command to run a single test, or "needs setup — first slice should configure test framework">
 First slice: <name and goal>
 Validation command: <exact command>
+TDD: mandatory from Slice 1 — all behavioral changes require tests first
 Next: /continue-work <initiative>
 ```
+
+Do not replace this with a conversational summary. Do not end with "let me know if..." or any question.
 
 ## Rules
 
 - Do not add rules or session state to CLAUDE.md — only stable facts (stack, structure, build/test commands, observed patterns).
 - Do not implement during bootstrap.
 - Do not widen scope beyond what was stated.
+- Do not end with a conversational message — always use the structured output above.
