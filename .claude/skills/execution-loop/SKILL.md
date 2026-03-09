@@ -170,6 +170,40 @@ Next: /continue-work <initiative> → Slice <N+1>: <name>
 
 Do not replace this with a conversational summary. Do not end with a question. The structured output is mandatory.
 
+**If this was the last slice** (no slices remain as Not Started or In Progress after this update), replace the normal next-step line with an End of Plan block:
+
+1. Scan every slice section in `docs/ai/<initiative>-status.md` for non-empty "What remains unverified" entries. Collect them into a single flat list, attributed by slice.
+2. Cross-check against exit criteria in `docs/ai/<initiative>-slices.md` — flag any exit criterion with no corresponding validated entry in status.md.
+3. Output this block verbatim (fill in the checklist items from the scan above):
+
+```
+---
+## End of Plan
+
+All slices are complete. This is an MVP candidate — not a finished product.
+
+Before continuing, manually validate the following:
+
+**Slice N — <name>**
+- <copy "What remains unverified" text verbatim>
+- <any unverified exit criterion from slices.md>
+
+**Slice M — <name>**
+- ...
+
+(Omit slices where everything was verified.)
+
+Once you have run validation and noted what works, what breaks, and what feels wrong:
+
+→ Run `/bootstrap-existing <initiative>-fixes` to plan the fix cycle.
+
+The next plan will be depth-first: make verified features work well, fix what broke,
+and address anything discovered during real use.
+---
+```
+
+Keep checklist items concrete — copy the actual unverified text verbatim, do not paraphrase or summarize. A user reading only this message must know exactly what to test without opening any other file.
+
 ---
 
 ## Rules
