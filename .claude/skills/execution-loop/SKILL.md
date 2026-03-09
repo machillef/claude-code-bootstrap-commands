@@ -62,19 +62,37 @@ Before editing:
 
 ---
 
-## Step 4: Apply TDD or Test-First Discipline
+## Step 4: Research Before Implementing
 
-Where practical:
-- Add or update tests first
-- Run the smallest relevant failing test
-- Implement narrowly to pass it
-- Rerun tests
+Before writing code, check for existing solutions:
+- Search the codebase for similar patterns already implemented (`rg`, `ast-grep`, Glob)
+- Search package registries (npm, PyPI, crates.io) for libraries that solve the problem
+- If the slice involves an unfamiliar API or integration, fetch the relevant docs first
+- Prefer adopting a proven approach over writing net-new code
 
-If test-first is not practical, explain why briefly and apply immediate verification after implementation.
+Skip this step only if the slice is a mechanical change where the pattern is already identified in the slice definition.
 
 ---
 
-## Step 5: Use Bounded ECC Delegation When Relevant
+## Step 5: Apply TDD Discipline
+
+TDD is **mandatory** for any slice that adds or changes behavior. Follow the Red-Green-Refactor cycle:
+
+1. Write a failing test that describes the expected behavior (RED)
+2. Run the test — confirm it fails
+3. Write the minimal implementation to make it pass (GREEN)
+4. Run the test — confirm it passes
+5. Refactor if needed — tests must stay green
+
+**Exceptions** (must state the reason explicitly):
+- Pure infrastructure/config changes (build scripts, CI config, scaffolding) — no testable behavior exists
+- Documentation-only changes
+
+If skipping TDD, state why in a single line before proceeding. "Not practical" is not a valid reason — name the specific exception.
+
+---
+
+## Step 6: Use Bounded ECC Delegation
 
 ECC agents are available only if ECC is installed. Check first:
 
@@ -82,12 +100,12 @@ ECC agents are available only if ECC is installed. Check first:
 ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
 ```
 
-If installed, invoke according to these criteria — not ceremonially:
+If installed, invoke according to these criteria:
 
 | Agent | Invoke when |
 |---|---|
-| `tdd-guide` | Slice adds new testable behavior (functions, endpoints, components) |
-| `code-reviewer` | Slice touches more than one file and is non-trivial |
+| `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
+| `code-reviewer` | Always after implementation — every slice gets a review |
 | `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 
@@ -95,7 +113,7 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ---
 
-## Step 6: Verify
+## Step 7: Verify
 
 - Run targeted tests for the changed area first
 - Broader build/test only as needed
@@ -103,7 +121,7 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ---
 
-## Step 7: Update Docs
+## Step 9: Update Docs
 
 After a completed or partially completed slice, update all relevant docs:
 
@@ -138,13 +156,19 @@ Do not summarize vaguely. A fresh session reading only this file must be able to
 
 ---
 
-## Step 8: Stop Cleanly
+## Step 10: Stop Cleanly
 
-Output a brief stop summary to the user matching the status.md content:
-- What changed
-- What was validated
-- What remains
-- Next recommended slice and command
+**Always** end with this exact structured output — do not end conversationally:
+
+```
+Slice <N>: <name> — <Complete|In Progress|Blocked>
+Changed: <file list>
+Validated: <commands run and pass/fail>
+Remains: <what's left, or "nothing">
+Next: /continue-work <initiative> → Slice <N+1>: <name>
+```
+
+Do not replace this with a conversational summary. Do not end with a question. The structured output is mandatory.
 
 ---
 
