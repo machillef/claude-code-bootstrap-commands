@@ -144,6 +144,21 @@ Asks up to 4 questions (type of app, scale, constraints, team ecosystem), invoke
 
 Same execution loop as the existing-repo path — `docs/ai/` is the source of truth regardless of how the project started.
 
+### After all slices complete
+
+When `/continue-work` detects there are no slices left, it emits an **End of Plan** summary instead of a normal next-step line. The summary contains:
+
+- A concrete checklist of everything built but not yet verified in a real environment (copied verbatim from the "What remains unverified" entries the execution loop has been maintaining in `docs/ai/`)
+- Any exit criteria from `docs/ai/<initiative>-slices.md` that were never confirmed
+
+Take that checklist, run manual validation in your target environment, note what works and what breaks, then start a new initiative for the fix cycle:
+
+```
+/bootstrap-existing <initiative>-fixes
+```
+
+This starts a new disciplined initiative on the same codebase — depth-first now (make things work well, fix breakage found in validation) rather than the breadth-first feature delivery of the first plan. Repeat as needed until the software is stable.
+
 ## docs/ai/ structure
 
 Created inside your target repo by the commands. Scale depends on scenario:
