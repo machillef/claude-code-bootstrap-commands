@@ -36,7 +36,7 @@ Two agents:
 - [Claude Code](https://claude.ai/code) installed
 - [everything-claude-code](https://github.com/affaan-m/everything-claude-code) plugin (install at user scope for global availability)
 
-### On a new workstation
+### On a new workstation (Linux / macOS / WSL)
 
 ```bash
 # 1. Clone this repo to a permanent location
@@ -47,7 +47,20 @@ cd ~/path/to/claude-bootstrap
 ./install.sh
 ```
 
-The installer copies commands, agents, and skills into `~/.claude/`. It is safe to re-run after pulling updates.
+### On Windows (PowerShell)
+
+Requires PowerShell 7+ and either **Developer Mode** enabled or an **Administrator** shell.
+
+```powershell
+# 1. Clone this repo to a permanent location
+git clone https://github.com/YOUR_USERNAME/claude-code-bootstrap-commands C:\path\to\claude-bootstrap
+
+# 2. Run the installer
+cd C:\path\to\claude-bootstrap
+.\install.ps1
+```
+
+Both installers create symlinks from `~/.claude/` into this repo. It is safe to re-run after pulling updates.
 
 **What it writes:**
 ```
@@ -66,9 +79,17 @@ If a file with the same name already exists and was not installed by this script
 ### Updating
 
 ```bash
+# Linux / macOS / WSL
 cd ~/path/to/claude-bootstrap
 git pull
 ./install.sh   # updates only the files it owns
+```
+
+```powershell
+# Windows (PowerShell)
+cd C:\path\to\claude-bootstrap
+git pull
+.\install.ps1   # updates only the files it owns
 ```
 
 ### Installing ECC
