@@ -257,6 +257,7 @@ If ECC is installed, invoke its agents according to these criteria:
 | `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
 | `code-reviewer` | Always after implementation — every slice gets a review |
 | `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
+| `e2e-runner` | Slice completes a navigable route or user-visible UI journey |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 
 Language-specific: Go → `golang-patterns` + `golang-testing`; Python → `python-patterns`; React/Next.js → `frontend-patterns`; Java/Spring → `springboot-patterns`; Postgres → `postgres-patterns`.
