@@ -55,6 +55,21 @@ Systematically catalog before forming any opinions. Check in order:
 - How is config loaded? (env vars, config files, secrets manager)
 - What does the API response shape look like?
 
+**Verification commands:** Record the concrete commands discovered above into the scope-map so the execution loop knows exactly what to run during verification. Use this format in `docs/ai/<initiative>-scope-map.md`:
+
+```
+## Verification Commands
+| Phase | Command |
+|---|---|
+| Build | <exact build command> |
+| Test (single) | <command to run one test file in isolation> |
+| Test (full) | <command to run the full test suite> |
+| Type check | <type checker command, or "N/A"> |
+| Lint | <linter command, or "N/A"> |
+```
+
+Only include phases that have tooling. Do not invent commands — record what actually exists.
+
 **Produce a one-screen tech stack summary before moving to Step 2.** This is the foundation for all subsequent decisions.
 
 ---
@@ -70,6 +85,18 @@ Identify what is in-scope, adjacent, and out-of-scope for this initiative.
 - **Contracts relevant to this change**: auth/session, integration points, API shape, env vars
 
 Use concrete file paths. No abstract descriptions.
+
+**Definition of Done:** Derive 2-4 concrete, verifiable exit criteria from the user's stated objective. These answer "how does the user know this initiative succeeded?" — not generic quality gates.
+
+Infer what "done" means from the objective's nature:
+- **Migration** (e.g., ".NET views to React") → target stack works end-to-end, old code removed, no user-facing regression
+- **Feature** (e.g., "add RBAC to the API") → feature is accessible and enforced on all relevant routes, covered by tests
+- **Infrastructure** (e.g., "split Terraform into modules") → `terraform plan` shows no drift, all environments apply cleanly
+- **Refactor** (e.g., "extract shared auth library") → consumers use the new library, old duplication removed, behavior unchanged
+
+Do not include criteria enforced by the execution loop on every slice (tests pass, code reviewed). Focus on what is specific to *this* objective.
+
+Write the Definition of Done into `docs/ai/<initiative>-scope-map.md` under a `## Definition of Done` heading.
 
 **For Large changes only:** Before completing this step, invoke the `architecture-discovery` agent. Feed its output into the docs/ai/ files. Cross-check its findings against what you read directly.
 
@@ -169,6 +196,7 @@ If installed, invoke according to these criteria:
 | `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
 | `code-reviewer` | Always after implementation — every slice gets a review |
 | `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
+| `e2e-runner` | Slice completes a navigable route or user-visible UI journey |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 
 **Language-specific:** if the codebase uses Go → `golang-patterns` + `golang-testing`; Python/Django → `python-patterns` + `django-patterns`; React/Next.js → `frontend-patterns`; Java/Spring → `springboot-patterns`; Postgres → `postgres-patterns`.
