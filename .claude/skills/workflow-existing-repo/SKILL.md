@@ -55,6 +55,21 @@ Systematically catalog before forming any opinions. Check in order:
 - How is config loaded? (env vars, config files, secrets manager)
 - What does the API response shape look like?
 
+**Verification commands:** Record the concrete commands discovered above into the scope-map so the execution loop knows exactly what to run during verification. Use this format in `docs/ai/<initiative>-scope-map.md`:
+
+```
+## Verification Commands
+| Phase | Command |
+|---|---|
+| Build | <exact build command> |
+| Test (single) | <command to run one test file in isolation> |
+| Test (full) | <command to run the full test suite> |
+| Type check | <type checker command, or "N/A"> |
+| Lint | <linter command, or "N/A"> |
+```
+
+Only include phases that have tooling. Do not invent commands — record what actually exists.
+
 **Produce a one-screen tech stack summary before moving to Step 2.** This is the foundation for all subsequent decisions.
 
 ---

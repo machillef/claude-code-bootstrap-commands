@@ -109,6 +109,7 @@ If installed, invoke according to these criteria:
 | `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
 | `e2e-runner` | Slice completes a navigable route or user-visible UI journey |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
+| Language-specific (`golang-patterns`, `python-patterns`, `frontend-patterns`, `springboot-patterns`, etc.) | Slice implements new code in that stack — use for idiomatic guidance during implementation |
 
 If ECC is **not** installed: apply the discipline directly (write tests first, review your own code, check security manually). Do not skip the discipline — skip only the agent invocation.
 
@@ -116,6 +117,7 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ## Step 7: Verify
 
+- Check `docs/ai/<initiative>-scope-map.md` for a `## Verification Commands` table. If it exists, use those exact commands. If not, infer from the stack.
 - Run targeted tests for the changed area first
 - Broader build/test only as needed
 - Record failures honestly — do not retry blindly
@@ -203,7 +205,7 @@ All slices are complete.
 
 ### Next Step
 <if all DoD criteria are met:>
-Initiative is complete. No further slices needed.
+Initiative is complete. Consider running `/everything-claude-code:learn-eval` to extract reusable patterns from this initiative.
 <if any DoD criterion is NOT MET:>
 → Run `/bootstrap-existing <initiative>-fixes` to address unmet criteria.
 ---
