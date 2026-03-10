@@ -71,6 +71,18 @@ Identify what is in-scope, adjacent, and out-of-scope for this initiative.
 
 Use concrete file paths. No abstract descriptions.
 
+**Definition of Done:** Derive 2-4 concrete, verifiable exit criteria from the user's stated objective. These answer "how does the user know this initiative succeeded?" — not generic quality gates.
+
+Infer what "done" means from the objective's nature:
+- **Migration** (e.g., ".NET views to React") → target stack works end-to-end, old code removed, no user-facing regression
+- **Feature** (e.g., "add RBAC to the API") → feature is accessible and enforced on all relevant routes, covered by tests
+- **Infrastructure** (e.g., "split Terraform into modules") → `terraform plan` shows no drift, all environments apply cleanly
+- **Refactor** (e.g., "extract shared auth library") → consumers use the new library, old duplication removed, behavior unchanged
+
+Do not include criteria enforced by the execution loop on every slice (tests pass, code reviewed). Focus on what is specific to *this* objective.
+
+Write the Definition of Done into `docs/ai/<initiative>-scope-map.md` under a `## Definition of Done` heading.
+
 **For Large changes only:** Before completing this step, invoke the `architecture-discovery` agent. Feed its output into the docs/ai/ files. Cross-check its findings against what you read directly.
 
 ---

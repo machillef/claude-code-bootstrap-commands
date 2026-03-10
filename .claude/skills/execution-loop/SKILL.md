@@ -173,17 +173,24 @@ Do not replace this with a conversational summary. Do not end with a question. T
 
 **If this was the last slice** (no slices remain as Not Started or In Progress after this update), replace the normal next-step line with an End of Plan block:
 
-1. Scan every slice section in `docs/ai/<initiative>-status.md` for non-empty "What remains unverified" entries. Collect them into a single flat list, attributed by slice.
-2. Cross-check against exit criteria in `docs/ai/<initiative>-slices.md` — flag any exit criterion with no corresponding validated entry in status.md.
-3. Output this block verbatim (fill in the checklist items from the scan above):
+1. Read the `## Definition of Done` from `docs/ai/<initiative>-scope-map.md`. For each criterion, check whether it was validated across the completed slices. Mark each as MET or NOT MET with evidence.
+2. Scan every slice section in `docs/ai/<initiative>-status.md` for non-empty "What remains unverified" entries. Collect them into a single flat list, attributed by slice.
+3. Cross-check against exit criteria in `docs/ai/<initiative>-slices.md` — flag any exit criterion with no corresponding validated entry in status.md.
+4. Output this block verbatim (fill in the checklist items from the scans above):
 
 ```
 ---
 ## End of Plan
 
-All slices are complete. This is an MVP candidate — not a finished product.
+All slices are complete.
 
-Before continuing, manually validate the following:
+### Definition of Done
+<for each criterion from scope-map.md:>
+- [x] <criterion> — MET: <evidence>
+- [ ] <criterion> — NOT MET: <what's missing>
+
+### Remaining Validation
+<if all DoD criteria are met, write "All exit criteria met." and skip the slice-level detail below>
 
 **Slice N — <name>**
 - <copy "What remains unverified" text verbatim>
@@ -194,16 +201,17 @@ Before continuing, manually validate the following:
 
 (Omit slices where everything was verified.)
 
-Once you have run validation and noted what works, what breaks, and what feels wrong:
-
-→ Run `/bootstrap-existing <initiative>-fixes` to plan the fix cycle.
-
-The next plan will be depth-first: make verified features work well, fix what broke,
-and address anything discovered during real use.
+### Next Step
+<if all DoD criteria are met:>
+Initiative is complete. No further slices needed.
+<if any DoD criterion is NOT MET:>
+→ Run `/bootstrap-existing <initiative>-fixes` to address unmet criteria.
 ---
 ```
 
 Keep checklist items concrete — copy the actual unverified text verbatim, do not paraphrase or summarize. A user reading only this message must know exactly what to test without opening any other file.
+
+If no Definition of Done section exists in scope-map.md (e.g., initiative was bootstrapped before this feature), fall back to the slice-level validation only and note that no initiative-level exit criteria were defined.
 
 ---
 
