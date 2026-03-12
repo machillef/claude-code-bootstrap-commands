@@ -56,9 +56,28 @@ Write findings to `docs/ai/<initiative>-requirements.md`:
 
 ---
 
-## Step 2: Stack Decision
+## Step 2: Design Exploration
 
-Invoke the `stack-advisor` agent with the requirements from Step 1.
+Before making stack decisions, explore the design space with the user.
+
+Invoke the `brainstorm-design` skill with the initiative name and requirements from Step 1. The skill will:
+- Load the requirements doc from Step 1
+- Ask clarifying questions one at a time
+- Propose 2-3 approaches with trade-offs
+- Present a design for user approval
+- Write the validated design to `docs/ai/<initiative>-design.md`
+- Run a spec review loop
+- Return control here after user approves the spec
+
+**Do not proceed to Step 3 until brainstorm-design completes and the user has approved the design.**
+
+For truly trivial projects where the design is self-evident from the requirements (e.g., a single CLI utility with one command), the brainstorm-design output can be brief — but it must still exist and be approved.
+
+---
+
+## Step 3: Stack Decision
+
+Invoke the `stack-advisor` agent with the requirements from Step 1 and the approved design from Step 2.
 
 The agent will:
 - Ask any remaining clarifying questions
@@ -82,7 +101,7 @@ Do not proceed to Step 3 until the user confirms. If the user overrides, update 
 
 ---
 
-## Step 3: Scaffold
+## Step 4: Scaffold
 
 Set up the project structure using the scaffold identified by the stack-advisor.
 
@@ -143,15 +162,18 @@ Do not store session state or evolving task notes here.
 
 ---
 
-## Step 4: Create docs/ai/ Initiative Files
+## Step 5: Create docs/ai/ Initiative Files
 
-Create these five files (scaled for a new project — no scope-map or contracts yet, nothing exists to map):
+Create these six files (scaled for a new project — no scope-map or contracts yet, nothing exists to map):
 
 ### `docs/ai/<initiative>-requirements.md`
 Already written in Step 1.
 
+### `docs/ai/<initiative>-design.md`
+Already written in Step 2 by the brainstorm-design skill.
+
 ### `docs/ai/<initiative>-decisions.md`
-Already populated in Steps 2 and 3. Will grow as more decisions are made during execution.
+Already populated in Steps 3 and 4. Will grow as more decisions are made during execution.
 
 ### `docs/ai/<initiative>-plan.md`
 ```markdown
@@ -201,9 +223,10 @@ Last updated: <today>
 
 ### What was implemented
 - Requirements captured in docs/ai/<initiative>-requirements.md
+- Design explored and approved in docs/ai/<initiative>-design.md
 - Stack decided: <stack summary>
 - Scaffold created via: <CLI command or source>
-- docs/ai/ files created: requirements, decisions, plan, slices, status
+- docs/ai/ files created: requirements, design, decisions, plan, slices, status
 
 ### What was validated
 - <build command run>: pass
@@ -242,7 +265,7 @@ Run /continue-work <initiative> to begin this slice
 
 ---
 
-## Step 5: Wire ECC Skills Where Relevant
+## Step 6: Wire ECC Skills Where Relevant
 
 ECC agents are available only if ECC is installed in the current project. Check before referencing:
 
@@ -266,7 +289,7 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ---
 
-## Step 6: Stop in a Controlled State
+## Step 7: Stop in a Controlled State
 
 Bootstrap is complete when:
 - Requirements documented
