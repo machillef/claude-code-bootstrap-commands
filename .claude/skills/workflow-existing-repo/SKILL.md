@@ -102,17 +102,39 @@ Write the Definition of Done into `docs/ai/<initiative>-scope-map.md` under a `#
 
 ---
 
-## Step 3: Create Initiative Docs Under `docs/ai/`
+## Step 3: Design Exploration
+
+For **medium** and **large** changes, invoke the `brainstorm-design` skill before creating docs/ai/ files.
+
+The skill will:
+- Load any existing docs/ai/ context (scope-map from Step 2, if written early)
+- Load CLAUDE.md and project context
+- Ask clarifying questions one at a time
+- Propose 2-3 approaches with trade-offs
+- Present a design for user approval
+- Write the validated design to `docs/ai/<initiative>-design.md`
+- Run a spec review loop
+- Return control here after user approves the spec
+
+**Do not proceed to Step 4 until brainstorm-design completes and the user has approved the design.**
+
+The design doc informs the slice definitions in Step 4 — slices should implement the approved design, not invent new approaches.
+
+---
+
+## Step 4: Create Initiative Docs Under `docs/ai/`
 
 Scale the document set to change size:
 
 ### Medium — create:
 - `docs/ai/<initiative>-scope-map.md`
+- `docs/ai/<initiative>-design.md` (already written in Step 3)
 - `docs/ai/<initiative>-slices.md`
 - `docs/ai/<initiative>-status.md`
 
-### Large — create all seven:
+### Large — create all eight:
 - `docs/ai/<initiative>-scope-map.md`
+- `docs/ai/<initiative>-design.md` (already written in Step 3)
 - `docs/ai/<initiative>-contracts.md`
 - `docs/ai/<initiative>-risks.md`
 - `docs/ai/<initiative>-plan.md`
@@ -181,7 +203,7 @@ Done when: <concrete observable criterion>
 
 ---
 
-## Step 4: Wire ECC Skills Where Relevant
+## Step 5: Wire ECC Skills Where Relevant
 
 ECC agents are available only if ECC is installed in the target repo. Check before referencing:
 
@@ -205,7 +227,7 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ---
 
-## Step 5: Define the First Safe Slice
+## Step 6: Define the First Safe Slice
 
 Must:
 - Prove the chosen approach is viable (not just "easy")
@@ -217,7 +239,7 @@ State the first slice using the full slice format from Step 3.
 
 ---
 
-## Step 6: Stop in a Controlled State
+## Step 7: Stop in a Controlled State
 
 Bootstrap is complete when:
 - Tech stack is documented

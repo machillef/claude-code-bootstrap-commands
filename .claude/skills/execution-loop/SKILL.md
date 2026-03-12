@@ -124,6 +124,33 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ---
 
+## Step 8: Systematic Debugging (if verification failed)
+
+If Step 7 verification passes, skip to Step 9.
+
+If verification **fails**, invoke the `systematic-debugging` skill before attempting any fix. The skill enforces a mandatory 4-phase process:
+
+1. **Root Cause Investigation** — read errors carefully, reproduce, check recent changes, gather evidence, trace data flow
+2. **Pattern Analysis** — find working examples, compare against references, identify differences
+3. **Hypothesis Testing** — form a single hypothesis, test minimally, verify before continuing
+4. **Implementation** — create failing test, implement single fix, verify
+
+**Escalation rule:** If 3+ fix attempts fail for the same issue:
+- STOP the execution loop
+- Update `docs/ai/<initiative>-status.md` with the architectural concern and evidence from each attempt
+- Flag the current slice for re-planning
+- Do NOT continue to Step 9 — wait for user acknowledgment
+
+After successful debugging, return to Step 7 to re-verify, then continue to Step 9.
+
+Supporting techniques available in `.claude/skills/systematic-debugging/`:
+- `root-cause-tracing.md` — backward tracing through call stacks
+- `defense-in-depth.md` — multi-layer validation after fix
+- `condition-based-waiting.md` — replace arbitrary timeouts with condition polling
+- `find-polluter.sh` — bisection script for test pollution
+
+---
+
 ## Step 9: Update Docs
 
 After a completed or partially completed slice, update all relevant docs:
