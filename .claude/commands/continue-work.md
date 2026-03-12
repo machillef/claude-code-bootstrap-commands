@@ -4,9 +4,22 @@ User input: $ARGUMENTS
 
 Interpret the argument as the initiative name, optionally with a specific constraint or priority.
 
-Required behavior:
-- read `CLAUDE.md`
-- read the initiative docs in `docs/ai/`
+## Session Start Checklist
+
+Before doing anything else, execute these reads in order:
+
+1. Read `CLAUDE.md` — project rules and structure
+2. Read `docs/ai/<initiative>-status.md` — where are we?
+3. Read `docs/ai/<initiative>-slices.md` — what's the plan?
+4. Read `docs/ai/<initiative>-plan.md` (if it exists) — strategy and constraints
+5. Read any learned skills relevant to this initiative (`~/.claude/skills/learned/`)
+6. Read memory files relevant to this initiative (`~/.claude/projects/*/memory/`)
+7. Run `git log --oneline -10` — what changed since last session?
+
+Only then proceed to the execution loop. Do not skip this checklist.
+
+## Required behavior:
+
 - determine the next in-progress or next planned slice
 - reconfirm scope before editing
 - research before implementing: search codebase for existing patterns, check package registries for libraries

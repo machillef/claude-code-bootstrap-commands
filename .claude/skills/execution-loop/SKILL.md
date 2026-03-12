@@ -115,12 +115,29 @@ If ECC is **not** installed: apply the discipline directly (write tests first, r
 
 ---
 
-## Step 7: Verify
+## Step 7: Verify (max 3 attempts)
+
+Run targeted tests for the changed area first, broader build/test only as needed.
+
+```
+┌─────────────────────────────────────────────────────┐
+│  7a. Run validation command for this slice.         │
+│                                                     │
+│  7b. EVALUATE                                       │
+│      PASS ──► Step 9                                │
+│      FAIL ──► Read failure, update diagnosis,       │
+│               fix, loop back to 7a.                 │
+│                                                     │
+│  After 3 consecutive failures on the same slice:    │
+│  STOP. Record what you know in status.md, mark      │
+│  the slice as Blocked, and report to the user.      │
+│  Do not keep looping.                               │
+└─────────────────────────────────────────────────────┘
+```
 
 - Check `docs/ai/<initiative>-scope-map.md` for a `## Verification Commands` table. If it exists, use those exact commands. If not, infer from the stack.
-- Run targeted tests for the changed area first
-- Broader build/test only as needed
 - Record failures honestly — do not retry blindly
+- Each attempt must change something (fix, different approach) — never re-run the exact same code expecting a different result
 
 ---
 
@@ -186,7 +203,30 @@ Do not summarize vaguely. A fresh session reading only this file must be able to
 
 ---
 
-## Step 10: Stop Cleanly
+## Step 10: Cross-Initiative Learning
+
+**Mandatory** after every completed slice (skip only for blocked/abandoned slices).
+
+After updating docs, check if this slice revealed a reusable pattern:
+
+1. **Did you discover something that applies beyond this slice?** Examples:
+   - A retry pattern that other suites/modules will need
+   - An API quirk or schema change
+   - A tool/library behavior that wasn't obvious
+   - A failure mode category (infra vs product vs test code)
+
+2. **If yes:** save it as a learned skill or update an existing one.
+   - Cross-project patterns → global (`~/.claude/skills/learned/`)
+   - Project-specific patterns → project (`.claude/skills/learned/`)
+   - Use the `learn-eval` skill if available, or write directly
+
+3. **If no:** move on — not every slice produces a learning. Don't force it.
+
+The goal is cumulative intelligence: each initiative should make the next one faster. Patterns discovered in Suite A should inform Suite B without re-discovery.
+
+---
+
+## Step 11: Stop Cleanly
 
 **Always** end with this exact structured output — do not end conversationally:
 
