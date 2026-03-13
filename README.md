@@ -25,6 +25,7 @@ Claude also uses two specialist agents:
 ## Design principles
 
 - **Durable repo state beats chat memory.** `docs/ai/` covers initiative state across sessions and now acts as the shared state layer between the Claude and Codex variants.
+- **Minimal CLAUDE.md in target repos.** Both bootstrap workflows create a small (30–40 line) `CLAUDE.md` with stable project facts only — stack, build/test commands, file structure, and a pointer to `docs/ai/`. No rules, no session state, nothing that duplicates your global `~/.claude/CLAUDE.md`. If one already exists, only missing sections are added.
 - **Scale to change size.** Small change → no docs overhead. Medium → scope-map, design, slices, status. Large → those files plus contracts, risks, plan, decisions, and architecture discovery. New project → requirements, design, decisions, plan, slices, status.
 - **ECC-native.** References [everything-claude-code](https://github.com/affaan-m/everything-claude-code) agents and language-specific skills instead of duplicating them locally.
 - **Codex-native additive install.** The Codex variant installs namespaced skills and merges a managed block into `~/.codex/AGENTS.md` without overwriting user-owned config.
