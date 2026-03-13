@@ -32,6 +32,18 @@ State the classification explicitly.
 
 ## Step 1: Discover the Repo
 
+Before writing any plan or proposing net-new implementation, do research first:
+
+- search the codebase for existing patterns
+- check package registries before inventing local utilities
+- check primary docs when the task depends on external APIs or framework behavior
+- prefer adapting a proven approach over writing from scratch
+
+If you have Codex role configs for `explorer` or `docs-researcher`, use them for
+evidence gathering and docs verification.
+
+## Step 2: Discover the Repo
+
 Catalog:
 
 - language and runtime
@@ -53,21 +65,21 @@ Record concrete commands in `docs/ai/<initiative>-scope-map.md` under:
 | Lint | <exact command or N/A> |
 ```
 
-## Step 2: Map Scope And Done-Criteria
+## Step 3: Map Scope And Done-Criteria
 
 Write concrete in-scope, adjacent, and out-of-scope areas using file paths.
 
 Derive 2-4 initiative-specific Definition of Done items and store them in
 `docs/ai/<initiative>-scope-map.md`.
 
-## Step 3: Design Exploration
+## Step 4: Design Exploration
 
 Invoke `codex-brainstorm-design` before creating slice plans.
 
 Do not proceed until the design is written to `docs/ai/<initiative>-design.md`
 and the user has approved it.
 
-## Step 4: Large-Change Discovery
+## Step 5: Large-Change Discovery
 
 If the initiative is large, spawn a sub-agent using
 `prompts/architecture-discovery.md` and write its validated output to
@@ -76,7 +88,7 @@ If the initiative is large, spawn a sub-agent using
 Treat the sub-agent output as input to the docs, not as ground truth. Cross-check
 it against what you verified directly.
 
-## Step 5: Create Initiative Docs
+## Step 6: Create Initiative Docs
 
 Medium change:
 
@@ -108,7 +120,7 @@ facts only:
 
 If it already exists, append only missing stable facts. Do not overwrite user rules.
 
-## Step 6: Define The First Safe Slice
+## Step 7: Define The First Safe Slice
 
 The first slice must:
 
@@ -117,7 +129,7 @@ The first slice must:
 - include a runnable validation command
 - avoid depending on unfinished work elsewhere
 
-## Step 7: Stop Cleanly
+## Step 8: Stop Cleanly
 
 End with a compact structured summary:
 

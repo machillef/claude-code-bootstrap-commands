@@ -13,6 +13,7 @@ This directory contains a Codex-native variant of the bootstrap workflow.
 
 - Namespaced skills under `~/.codex/skills/`
 - A managed block inside `~/.codex/AGENTS.md` that advertises the workflow
+- An optional reference bundle under `~/.codex/bootstrap-reference/claude-code-bootstrap-commands/`
 
 The installer does **not** modify `~/.codex/config.toml`.
 
@@ -24,6 +25,36 @@ The installer does **not** modify `~/.codex/config.toml`.
 - `codex-continue-work`
 - `codex-brainstorm-design`
 - `codex-systematic-debugging`
+- `codex-orchestrate`
+
+## ECC-Inspired Compatibility Layer
+
+This is not a direct port of `everything-claude-code`. Codex does not expose the
+same plugin, slash-command, or hook model. Instead, this variant recreates the
+portable parts of ECC in Codex-native form:
+
+- durable initiative state in `docs/ai/`
+- planner-style bootstrap before implementation
+- research-first workflow before new code
+- TDD-first execution for behavioral changes
+- reviewer and security-review handoff discipline
+- optional multi-agent role templates for exploration, review, and docs research
+- orchestration patterns with explicit handoff documents
+
+## Reference Bundle
+
+The installer links a non-invasive reference bundle to:
+
+`~/.codex/bootstrap-reference/claude-code-bootstrap-commands/`
+
+That bundle includes:
+
+- `config.reference.toml` — an ECC-inspired sample Codex config
+- `agents/*.toml` — sample multi-agent role configs
+- `README.md` — guidance on how to adopt the reference files manually
+
+Nothing in the reference bundle is auto-applied. It exists so users can merge
+the ideas into their existing Codex setup intentionally.
 
 ## How To Invoke
 

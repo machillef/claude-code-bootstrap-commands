@@ -5,6 +5,9 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CODEX_DIR="$HOME/.codex"
 SKILL_SOURCE_DIR="$REPO_DIR/codex/skills"
 SKILL_DEST_DIR="$CODEX_DIR/skills"
+REFERENCE_SOURCE_DIR="$REPO_DIR/codex/reference"
+REFERENCE_DEST_ROOT="$CODEX_DIR/bootstrap-reference"
+REFERENCE_DEST_DIR="$REFERENCE_DEST_ROOT/claude-code-bootstrap-commands"
 AGENTS_FILE="$CODEX_DIR/AGENTS.md"
 FORCE=false
 MANAGED_START='<!-- BEGIN claude-code-bootstrap-commands -->'
@@ -102,11 +105,14 @@ echo "(skills are linked; AGENTS.md is merged conservatively)"
 echo ""
 
 mkdir -p "$SKILL_DEST_DIR"
+mkdir -p "$REFERENCE_DEST_ROOT"
 for skill_dir in "$SKILL_SOURCE_DIR"/*; do
   [ -d "$skill_dir" ] || continue
   skill_name="$(basename "$skill_dir")"
   install_directory_link "$skill_dir" "$SKILL_DEST_DIR/$skill_name" "skill:   $skill_name"
 done
+
+install_directory_link "$REFERENCE_SOURCE_DIR" "$REFERENCE_DEST_DIR" "reference bundle"
 
 mkdir -p "$CODEX_DIR"
 merge_agents_block "$AGENTS_FILE"
@@ -114,3 +120,4 @@ merge_agents_block "$AGENTS_FILE"
 echo ""
 echo "Done. Restart Codex if it is already running."
 echo "No changes were made to config.toml."
+echo "Reference bundle: $REFERENCE_DEST_DIR"

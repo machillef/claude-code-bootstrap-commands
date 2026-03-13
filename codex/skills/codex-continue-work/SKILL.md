@@ -23,19 +23,28 @@ Before editing:
 1. Run a stale check against recent commits.
 2. Determine the in-progress or next planned slice.
 3. Reconfirm the exact touched area and adjacent non-target areas.
-4. Search for existing repo patterns before implementing.
-5. Apply test-first discipline for behavioral changes.
-6. Implement one slice only.
-7. If verification fails, invoke `codex-systematic-debugging`.
-8. Verify with the narrowest relevant command first.
-9. Update `docs/ai/` docs to match reality.
-10. Stop with a clear next step.
+4. Research first:
+   - search for existing repo patterns
+   - check package registries before inventing utilities
+   - verify external APIs or framework behavior against primary docs when relevant
+5. If you have Codex role configs, use:
+   - `explorer` for read-only evidence gathering
+   - `docs-researcher` for external behavior verification
+   - `reviewer` after implementation
+6. Apply test-first discipline for behavioral changes.
+7. Implement one slice only.
+8. If verification fails, invoke `codex-systematic-debugging`.
+9. Verify with the narrowest relevant command first.
+10. Review the diff critically for correctness, security, regressions, and missing tests.
+11. Update `docs/ai/` docs to match reality.
+12. Stop with a clear next step.
 
 ## Preferred Codex Helpers
 
 - `verification-loop` for broader pre-PR validation
 - `security-review` when the slice crosses trust boundaries
 - `session-handoff` when ending a long session
+- `codex-orchestrate` when the slice needs explicit multi-agent handoffs
 
 ## Required Status Format
 

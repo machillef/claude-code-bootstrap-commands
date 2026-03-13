@@ -111,6 +111,8 @@ cd C:\path\to\claude-bootstrap
 ~/.codex/skills/codex-continue-work
 ~/.codex/skills/codex-brainstorm-design
 ~/.codex/skills/codex-systematic-debugging
+~/.codex/skills/codex-orchestrate
+~/.codex/bootstrap-reference/claude-code-bootstrap-commands/
 ~/.codex/AGENTS.md   (managed block merge only)
 ```
 
@@ -220,7 +222,33 @@ Use codex-continue-work for initiative migrate-to-react.
 Use codex-quick-change to add Google OAuth to the settings page.
 ```
 
+```text
+Use codex-orchestrate for a feature workflow that needs planning, implementation, review, and security handoffs.
+```
+
 See [codex/README.md](codex/README.md) for the Codex-specific workflow details.
+
+### Codex: ECC-inspired reference bundle
+
+The Codex installer also links a reference bundle at:
+
+`~/.codex/bootstrap-reference/claude-code-bootstrap-commands/`
+
+This bundle is the "kinda our own version of ECC for Codex" layer:
+
+- sample multi-agent role configs inspired by ECC's `.codex/agents/`
+- a non-invasive `config.reference.toml` users can merge manually
+- guidance on how to adopt ECC-style Codex patterns without overwriting an existing setup
+
+For contributors working on this repository itself, there is also a checked-in
+repo-local `.codex/` directory with:
+
+- `.codex/AGENTS.md`
+- `.codex/config.toml`
+- `.codex/agents/*.toml`
+
+That gives this repo its own Codex-native baseline without touching any user's
+global Codex files.
 
 ## docs/ai/ structure
 

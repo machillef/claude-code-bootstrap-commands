@@ -15,20 +15,22 @@ Use this skill for a truly greenfield project.
    - expected scale and lifetime
    - hard constraints
    - strongest language or ecosystem
-3. Invoke `codex-brainstorm-design` and wait for user approval of the design doc.
-4. Spawn a sub-agent using `prompts/stack-advisor.md` to recommend one stack.
-5. Present the recommendation and wait for explicit user confirmation.
-6. Scaffold using an official CLI or maintained starter.
-7. Verify the scaffold builds and the test runner can execute at least one isolated test.
-8. Create:
+3. Research existing scaffolds, starter repos, and primary framework docs before choosing a stack.
+4. If you have a `docs-researcher` role, use it to verify framework and starter-template claims against primary sources.
+5. Invoke `codex-brainstorm-design` and wait for user approval of the design doc.
+6. Spawn a sub-agent using `prompts/stack-advisor.md` to recommend one stack.
+7. Present the recommendation and wait for explicit user confirmation.
+8. Scaffold using an official CLI or maintained starter.
+9. Verify the scaffold builds and the test runner can execute at least one isolated test.
+10. Create:
    - `docs/ai/<initiative>-requirements.md`
    - `docs/ai/<initiative>-design.md`
    - `docs/ai/<initiative>-decisions.md`
    - `docs/ai/<initiative>-plan.md`
    - `docs/ai/<initiative>-slices.md`
    - `docs/ai/<initiative>-status.md`
-9. Create or extend repo `AGENTS.md` with stable project facts only.
-10. Stop before implementing features.
+11. Create or extend repo `AGENTS.md` with stable project facts only.
+12. Stop before implementing features.
 
 ## Output
 

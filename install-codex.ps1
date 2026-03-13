@@ -11,6 +11,9 @@ $RepoDir = $PSScriptRoot
 $CodexDir = Join-Path $HOME '.codex'
 $SkillSourceDir = Join-Path (Join-Path $RepoDir 'codex') 'skills'
 $SkillDestDir = Join-Path $CodexDir 'skills'
+$ReferenceSourceDir = Join-Path (Join-Path $RepoDir 'codex') 'reference'
+$ReferenceDestRoot = Join-Path $CodexDir 'bootstrap-reference'
+$ReferenceDestDir = Join-Path $ReferenceDestRoot 'claude-code-bootstrap-commands'
 $AgentsFile = Join-Path $CodexDir 'AGENTS.md'
 $ManagedStart = '<!-- BEGIN claude-code-bootstrap-commands -->'
 $ManagedEnd = '<!-- END claude-code-bootstrap-commands -->'
@@ -154,12 +157,19 @@ if (-not (Test-Path $SkillDestDir)) {
     New-Item -ItemType Directory -Path $SkillDestDir -Force | Out-Null
 }
 
+if (-not (Test-Path $ReferenceDestRoot)) {
+    New-Item -ItemType Directory -Path $ReferenceDestRoot -Force | Out-Null
+}
+
 foreach ($skillDir in Get-ChildItem $SkillSourceDir -Directory) {
     Install-DirectoryLink -Source $skillDir.FullName -Destination (Join-Path $SkillDestDir $skillDir.Name) -Label "skill:   $($skillDir.Name)"
 }
+
+Install-DirectoryLink -Source $ReferenceSourceDir -Destination $ReferenceDestDir -Label 'reference bundle'
 
 Merge-AgentsBlock -Path $AgentsFile
 
 Write-Host ""
 Write-Host "Done. Restart Codex if it is already running."
 Write-Host "No changes were made to config.toml."
+Write-Host "Reference bundle: $ReferenceDestDir"
