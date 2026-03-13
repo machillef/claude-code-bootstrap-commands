@@ -28,7 +28,7 @@ Only then proceed to the execution loop. Do not skip this checklist.
 - review: use code-reviewer agent (or self-review if ECC not installed) after every slice
 - verify with the smallest relevant validation commands
 - update initiative docs after the step
-- stop cleanly with the mandatory structured output format (see execution-loop Step 10)
+- stop cleanly with the mandatory structured output format (see execution-loop Step 12)
 
 Use bounded delegation (check ECC is installed first):
 - tdd-guide → any slice that adds or changes behavior (default for most slices)
