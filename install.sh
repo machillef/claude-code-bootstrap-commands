@@ -49,6 +49,15 @@ install_link() {
     else
       echo "  SKIPPED  $label  (regular file exists from another source; use --force to override)"
     fi
+  elif [ -e "$dst" ]; then
+    # Directory or other item from another source
+    if [ "$FORCE" = true ]; then
+      rm -rf "$dst"
+      ln -s "$src" "$dst"
+      echo "  updated  $label  (replaced existing item with symlink)"
+    else
+      echo "  SKIPPED  $label  (existing item exists from another source; use --force to override)"
+    fi
   else
     # Nothing there — create the symlink
     ln -s "$src" "$dst"
@@ -79,8 +88,7 @@ done
 mkdir -p "$CLAUDE_DIR/skills"
 for skill_dir in "$REPO_DIR/.claude/skills"/*/; do
   skill_name="$(basename "$skill_dir")"
-  mkdir -p "$CLAUDE_DIR/skills/$skill_name"
-  install_link "${skill_dir%/}/SKILL.md" "$CLAUDE_DIR/skills/$skill_name/SKILL.md" "skill:   $skill_name"
+  install_link "${skill_dir%/}" "$CLAUDE_DIR/skills/$skill_name" "skill:   $skill_name"
 done
 
 echo ""

@@ -77,14 +77,19 @@ function Install-Link {
             }
         }
         else {
-            # Regular file from another source
+            # Regular file or directory from another source
             if ($Force) {
-                Remove-Item $Destination -Force
+                if ($item.PSIsContainer) {
+                    Remove-Item $Destination -Recurse -Force
+                }
+                else {
+                    Remove-Item $Destination -Force
+                }
                 New-Item -ItemType SymbolicLink -Path $Destination -Target $Source | Out-Null
-                Write-Host "  updated  $Label  (replaced file with symlink)"
+                Write-Host "  updated  $Label  (replaced existing item with symlink)"
             }
             else {
-                Write-Host "  SKIPPED  $Label  (regular file exists from another source; use -Force to override)"
+                Write-Host "  SKIPPED  $Label  (existing item exists from another source; use -Force to override)"
             }
         }
     }
@@ -127,12 +132,7 @@ foreach ($f in Get-ChildItem (Join-Path $RepoDir '.claude' 'agents') -Filter '*.
 $skillsDir = Join-Path $ClaudeDir 'skills'
 if (-not (Test-Path $skillsDir)) { New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null }
 foreach ($skillDir in Get-ChildItem (Join-Path $RepoDir '.claude' 'skills') -Directory) {
-    $destSkillDir = Join-Path $skillsDir $skillDir.Name
-    if (-not (Test-Path $destSkillDir)) { New-Item -ItemType Directory -Path $destSkillDir -Force | Out-Null }
-    $skillFile = Join-Path $skillDir.FullName 'SKILL.md'
-    if (Test-Path $skillFile) {
-        Install-Link -Source $skillFile -Destination (Join-Path $destSkillDir 'SKILL.md') -Label "skill:   $($skillDir.Name)"
-    }
+    Install-Link -Source $skillDir.FullName -Destination (Join-Path $skillsDir $skillDir.Name) -Label "skill:   $($skillDir.Name)"
 }
 
 Write-Host ""
