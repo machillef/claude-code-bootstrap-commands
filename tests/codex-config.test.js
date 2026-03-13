@@ -64,6 +64,36 @@ if (
 else failed++;
 
 if (
+  test('reference config does not pin a top-level model provider', () => {
+    assert.ok(
+      !/^model_provider\s*=/m.test(referenceConfig),
+      'Expected codex/reference/config.reference.toml to inherit the CLI default provider',
+    );
+  })
+)
+  passed++;
+else failed++;
+
+if (
+  test('reference config points role entries at the installed bootstrap-reference bundle', () => {
+    const expectedPaths = [
+      'bootstrap-reference/claude-code-bootstrap-commands/agents/explorer.toml',
+      'bootstrap-reference/claude-code-bootstrap-commands/agents/reviewer.toml',
+      'bootstrap-reference/claude-code-bootstrap-commands/agents/docs-researcher.toml',
+    ];
+
+    for (const expectedPath of expectedPaths) {
+      assert.ok(
+        referenceConfig.includes(`config_file = "${expectedPath}"`),
+        `Expected reference config to include ${expectedPath}`,
+      );
+    }
+  })
+)
+  passed++;
+else failed++;
+
+if (
   test('sample role configs do not use o4-mini', () => {
     const roleFiles = [
       ...fs.readdirSync(repoAgentsDir).map(file => path.join(repoAgentsDir, file)),

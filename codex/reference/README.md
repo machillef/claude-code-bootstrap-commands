@@ -28,9 +28,12 @@ Use these files as merge inputs, not as a blind copy-over:
 
 1. Compare your current `~/.codex/config.toml` against `config.reference.toml`.
 2. Copy only the sections you actually want.
-3. Keep your own auth, MCP credentials, and project settings intact.
-4. If you define custom `[agents.<name>]` entries, point them at the provided
-   `agents/*.toml` files or merge their instructions into your own roles.
+3. If you merge the sample `[agents.<name>]` entries into global
+   `~/.codex/config.toml`, the bundled `config_file` paths assume the installer
+   linked this folder to `~/.codex/bootstrap-reference/claude-code-bootstrap-commands/`.
+4. If you prefer repo-local `.codex/config.toml`, rewrite those `config_file`
+   paths so they resolve relative to that repository.
+5. Keep your own auth, MCP credentials, and project settings intact.
 
 ## Why This Exists
 

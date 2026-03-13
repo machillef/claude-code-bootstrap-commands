@@ -71,6 +71,9 @@ The Codex installer is additive:
 - merges a managed block into `~/.codex/AGENTS.md`
 - does **not** modify `~/.codex/config.toml`
 
+On Windows, `install-codex.ps1` requires PowerShell 7+ and either **Developer
+Mode** enabled or an **Administrator** shell so it can create symlinks.
+
 ```bash
 # Linux / macOS / WSL
 cd ~/path/to/claude-bootstrap
