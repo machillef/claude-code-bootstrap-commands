@@ -1,19 +1,26 @@
 # docs/ai
 
-This folder stores durable working state for substantial initiatives. It is the source of truth for active work — not CLAUDE.md, not conversation context.
+This folder stores durable working state for substantial initiatives. It is the source of truth for active work across the Claude and Codex variants — not a global instruction file, not conversation context.
 
 ## Scale to change size
 
 | Size | Files to create |
 |---|---|
 | Small change | None — use `quick-changes-log.md` only |
-| Medium (feature, 1-3 days) | scope-map + slices + status |
-| Large (migration, multi-week) | All seven files below + architecture-discovery |
+| Medium (feature, 1-3 days) | scope-map + design + slices + status |
+| Large (migration, multi-week) | Medium set plus contracts + risks + plan + decisions + architecture-discovery |
+| New project | requirements + design + decisions + plan + slices + status |
 
 ## File roles
 
 ### `<initiative>-scope-map.md`
 What parts of the repo are relevant, adjacent, or out of scope. Use concrete file paths.
+
+### `<initiative>-requirements.md`
+Used for greenfield projects. Captures what is being built, constraints, scale, and non-goals.
+
+### `<initiative>-design.md`
+Validated design doc for the current initiative. Captures architecture, boundaries, data flow, error handling, and testing approach.
 
 ### `<initiative>-contracts.md`
 Routes, APIs, auth/session behavior, events, shared dependencies, integration contracts. What must not break.

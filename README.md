@@ -1,12 +1,12 @@
 # claude-code-bootstrap-commands
 
-A disciplined workflow for Claude Code covering every project scenario: opening an existing codebase, starting from scratch, or making a small targeted fix — without a bloated CLAUDE.md that drifts over time.
+A disciplined workflow for Claude Code, with an in-progress Codex-native variant, covering every project scenario: opening an existing codebase, starting from scratch, or making a small targeted fix — without a bloated global instruction file that drifts over time.
 
 ## What it does
 
-Instead of generating a massive `CLAUDE.md` that gets stale, this workflow keeps `CLAUDE.md` minimal and stores all project-specific state in `docs/ai/` files alongside your code. Claude reads those files on each session — they stay current because they live in the repo.
+Instead of generating a massive instruction file that gets stale, this workflow keeps the global agent guidance minimal and stores all project-specific state in `docs/ai/` files alongside your code. The active CLI reads those files on each session — they stay current because they live in the repo.
 
-Four commands cover every scenario:
+Claude currently exposes four command entrypoints:
 
 | Command | When to use |
 |---|---|
@@ -15,7 +15,7 @@ Four commands cover every scenario:
 | `/bootstrap-new <what you're building>` | Greenfield project. Gathers requirements, picks an opinionated stack, scaffolds the project, creates `docs/ai/` planning docs. Does not implement. |
 | `/continue-work <initiative>` | Resume after either bootstrap. Reads `docs/ai/` state, picks the next slice, implements narrowly, verifies, updates docs. |
 
-Two agents:
+Claude also uses two specialist agents:
 
 | Agent | When | What it does |
 |---|---|---|
@@ -24,19 +24,20 @@ Two agents:
 
 ## Design principles
 
-- **No CLAUDE.md in target repos.** Your global `~/.claude/CLAUDE.md` covers universal principles. `docs/ai/` covers initiative state. A repo-level CLAUDE.md loads context every session and drifts — so this workflow never writes one.
-- **Scale to change size.** Small change → no docs overhead. Medium → 3 docs/ai files. Large → 7 docs/ai files + architecture discovery. New project → 5 docs/ai files starting from requirements.
+- **Durable repo state beats chat memory.** `docs/ai/` covers initiative state across sessions and now acts as the shared state layer between the Claude and Codex variants.
+- **Scale to change size.** Small change → no docs overhead. Medium → scope-map, design, slices, status. Large → those files plus contracts, risks, plan, decisions, and architecture discovery. New project → requirements, design, decisions, plan, slices, status.
 - **ECC-native.** References [everything-claude-code](https://github.com/affaan-m/everything-claude-code) agents and language-specific skills instead of duplicating them locally.
+- **Codex-native additive install.** The Codex variant installs namespaced skills and merges a managed block into `~/.codex/AGENTS.md` without overwriting user-owned config.
 - **Stale check on resume.** Before trusting `docs/ai/`, the execution loop checks recent git commits against doc dates and flags drift.
 
 ## Installation
 
 ### Prerequisites
 
-- [Claude Code](https://claude.ai/code) installed
-- [everything-claude-code](https://github.com/affaan-m/everything-claude-code) plugin (install at user scope for global availability)
+- For the Claude variant: [Claude Code](https://claude.ai/code) plus the [everything-claude-code](https://github.com/affaan-m/everything-claude-code) plugin
+- For the Codex variant: Codex CLI
 
-### On a new workstation (Linux / macOS / WSL)
+### Claude variant on a new workstation (Linux / macOS / WSL)
 
 ```bash
 # 1. Clone this repo to a permanent location
@@ -47,7 +48,7 @@ cd ~/path/to/claude-bootstrap
 ./install.sh
 ```
 
-### On Windows (PowerShell)
+### Claude variant on Windows (PowerShell)
 
 Requires PowerShell 7+ and either **Developer Mode** enabled or an **Administrator** shell.
 
@@ -62,7 +63,37 @@ cd C:\path\to\claude-bootstrap
 
 Both installers create symlinks from `~/.claude/` into this repo. It is safe to re-run after pulling updates.
 
-**What it writes:**
+### Codex variant
+
+The Codex installer is additive:
+
+- links namespaced skills from this repo into `~/.codex/skills/`
+- merges a managed block into `~/.codex/AGENTS.md`
+- does **not** modify `~/.codex/config.toml`
+
+```bash
+# Linux / macOS / WSL
+cd ~/path/to/claude-bootstrap
+./install-codex.sh
+```
+
+```powershell
+# Windows (PowerShell)
+cd C:\path\to\claude-bootstrap
+.\install-codex.ps1
+```
+
+### Both CLIs from one clone
+
+```bash
+./install-all.sh
+```
+
+```powershell
+.\install-all.ps1
+```
+
+**Claude installer writes:**
 ```
 ~/.claude/commands/bootstrap-existing.md
 ~/.claude/commands/continue-work.md
@@ -72,7 +103,18 @@ Both installers create symlinks from `~/.claude/` into this repo. It is safe to 
 ~/.claude/skills/execution-loop/SKILL.md
 ```
 
-**What it never touches:** your existing `CLAUDE.md`, `rules/`, custom skills, plugin configs, MCP settings, or any file it did not install.
+**Codex installer writes:**
+```
+~/.codex/skills/codex-quick-change
+~/.codex/skills/codex-bootstrap-existing
+~/.codex/skills/codex-bootstrap-new
+~/.codex/skills/codex-continue-work
+~/.codex/skills/codex-brainstorm-design
+~/.codex/skills/codex-systematic-debugging
+~/.codex/AGENTS.md   (managed block merge only)
+```
+
+**What it never touches by default:** your existing `CLAUDE.md`, `rules/`, custom skills, plugin configs, `~/.codex/config.toml`, or any file it did not install or merge via the managed AGENTS block.
 
 If a file with the same name already exists and was not installed by this script, it is **skipped with a warning** rather than overwritten. Use `--force` only if you are sure the conflict is safe to override.
 
@@ -82,14 +124,16 @@ If a file with the same name already exists and was not installed by this script
 # Linux / macOS / WSL
 cd ~/path/to/claude-bootstrap
 git pull
-./install.sh   # updates only the files it owns
+./install.sh         # updates Claude-owned links
+./install-codex.sh   # updates Codex-owned links and refreshes the AGENTS block
 ```
 
 ```powershell
 # Windows (PowerShell)
 cd C:\path\to\claude-bootstrap
 git pull
-.\install.ps1   # updates only the files it owns
+.\install.ps1         # updates Claude-owned links
+.\install-codex.ps1   # updates Codex-owned links and refreshes the AGENTS block
 ```
 
 ### Installing ECC
@@ -108,7 +152,7 @@ Or at project scope to try it in one repo first:
 
 ## Usage
 
-### Small change
+### Claude: small change
 
 ```
 /quick-change add Google OAuth to the settings page
@@ -116,7 +160,7 @@ Or at project scope to try it in one repo first:
 
 Finds the existing auth pattern, applies it minimally, verifies, logs one line to `docs/ai/quick-changes-log.md`.
 
-### Medium or large change in an existing repo
+### Claude: medium or large change in an existing repo
 
 ```
 /bootstrap-existing migrate-to-react
@@ -130,7 +174,7 @@ Triages the request, detects the tech stack, maps scope boundaries, creates `doc
 
 Reads `docs/ai/` state, checks for drift since last session, picks the next slice, implements narrowly with TDD, verifies, updates docs, stops cleanly with the next recommended slice.
 
-### New project from scratch
+### Claude: new project from scratch
 
 ```
 /bootstrap-new task management API
@@ -159,9 +203,28 @@ Take that checklist, run manual validation in your target environment, note what
 
 This starts a new disciplined initiative on the same codebase — depth-first now (make things work well, fix breakage found in validation) rather than the breadth-first feature delivery of the first plan. Repeat as needed until the software is stable.
 
+### Codex: invoking the workflow
+
+Codex does not use the Claude-style slash command model. Instead, ask for the
+skill directly:
+
+```text
+Use the codex-bootstrap-existing skill for initiative migrate-to-react.
+```
+
+```text
+Use codex-continue-work for initiative migrate-to-react.
+```
+
+```text
+Use codex-quick-change to add Google OAuth to the settings page.
+```
+
+See [codex/README.md](codex/README.md) for the Codex-specific workflow details.
+
 ## docs/ai/ structure
 
-Created inside your target repo by the commands. Scale depends on scenario:
+Created inside your target repo by the workflow. Scale depends on scenario:
 
 ```
 docs/ai/
@@ -169,6 +232,7 @@ docs/ai/
 
   ← existing repo, medium change:
   <initiative>-scope-map.md
+  <initiative>-design.md
   <initiative>-slices.md
   <initiative>-status.md
 
@@ -181,6 +245,7 @@ docs/ai/
 
   ← new project:
   <initiative>-requirements.md
+  <initiative>-design.md
   <initiative>-decisions.md
   <initiative>-plan.md
   <initiative>-slices.md
