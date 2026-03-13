@@ -168,7 +168,42 @@ Supporting techniques available in `.claude/skills/systematic-debugging/`:
 
 ---
 
-## Step 9: Update Docs
+## Step 9: Re-assessment
+
+After verification passes, step back and evaluate the slice as a whole. This is not a code-quality review (Step 6 handles that) — it is a completeness and risk check: did I do the right thing, and what did I miss?
+
+**Mandatory** for every slice. Do not skip even if verification passed cleanly.
+
+### Pass 1 — Completeness
+
+Re-read the slice definition from `docs/ai/<initiative>-slices.md`. Re-read the diff of what you actually changed.
+
+- Does the diff fully implement the slice goal, or is something partially done?
+- Does the diff touch anything outside the slice's declared "Touched area"?
+- Are there TODOs, hardcoded values, or placeholder implementations?
+- Did you change a contract (function signature, API shape, config key) that the slice didn't call for?
+
+### Pass 2 — Risk
+
+For each changed file, consider failure modes that automated tests won't catch:
+
+- **Error paths**: What happens with unexpected input, null/empty values, or a failed dependency?
+- **Concurrency**: Could parallel execution (threads, async, Parallel.ForEach) cause races or data corruption?
+- **Contracts**: Does this assume a specific response shape, config value, or environmental condition that could differ in production?
+- **Security surface**: Did this expose new input handling, modify auth flow, or change data persistence?
+- **Rollback safety**: If this change is reverted, does it leave the system in a clean state?
+
+### Resolution
+
+- If either pass finds an actionable issue: fix it, return to Step 7 to re-verify, then re-run this step.
+- If both passes are clean: proceed to Step 10.
+- Maximum 2 re-assessment cycles per slice. If issues persist after the second cycle, record them in status.md under "What remains unverified" and proceed.
+
+> **When tests run only in CI/CD**, this step is your primary behavioral safety net. Be proportionally more thorough in Pass 2.
+
+---
+
+## Step 10: Update Docs
 
 After a completed or partially completed slice, update all relevant docs:
 
@@ -203,7 +238,7 @@ Do not summarize vaguely. A fresh session reading only this file must be able to
 
 ---
 
-## Step 10: Cross-Initiative Learning
+## Step 11: Cross-Initiative Learning
 
 **Mandatory** after every completed slice (skip only for blocked/abandoned slices).
 
@@ -226,7 +261,7 @@ The goal is cumulative intelligence: each initiative should make the next one fa
 
 ---
 
-## Step 11: Stop Cleanly
+## Step 12: Stop Cleanly
 
 **Always** end with this exact structured output — do not end conversationally:
 
