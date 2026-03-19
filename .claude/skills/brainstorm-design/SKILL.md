@@ -1,6 +1,6 @@
 ---
 name: brainstorm-design
-description: "Collaborative design exploration before implementation. Explores user intent, requirements, and design through natural dialogue. Produces a validated design doc at docs/ai/<initiative>-design.md. Must be invoked by bootstrap workflows — not directly."
+description: "Design exploration before implementation. Dialogue → 2-3 approaches → approved design doc. Invoked by bootstrap workflows, not directly."
 ---
 
 # Brainstorming Ideas Into Designs

@@ -1,9 +1,15 @@
 ---
 name: workflow-existing-repo
-description: Bootstrap disciplined work in an existing repository. Discovers scope, maps boundaries, creates scaled docs/ai/ control docs, and prepares a safe execution path. Combines Claude Code best practices with ECC-style planning, TDD discipline, reviewer handoff, and repo-state continuity.
+description: "Bootstrap existing repo: triage size, detect stack, map scope, create docs/ai/, define first slice. Does not implement."
 ---
 
 # Workflow: Bootstrap Existing Repo
+
+## Skill Contents
+
+- `templates/claude-md.md` — copy this when creating CLAUDE.md in target repos
+- `templates/slice-format.md` — copy this for each slice definition
+- `templates/verification-commands.md` — copy this into scope-map.md
 
 ## Inputs
 
@@ -55,20 +61,7 @@ Systematically catalog before forming any opinions. Check in order:
 - How is config loaded? (env vars, config files, secrets manager)
 - What does the API response shape look like?
 
-**Verification commands:** Record the concrete commands discovered above into the scope-map so the execution loop knows exactly what to run during verification. Use this format in `docs/ai/<initiative>-scope-map.md`:
-
-```
-## Verification Commands
-| Phase | Command |
-|---|---|
-| Build | <exact build command> |
-| Test (single) | <command to run one test file in isolation> |
-| Test (full) | <command to run the full test suite> |
-| Type check | <type checker command, or "N/A"> |
-| Lint | <linter command, or "N/A"> |
-```
-
-Only include phases that have tooling. Do not invent commands — record what actually exists.
+**Verification commands:** Copy `templates/verification-commands.md` into `docs/ai/<initiative>-scope-map.md` and fill in with the concrete commands discovered above. Only include phases that have tooling. Do not invent commands — record what actually exists.
 
 **Produce a one-screen tech stack summary before moving to Step 2.** This is the foundation for all subsequent decisions.
 
@@ -150,56 +143,16 @@ For large changes, also save: `docs/ai/<initiative>-architecture-discovery.md`
 - Status must reflect current reality, not aspirations
 
 After creating docs/ai/ files, check if `CLAUDE.md` exists in the project root:
-- **Does not exist:** create it with stable project facts discovered in Steps 1–2.
+- **Does not exist:** copy `templates/claude-md.md` from this skill directory and fill in the discovered values.
 - **Already exists:** read it. Add only missing sections — do not overwrite or reformat existing content.
 
-Minimal `CLAUDE.md` template:
-
-```markdown
-# <project-name>
-
-## Stack
-<language, framework, key libraries — one line>
-
-## Build & test
-<build command> | <test command>
-
-## Structure
-<entry point and key directories — 5–8 lines max>
-
-## Key patterns
-- Auth: <how auth is applied, e.g., "JWT middleware on all /api routes">
-- Errors: <how errors are handled, e.g., "Result<T, AppError> throughout">
-- Config: <how config is loaded, e.g., "dotenv via config/settings.py">
-
-## Source of truth
-- `docs/ai/` — initiative planning, status, and decisions
-- `~/.claude/CLAUDE.md` — global coding rules and workflow
-
-Do not store session state or evolving task notes here.
-
-## Start here
-1. Read `docs/ai/<initiative>-status.md` for current slice
-2. Read `docs/ai/<initiative>-slices.md` for scope
-3. Read the touched code paths
-```
-
-**Rules for this file:**
+**Rules for CLAUDE.md:**
 - Stable facts only — stack, structure, build/test commands, observed patterns.
 - No rules that duplicate the global `~/.claude/CLAUDE.md` (no testing %, security rules, git workflow, code style).
 - 40 lines maximum.
 - Patterns section: only include what you actually observed in Step 1 — do not invent or speculate.
 
-**Slice format** (for slices.md):
-```
-## Slice N: <name>
-Goal: <what this slice proves or delivers>
-Touched area: <file paths or modules>
-Tests: <what tests validate this slice>
-Risk: <what could go wrong>
-Rollback: <how to undo if it goes wrong>
-Done when: <concrete observable criterion>
-```
+**Slice format:** Use `templates/slice-format.md` from this skill directory for each slice in slices.md.
 
 ---
 

@@ -1,11 +1,15 @@
 ---
 name: workflow-new-repo
-description: Bootstrap a brand new project with no existing code. Gathers requirements, makes an opinionated stack decision, scaffolds the project, creates docs/ai/ planning docs, and prepares the first slice. Hands off to the same execution-loop as the existing-repo workflow.
+description: "Bootstrap greenfield project: gather requirements, decide stack, scaffold, create docs/ai/, define first slice. Does not implement."
 ---
 
 # Workflow: Bootstrap New Repo
 
 Use this when starting from scratch — no existing code, no existing constraints to discover.
+
+## Skill Contents
+
+This skill shares templates with `workflow-existing-repo/templates/` (CLAUDE.md, slice format). The execution phase after bootstrap uses `execution-loop/templates/` (status entry, stop output).
 
 The key difference from `workflow-existing-repo`: there is nothing to inspect. The challenge here is **decisions**, not discovery. Stack, structure, and conventions are chosen upfront and documented so they survive across sessions.
 
@@ -128,35 +132,11 @@ Status: Accepted
 
 **On boilerplate removal:** Only remove files that the stack-advisor explicitly recommended removing. If stack-advisor made no specific recommendation, apply the scaffold as-is and document "none — applied as-is". Do not guess at what to strip.
 
-After verifying the scaffold, create a minimal `CLAUDE.md` in the project root:
+After verifying the scaffold, create a minimal `CLAUDE.md` using the template from `workflow-existing-repo/templates/claude-md.md`. Fill in the stack, build/test, and structure sections from the scaffold.
 
-```markdown
-# <project-name>
-
-## Stack
-<one-line: language, framework, key libraries — e.g., "Rust CLI, clap 4, tokio async">
-
-## Build & test
-<build command> | <test command>
-
-## Structure
-<entry point and key directories — 5–8 lines max>
-
-## Source of truth
-- `docs/ai/` — initiative planning, status, and decisions
-- `~/.claude/CLAUDE.md` — global coding rules and workflow
-
-Do not store session state or evolving task notes here.
-
-## Start here
-1. Read `docs/ai/<initiative>-status.md` for current slice
-2. Read `docs/ai/<initiative>-slices.md` for scope
-3. Read the touched code paths
-```
-
-**Rules for this file:**
+**Rules for CLAUDE.md:**
 - Stable facts only — stack, structure, build/test commands. Nothing time-sensitive.
-- No rules that duplicate the global `~/.claude/CLAUDE.md` (no testing %, security rules, git workflow, code style).
+- No rules that duplicate the global `~/.claude/CLAUDE.md`.
 - 30 lines maximum.
 - Do not create if `CLAUDE.md` already exists — append missing sections instead.
 
@@ -195,73 +175,13 @@ Already populated in Steps 3 and 4. Will grow as more decisions are made during 
 ```
 
 ### `docs/ai/<initiative>-slices.md`
-Define the first 3-5 slices. Each in the standard format:
-
-```
-## Slice N: <name>
-Goal: <what this slice proves or delivers>
-Touched area: <file paths or modules>
-Tests: <what tests validate this slice>
-Risk: <what could go wrong>
-Rollback: <how to undo>
-Done when: <concrete observable criterion>
-```
+Define the first 3-5 slices using `workflow-existing-repo/templates/slice-format.md`.
 
 First slice for a new project is almost always: **"Verify scaffold builds, tests run, CI passes"** — proving the foundation before building anything.
 
 ### `docs/ai/<initiative>-status.md`
 
-Write the completed bootstrap as Slice 0, then the first real slice as Not Started.
-Use the execution-loop format so `/continue-work` can read it without ambiguity:
-
-```markdown
-# Status: <initiative>
-
-## Slice 0: Bootstrap
-Status: Complete
-Last updated: <today>
-
-### What was implemented
-- Requirements captured in docs/ai/<initiative>-requirements.md
-- Design explored and approved in docs/ai/<initiative>-design.md
-- Stack decided: <stack summary>
-- Scaffold created via: <CLI command or source>
-- docs/ai/ files created: requirements, design, decisions, plan, slices, status
-
-### What was validated
-- <build command run>: pass
-- <test runner command>: pass (or "no tests yet — runner confirmed working")
-
-### What remains unverified
-<anything not confirmed, or "None">
-
-### Blockers
-None
-
-### Next recommended step
-Run /continue-work <initiative> to start Slice 1: <name>
-
----
-
-## Slice 1: <name>
-Status: Not Started
-Last updated: <today>
-
-### What was implemented
-N/A — not started
-
-### What was validated
-N/A
-
-### What remains unverified
-Everything — slice not started
-
-### Blockers
-None
-
-### Next recommended step
-Run /continue-work <initiative> to begin this slice
-```
+Write the completed bootstrap as Slice 0 (Complete), then the first real slice as Not Started. Use `execution-loop/templates/status-entry.md` format for each slice so `/continue-work` can read it without ambiguity.
 
 ---
 

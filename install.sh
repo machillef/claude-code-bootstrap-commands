@@ -100,3 +100,7 @@ echo "  /quick-change <description>        small change, 1-3 files, no bootstrap
 echo "  /bootstrap-existing <initiative>   medium or large change, creates docs/ai/"
 echo "  /bootstrap-new <project>           greenfield project, creates docs/ai/"
 echo "  /continue-work <initiative>        resume after bootstrap"
+echo "  /consolidate-learnings             merge learned skills into parent skill gotchas"
+echo "  /skill-health                      audit skill structure against best practices"
+echo "  /skill-improve <skill>             iteratively improve a specific skill"
+echo "  /retro <initiative>                retrospective with metrics and learnings"
