@@ -1,16 +1,16 @@
 #!/bin/bash
-# PreToolUse hook for Read tool: on first read of a session, check if skill-health is overdue
-# Uses a stamp file to fire only once per session and a history file for staleness
+# PreToolUse hook for Read tool: once per day, check if skill-health is overdue
+# Uses a date-based stamp file so it fires once per calendar day regardless of session boundaries
 
-STAMP="/tmp/.claude-skill-health-checked-$$"
+TODAY=$(date +%Y-%m-%d)
+STAMP="/tmp/.claude-skill-health-checked-${TODAY}"
 HISTORY="$HOME/.claude/skill-health-history.jsonl"
 
-# Only fire once per session (check for stamp from parent process)
-PARENT_STAMP="/tmp/.claude-skill-health-checked-$PPID"
-if [ -f "$PARENT_STAMP" ]; then
+# Already fired today
+if [ -f "$STAMP" ]; then
   exit 0
 fi
-touch "$PARENT_STAMP"
+touch "$STAMP"
 
 # No history at all — first time user
 if [ ! -f "$HISTORY" ]; then
@@ -25,13 +25,12 @@ if [ -z "$LAST_DATE" ]; then
   exit 0
 fi
 
-# Calculate days since last run (portable: works on GNU and BSD date)
-TODAY=$(date +%Y-%m-%d)
+# Same day — no reminder needed
 if [ "$LAST_DATE" = "$TODAY" ]; then
   exit 0
 fi
 
-# Try GNU date first, fall back to simple string comparison for 7-day threshold
+# Try GNU date for day delta, fall back to simple reminder
 LAST_EPOCH=$(date -d "$LAST_DATE" +%s 2>/dev/null)
 TODAY_EPOCH=$(date +%s)
 
@@ -41,8 +40,8 @@ if [ -n "$LAST_EPOCH" ]; then
     echo "Last /skill-health run was ${DAYS_AGO} days ago (${LAST_DATE}). Consider running it to check for structural improvements."
   fi
 else
-  # Fallback: just remind if dates differ (can't calculate delta)
-  echo "Last /skill-health run was on ${LAST_DATE}. Consider running it if it's been a while."
+  # Fallback: can't calculate delta, just remind if dates differ
+  echo "Last /skill-health run was on ${LAST_DATE}. Consider running it if it's been over a week."
 fi
 
 exit 0

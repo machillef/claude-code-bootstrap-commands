@@ -277,7 +277,7 @@ The goal is cumulative intelligence: each initiative should make the next one fa
 
 If no Definition of Done exists, fall back to slice-level validation only.
 
-**After emitting the End of Plan block**, automatically run `/retro <initiative>` to extract metrics and learnings from the completed initiative. This closes the feedback loop — patterns discovered during execution get captured for future initiatives.
+**After emitting the End of Plan block**, suggest running `/retro <initiative>` to extract metrics and learnings. Do not auto-invoke — let the user decide when to run it.
 
 ---
 
