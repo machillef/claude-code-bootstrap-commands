@@ -6,7 +6,7 @@ A disciplined workflow for Claude Code that stores all project state in `docs/ai
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           USER ENTRY POINTS                                │
+│                           USER ENTRY POINTS                                 │
 ├──────────────────┬──────────────────┬──────────────────┬────────────────────┤
 │  /quick-change   │ /bootstrap-      │ /bootstrap-new   │ /continue-work     │
 │  <description>   │ existing <init>  │ <project>        │ <initiative>       │
@@ -33,7 +33,7 @@ A disciplined workflow for Claude Code that stores all project state in `docs/ai
 │                 │ │  agents:         │ │  agents:         │ │              │
 │                 │ │  architecture-   │ │  stack-advisor   │ │  delegates:  │
 │                 │ │  discovery       │ │                  │ │  ECC agents  │
-│                 │ │  (large only)    │ │                  │ │  (if installed)│
+│                 │ │  (large only)    │ │                  │ │(if installed)│
 └─────────────────┘ └───────┬──────────┘ └────────┬─────────┘ └──────┬───────┘
                             │                     │                  │
                             └──────────┬──────────┘                  │
