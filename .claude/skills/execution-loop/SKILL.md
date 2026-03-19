@@ -1,6 +1,6 @@
 ---
 name: execution-loop
-description: Resume substantial work from repo state by reading docs/ai, selecting the next slice, applying TDD/verification, implementing narrowly, and updating status and decisions.
+description: "Continue initiative work: load docs/ai, pick next slice, TDD, verify, update status. One slice at a time."
 ---
 
 # Execution Loop
@@ -9,10 +9,31 @@ Use this workflow to continue an existing initiative after bootstrap.
 
 Intentionally conservative: one slice at a time, narrow implementation, clear verification, doc update, stop cleanly.
 
+## Skill Contents
+
+- `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output)
+- `gotchas/` — known failure patterns from real usage. **Read these before starting any slice.**
+
 ## Inputs
 
 - Initiative name
 - Optional current priority or constraint
+
+---
+
+## Session Start Checklist
+
+Before doing anything else, execute these reads in order:
+
+1. Read `CLAUDE.md` — project rules and structure
+2. Read `docs/ai/<initiative>-status.md` — where are we?
+3. Read `docs/ai/<initiative>-slices.md` — what's the plan?
+4. Read `docs/ai/<initiative>-plan.md` (if it exists)
+5. Read any learned skills relevant to this initiative (`~/.claude/skills/learned/`)
+6. Read `gotchas/` in this skill directory — known failure patterns
+7. Run `git log --oneline -10` — what changed since last session?
+
+Only then proceed. Do not skip this checklist.
 
 ---
 
@@ -211,28 +232,7 @@ After a completed or partially completed slice, update all relevant docs:
 - `docs/ai/<initiative>-slices.md` — update only if slice definitions changed
 - `docs/ai/<initiative>-plan.md` — update only if the plan materially changed
 
-**`docs/ai/<initiative>-status.md` — MANDATORY after every slice attempt, using this exact format:**
-
-```
-## Slice <N>: <name>
-Status: <Not Started | In Progress | Complete | Blocked>
-Last updated: <date>
-
-### What was implemented
-<concrete list of files changed and what each does>
-
-### What was validated
-<exact commands run and their pass/fail result>
-
-### What remains unverified
-<anything not tested or confirmed — be honest>
-
-### Blockers
-<any issues blocking completion, or "None">
-
-### Next recommended step
-<exact action: "Run /continue-work <initiative> to start Slice N+1" or specific blocker resolution>
-```
+**`docs/ai/<initiative>-status.md` — MANDATORY after every slice attempt. Copy the format from `templates/status-entry.md` in this skill directory.**
 
 Do not summarize vaguely. A fresh session reading only this file must be able to determine the true state without inspecting the codebase.
 
@@ -250,12 +250,15 @@ After updating docs, check if this slice revealed a reusable pattern:
    - A tool/library behavior that wasn't obvious
    - A failure mode category (infra vs product vs test code)
 
-2. **If yes:** save it as a learned skill or update an existing one.
-   - Cross-project patterns → global (`~/.claude/skills/learned/`)
-   - Project-specific patterns → project (`.claude/skills/learned/`)
+2. **If yes:** save it in the right place:
+   - **Execution-loop failure patterns** → add to `gotchas/` in this skill directory (one file per pattern)
+   - **Cross-project patterns** → global (`~/.claude/skills/learned/`)
+   - **Project-specific patterns** → project (`.claude/skills/learned/`)
    - Use the `learn-eval` skill if available, or write directly
 
-3. **If no:** move on — not every slice produces a learning. Don't force it.
+3. **Consolidation check:** If the learning relates to an existing skill (not just execution-loop), add it to that skill's gotchas or references — don't leave it orphaned in `~/.claude/skills/learned/` if it has a natural parent.
+
+4. **If no:** move on — not every slice produces a learning. Don't force it.
 
 The goal is cumulative intelligence: each initiative should make the next one faster. Patterns discovered in Suite A should inform Suite B without re-discovery.
 
@@ -263,59 +266,18 @@ The goal is cumulative intelligence: each initiative should make the next one fa
 
 ## Step 12: Stop Cleanly
 
-**Always** end with this exact structured output — do not end conversationally:
+**Always** end with the structured output format in `templates/stop-output.md` — do not end conversationally or with a question.
 
-```
-Slice <N>: <name> — <Complete|In Progress|Blocked>
-Changed: <file list>
-Validated: <commands run and pass/fail>
-Remains: <what's left, or "nothing">
-Next: /continue-work <initiative> → Slice <N+1>: <name>
-```
+**If this was the last slice** (no slices remain as Not Started or In Progress after this update), replace the normal stop output with the End of Plan block from `templates/end-of-plan.md`. To fill it:
 
-Do not replace this with a conversational summary. Do not end with a question. The structured output is mandatory.
+1. Read `## Definition of Done` from scope-map.md. Mark each as MET/NOT MET with evidence.
+2. Scan every slice in status.md for non-empty "What remains unverified." Collect into a flat list.
+3. Cross-check against exit criteria in slices.md — flag any with no validated entry.
+4. Keep checklist items concrete — copy unverified text verbatim.
 
-**If this was the last slice** (no slices remain as Not Started or In Progress after this update), replace the normal next-step line with an End of Plan block:
+If no Definition of Done exists, fall back to slice-level validation only.
 
-1. Read the `## Definition of Done` from `docs/ai/<initiative>-scope-map.md`. For each criterion, check whether it was validated across the completed slices. Mark each as MET or NOT MET with evidence.
-2. Scan every slice section in `docs/ai/<initiative>-status.md` for non-empty "What remains unverified" entries. Collect them into a single flat list, attributed by slice.
-3. Cross-check against exit criteria in `docs/ai/<initiative>-slices.md` — flag any exit criterion with no corresponding validated entry in status.md.
-4. Output this block verbatim (fill in the checklist items from the scans above):
-
-```
----
-## End of Plan
-
-All slices are complete.
-
-### Definition of Done
-<for each criterion from scope-map.md:>
-- [x] <criterion> — MET: <evidence>
-- [ ] <criterion> — NOT MET: <what's missing>
-
-### Remaining Validation
-<if all DoD criteria are met, write "All exit criteria met." and skip the slice-level detail below>
-
-**Slice N — <name>**
-- <copy "What remains unverified" text verbatim>
-- <any unverified exit criterion from slices.md>
-
-**Slice M — <name>**
-- ...
-
-(Omit slices where everything was verified.)
-
-### Next Step
-<if all DoD criteria are met:>
-Initiative is complete. Consider running `/everything-claude-code:learn-eval` to extract reusable patterns from this initiative.
-<if any DoD criterion is NOT MET:>
-→ Run `/bootstrap-existing <initiative>-fixes` to address unmet criteria.
----
-```
-
-Keep checklist items concrete — copy the actual unverified text verbatim, do not paraphrase or summarize. A user reading only this message must know exactly what to test without opening any other file.
-
-If no Definition of Done section exists in scope-map.md (e.g., initiative was bootstrapped before this feature), fall back to the slice-level validation only and note that no initiative-level exit criteria were defined.
+**After emitting the End of Plan block**, suggest running `/retro <initiative>` to extract metrics and learnings. Do not auto-invoke — let the user decide when to run it.
 
 ---
 

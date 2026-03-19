@@ -1,72 +1,46 @@
 ---
-description: Lightweight path for small, well-defined changes (add auth to a page, fix a bug, add a field). Skips full bootstrap. Creates only a minimal status trace. Use when the change touches 1-3 files and follows an existing pattern.
+description: Lightweight path for small, well-defined changes (1-3 files, follows existing pattern). Skips full bootstrap. Creates minimal status trace.
 ---
-
-# Quick Change
 
 **Request:** $ARGUMENTS
 
-You are handling a **small, bounded change** in an existing codebase. Do not bootstrap. Do not create full initiative docs. Move fast and precisely.
+Small, bounded change in an existing codebase. No bootstrap. No full docs/ai/. Move fast and precisely.
 
-## Your Procedure
+## Procedure
 
-### Step 1: Understand the Intent
-Parse the request. Identify:
-- What needs to change (the outcome)
-- Where it likely lives (which part of the codebase)
-- What existing pattern to follow (don't invent — replicate)
+### 1. Understand → Find Pattern → Identify Target
+- Parse the request: what changes, where it lives, what pattern to follow
+- Find how the codebase already does this (Grep/Glob, read 2-3 representative files)
+- Locate exact file(s) to change
 
-### Step 2: Find the Pattern First
-Before touching anything, find how the codebase already does this:
-- If adding auth → find where auth is already applied in similar files
-- If fixing a bug → find the failing path and understand why
-- If adding a field → find how similar fields are defined elsewhere
+**Escalation gate:** If the change requires >3 files or the pattern doesn't exist yet, stop and tell the user to run `/bootstrap-existing` instead.
 
-Use Grep and Glob to locate the pattern. Read 2-3 representative files. Do not read the whole codebase.
+### 2. Apply Minimal Change (with TDD)
+- Replicate existing pattern. Do not improve surrounding code.
+- If behavior changes: write failing test first → implement → confirm pass
+- If fixing a bug: write reproducing test first → fix → confirm pass
+- If purely structural: run existing tests to confirm no regression
+- If no test framework: state this explicitly
 
-### Step 3: Identify the Target
-Locate the exact file(s) to change. Confirm they match the intent.
+### 3. Self-Review
+Before finishing, review the diff:
+- Does it do only what was asked?
+- Security concerns? (input validation, auth, data exposure)
+- Follows existing patterns?
 
-If the change requires more than 3 files or the pattern doesn't exist yet, **stop and tell the user this is a medium/large change** and they should run `/bootstrap-existing` instead.
+### 4. Log
+Create or append to `docs/ai/quick-changes-log.md` using `templates/quick-change-log-entry.md` format.
 
-### Step 4: Apply the Minimal Change
-- Replicate the existing pattern. Do not improve surrounding code.
-- Do not refactor adjacent code.
-- Do not add features beyond what was asked.
-- Keep the diff small and reviewable.
+## Gotchas
 
-### Step 5: Test the Change
-
-TDD applies even to small changes when behavior is added or modified:
-- If the change adds or modifies behavior: write a failing test first, then implement, then confirm it passes
-- If fixing a bug: write a test that reproduces the bug first, then fix it
-- If the change is purely structural (rename, move, config): run existing tests to confirm no regression
-- If no test framework exists: state this explicitly — do not silently skip
-
-### Step 6: Review Your Own Change
-
-Before finishing, review the diff critically:
-- Does the change do only what was asked?
-- Are there any security concerns (input validation, auth, data exposure)?
-- Does it follow the existing codebase patterns?
-
-### Step 7: Create a Minimal Status Trace
-Create or append to `docs/ai/quick-changes-log.md`:
-
-```markdown
-## <date> — <one-line description>
-- Changed: <file(s)>
-- Pattern followed: <where the pattern was found>
-- Tests: <test added/updated and command run, or "existing tests pass" with command, or "no test framework — build only">
-- Reviewed: <yes — self-review of diff>
-```
-
-This keeps a lightweight audit trail without full initiative overhead.
+- **"Just one more file"** — if you need a 4th file, STOP. This is no longer a quick change.
+- **Missing test framework** — don't silently skip testing. State it. If the change is behavioral, recommend the user sets up testing before proceeding.
+- **Pattern doesn't exist** — if you can't find an existing pattern to replicate, this is a design decision, not a quick change. Escalate.
+- **Config changes cascade** — changing config files (appsettings.json, .env, k8s manifests) often has blast radius beyond the immediate file. Check dependents.
 
 ## Rules
 
-- Do not create a CLAUDE.md in the target repo.
-- Do not create the full 7-file docs/ai/ set for a small change.
-- Do not expand scope. If something adjacent looks broken, note it but don't fix it.
-- Prefer Edit over rewrite. Change only what must change.
-- If the change reveals unexpected complexity, stop, report what you found, and recommend `/bootstrap-existing`.
+- Do not create CLAUDE.md in the target repo.
+- Do not create full docs/ai/ set.
+- Do not expand scope. Note adjacent issues but don't fix them.
+- Prefer Edit over rewrite.

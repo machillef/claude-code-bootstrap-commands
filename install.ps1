@@ -135,8 +135,19 @@ foreach ($skillDir in Get-ChildItem (Join-Path $RepoDir '.claude' 'skills') -Dir
     Install-Link -Source $skillDir.FullName -Destination (Join-Path $skillsDir $skillDir.Name) -Label "skill:   $($skillDir.Name)"
 }
 
+# --- Hooks ---
+$hooksDir = Join-Path $ClaudeDir 'hooks'
+if (-not (Test-Path $hooksDir)) { New-Item -ItemType Directory -Path $hooksDir -Force | Out-Null }
+$hookFiles = Get-ChildItem (Join-Path $RepoDir '.claude' 'hooks' '*.sh') -ErrorAction SilentlyContinue
+foreach ($f in $hookFiles) {
+    Install-Link -Source $f.FullName -Destination (Join-Path $hooksDir $f.Name) -Label "hook:    $($f.Name)"
+}
+
 Write-Host ""
 Write-Host "Done. Restart Claude Code for changes to take effect."
+Write-Host ""
+Write-Host "HOOKS: Hook scripts have been linked to ~/.claude/hooks/."
+Write-Host "To activate them, add the entries from .claude/hooks/README.md to ~/.claude/settings.json."
 Write-Host "Future updates: git pull  (symlinks stay live -- no re-install needed)"
 Write-Host ""
 Write-Host "Available in every repo after restart:"
@@ -144,3 +155,7 @@ Write-Host "  /quick-change <description>        small change, 1-3 files, no boo
 Write-Host "  /bootstrap-existing <initiative>   medium or large change, creates docs/ai/"
 Write-Host "  /bootstrap-new <project>           greenfield project, creates docs/ai/"
 Write-Host "  /continue-work <initiative>        resume after bootstrap"
+Write-Host "  /consolidate-learnings             merge learned skills into parent skill gotchas"
+Write-Host "  /skill-health                      audit skill structure against best practices"
+Write-Host "  /skill-improve <skill>             iteratively improve a specific skill"
+Write-Host "  /retro <initiative>                retrospective with metrics and learnings"
