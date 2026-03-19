@@ -91,8 +91,19 @@ for skill_dir in "$REPO_DIR/.claude/skills"/*/; do
   install_link "${skill_dir%/}" "$CLAUDE_DIR/skills/$skill_name" "skill:   $skill_name"
 done
 
+# --- Hooks ---
+mkdir -p "$CLAUDE_DIR/hooks"
+for f in "$REPO_DIR/.claude/hooks/"*.sh; do
+  [ -f "$f" ] || continue
+  name="$(basename "$f")"
+  install_link "$f" "$CLAUDE_DIR/hooks/$name" "hook:    $name"
+done
+
 echo ""
 echo "Done. Restart Claude Code for changes to take effect."
+echo ""
+echo "HOOKS: Hook scripts have been linked to ~/.claude/hooks/."
+echo "To activate them, add the entries from .claude/hooks/README.md to ~/.claude/settings.json."
 echo "Future updates: git pull  (symlinks stay live — no re-install needed)"
 echo ""
 echo "Available in every repo after restart:"

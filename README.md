@@ -51,7 +51,7 @@ A disciplined workflow for Claude Code that stores all project state in `docs/ai
                               └─────────────────┘
 ```
 
-### Self-Improvement Commands
+### Self-Improvement Loop
 
 ```
 /retro <initiative>         Extract metrics + learnings from completed work
@@ -65,6 +65,11 @@ A disciplined workflow for Claude Code that stores all project state in `docs/ai
         ▼
 /skill-improve <skill>      Eval-driven improvement cycle for one skill
 ```
+
+**Automated triggers** (via hooks — see `.claude/hooks/README.md`):
+- `/skill-health` reminder fires on session start if last run was >7 days ago
+- `/consolidate-learnings` reminder fires after every `/everything-claude-code:learn-eval`
+- `/retro` auto-invoked by the execution-loop when all slices complete (End of Plan)
 
 ## Prerequisites
 
@@ -118,6 +123,90 @@ See [codex/README.md](codex/README.md) for Codex-specific details.
 **Agents:** `architecture-discovery`, `stack-advisor`
 
 What it **never** touches: your `CLAUDE.md`, `rules/`, custom skills, plugin configs, or any file it didn't install. Conflicts are skipped with a warning — use `--force` to override.
+
+**Hooks:** The installer links hook scripts to `~/.claude/hooks/`. To activate them, add the entries from `.claude/hooks/README.md` to your `~/.claude/settings.json`.
+
+## Self-Improvement Examples
+
+### `/retro migrate-to-react`
+
+Run after an initiative completes. Reads all `docs/ai/` files and git history, then outputs:
+
+```
+## Initiative Metrics
+
+| Metric | Value |
+|---|---|
+| Slices planned | 8 |
+| Slices completed | 7 |
+| Slices blocked | 1 |
+| Completion rate | 87% |
+| Debugging escalations | 2 |
+| Learnings extracted | 3 |
+
+## Key Learnings
+- Tailwind dark: classes in JS objects escape CSS audits → gotcha added to ux-craft
+- Backend escapes backslashes for JS string literals → gotcha added to execution-loop
+- JSDOM can't verify CSS rendering → gotcha added to execution-loop
+```
+
+### `/skill-health`
+
+Scores every installed skill against 8 structural criteria:
+
+```
+## Skill Health Scorecard — 2026-03-19
+
+| Skill | Score | Missing |
+|---|---|---|
+| execution-loop | 8/8 | — |
+| systematic-debugging | 7/8 | scripts (has one, could use more) |
+| code-review | 5/8 | gotchas, scripts, progressive disclosure |
+| session-handoff | 3/8 | folder structure, templates, gotchas, scripts |
+
+### Top 3 Recommendations
+1. Add gotchas/ to code-review (highest usage, no failure patterns captured)
+2. Convert session-handoff to folder-as-skill with a handoff template file
+3. Trim ux-craft description from 42 words to ≤25
+```
+
+### `/skill-improve code-review`
+
+Analyzes one skill and proposes targeted improvements:
+
+```
+## Skill Improvement Report — code-review — 2026-03-19
+
+### Baseline Score
+5/8
+
+### Changes Proposed
+1. Extract security checklist gotchas from learned skills → references/common-false-positives.md
+2. Move inline .NET-specific patterns to references/dotnet-patterns.md (progressive disclosure)
+3. Trim description from 52 words to 22 words
+
+### New Score
+7/8
+```
+
+### `/consolidate-learnings`
+
+Scans `~/.claude/skills/learned/` and merges patterns into parent skills:
+
+```
+## Consolidation Report — 2026-03-19
+
+### Consolidated
+- tailwind-v4-no-dynamic-classes → ux-craft/references/tailwind-gotchas.md
+- execution-loop-step9-never-skip → execution-loop/gotchas/step9-never-skip.md
+- backend-contract-verification → execution-loop/gotchas/backend-contract-verification.md
+
+### Flagged for Promotion
+- argocd-applicationset-migration — standalone runbook, should be its own skill
+
+### Left Orphaned
+- postgres-identity-seed-data — no clear parent skill
+```
 
 ## License
 
