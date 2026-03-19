@@ -54,22 +54,22 @@ A disciplined workflow for Claude Code that stores all project state in `docs/ai
 ### Self-Improvement Loop
 
 ```
-/retro <initiative>         Extract metrics + learnings from completed work
+/skill-evolve [skill]       Full audit+improve cycle (all skills or target one)
+        │                   Uses parallel sub-agents for batch audits
+        │                   Scores against Thariq + Karpathy patterns
+        │                   Persists pending improvements across runs
         │
-        ▼
-/consolidate-learnings      Merge orphaned learned skills into parent skill gotchas
-        │
-        ▼
-/skill-health               Score all skills against 8 structural criteria
-        │
-        ▼
-/skill-improve <skill>      Eval-driven improvement cycle for one skill
+        ├── /skill-health           Score structure (8 criteria)
+        ├── /skill-improve <skill>  Single-skill improvement cycle
+        ├── /consolidate-learnings  Merge learned skills → parent gotchas
+        └── /retro <initiative>     Post-initiative metrics + learnings
 ```
 
 **Automated triggers** (via hooks — see `.claude/hooks/README.md`):
 - `/skill-health` reminder fires on session start if last run was >7 days ago
 - `/consolidate-learnings` reminder fires after every `/everything-claude-code:learn-eval`
-- `/retro` auto-invoked by the execution-loop when all slices complete (End of Plan)
+- `/retro` suggested by execution-loop when all slices complete (End of Plan)
+- `/skill-evolve` carries forward pending improvements across invocations (self-learning)
 
 ## Prerequisites
 
@@ -116,9 +116,9 @@ See [codex/README.md](codex/README.md) for Codex-specific details.
 
 ## What Gets Installed
 
-**Commands:** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
+**Commands:** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/skill-evolve`, `/retro`
 
-**Skills:** `workflow-existing-repo`, `workflow-new-repo`, `execution-loop`, `brainstorm-design`, `systematic-debugging` (each a folder with templates, gotchas, and/or scripts)
+**Skills:** `workflow-existing-repo`, `workflow-new-repo`, `execution-loop`, `brainstorm-design`, `systematic-debugging`, `skill-evolve` (each a folder with templates, gotchas, references, and/or scripts)
 
 **Agents:** `architecture-discovery`, `stack-advisor`
 
@@ -127,6 +127,61 @@ What it **never** touches: your `CLAUDE.md`, `rules/`, custom skills, plugin con
 **Hooks:** The installer links hook scripts to `~/.claude/hooks/`. To activate them, add the entries from `.claude/hooks/README.md` to your `~/.claude/settings.json`.
 
 ## Self-Improvement Examples
+
+### `/skill-evolve code-review` (single skill)
+
+Deep audit of one skill with improvement proposals:
+
+```
+## Audit: code-review
+
+Location: ~/.claude/skills/code-review/
+Category: Code Quality & Review
+Structural score: 5/8
+
+| Criterion | Status |
+|---|---|
+| SKILL.md exists | pass |
+| Description ≤ 25 words | fail (52 words) |
+| Trigger-focused description | pass |
+| Folder structure | pass |
+| Templates/references | pass (references/security-checklist.md) |
+| Gotchas section | fail |
+| Scripts/code | fail |
+| Progressive disclosure | fail (.NET patterns inline, not in references/) |
+
+Top Improvements:
+1. Extract inline .NET patterns → references/dotnet-patterns.md — Impact: High
+2. Add gotchas/ with common false positives from real reviews — Impact: High
+3. Trim description from 52 → 22 words — Impact: Medium
+```
+
+### `/skill-evolve` (all skills)
+
+Parallel audit of all installed skills, dispatches sub-agents:
+
+```
+## Skill Evolution Plan — 2026-03-19
+
+Skills Audited: 12
+Average Score: 5.3/8
+
+| # | Skill | Improvement | Impact | Score Change |
+|---|---|---|---|---|
+| 1 | code-review | Add gotchas/ from learned skills | High | 5/8 → 7/8 |
+| 2 | session-handoff | Convert to folder-as-skill with template | High | 3/8 → 6/8 |
+| 3 | ux-craft | Consolidate Tailwind gotchas from learned/ | Medium | 7/8 → 8/8 |
+| 4 | portal-qa | Add version stamp to route-map.md | Medium | 6/8 → 6/8 |
+
+Deferred (for next run):
+- git-commit-craft: description is 50+ words but low impact to fix now
+- fluentui-blazor-ref: no gotchas yet, but low usage — wait for failures
+
+Pending from previous run (2 items resolved, 1 carried forward):
+- [RESOLVED] execution-loop: inline templates → extracted in last PR
+- [RESOLVED] quick-change: missing gotchas → added in last PR
+- [CARRIED] portal-ui: straddles two categories — needs split decision
+```
 
 ### `/retro migrate-to-react`
 
