@@ -180,4 +180,33 @@ A browser-based companion for showing mockups, diagrams, and visual options duri
 - **Use the browser** for content that IS visual — mockups, wireframes, layout comparisons, architecture diagrams, side-by-side visual designs
 - **Use the terminal** for content that is text — requirements questions, conceptual choices, tradeoff lists, A/B/C/D text options, scope decisions
 
-**Note:** The visual companion requires a local server. If the Superpowers plugin is installed, its `scripts/start-server.sh` can be used. If not, fall back to text-only brainstorming — the visual companion is optional, not required.
+### Starting the Visual Server
+
+The visual companion server is bundled in `scripts/` within this skill directory. It is a zero-dependency Node.js WebSocket server that watches for HTML files and live-reloads a browser tab.
+
+**To start:**
+```bash
+bash scripts/start-server.sh --project-dir "$(pwd)"
+```
+This returns JSON with `port`, `url`, and `screen_dir`. Open the URL in a browser.
+
+**To push a screen:** Write an HTML fragment to the `screen_dir` returned above. The server auto-wraps fragments in `frame-template.html` (which provides dark/light theming, option selection UI, and WebSocket live-reload). Full HTML documents (starting with `<!DOCTYPE` or `<html>`) are served as-is.
+
+**Available CSS classes in fragments:**
+- `.options` / `.option[data-choice]` — A/B/C choice boxes (user clicks to select, event sent via WebSocket)
+- `.cards` / `.card[data-choice]` — Card grid layouts for design comparisons
+- `.mockup` / `.mockup-header` / `.mockup-body` — Container layouts for wireframes
+- `.split` — Side-by-side comparison (2-column grid)
+- `.pros-cons` / `.pros` / `.cons` — Pros/cons comparison
+- `.mock-nav`, `.mock-sidebar`, `.mock-content`, `.mock-button`, `.mock-input` — Wireframe building blocks
+- `h2`, `h3`, `.subtitle`, `.section`, `.label` — Typography helpers
+
+**Reading user selections:** After pushing a screen with `[data-choice]` elements, read `<screen_dir>/.events` to see which options the user clicked (JSON lines with `type`, `choice`, `text`, `timestamp`).
+
+**To stop:**
+```bash
+bash scripts/stop-server.sh "<screen_dir>"
+```
+The server also auto-exits after 30 minutes of inactivity.
+
+**Persistent vs ephemeral:** When `--project-dir` is used, files persist under `.brainstorm/` for later review. Without it, files go to `/tmp` and are cleaned up on stop.
