@@ -13,6 +13,7 @@ Intentionally conservative: one slice at a time, narrow implementation, clear ve
 
 - `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output)
 - `gotchas/` — known failure patterns from real usage. **Read these before starting any slice.**
+- `prompts/` — subagent prompt templates for implementation dispatch (implementer, spec-reviewer, code-quality-reviewer)
 
 ## Inputs
 
@@ -113,15 +114,15 @@ If skipping TDD, state why in a single line before proceeding. "Not practical" i
 
 ---
 
-## Step 6: Use Bounded ECC Delegation
+## Step 6: Use Bounded Plugin Delegation
 
-ECC agents are available only if ECC is installed. Check first:
+Check which plugins are available before delegating:
 
 ```bash
-ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
+ls .claude/agents/ 2>/dev/null || echo "No agents available"
 ```
 
-If installed, invoke according to these criteria:
+### ECC Agents (if everything-claude-code is installed)
 
 | Agent | Invoke when |
 |---|---|
@@ -132,7 +133,34 @@ If installed, invoke according to these criteria:
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 | Language-specific (`golang-patterns`, `python-patterns`, `frontend-patterns`, `springboot-patterns`, etc.) | Slice implements new code in that stack — use for idiomatic guidance during implementation |
 
-If ECC is **not** installed: apply the discipline directly (write tests first, review your own code, check security manually). Do not skip the discipline — skip only the agent invocation.
+### code-foundations Skills (if code-foundations plugin is installed)
+
+| Skill | Invoke when |
+|---|---|
+| `code-foundations:cc-quality-practices` | After implementation alongside code-reviewer — checklist-based quality review (115 checks) |
+| `code-foundations:cc-defensive-programming` | Slice touches error handling, input validation, or resource management |
+| `code-foundations:aposd-verifying-correctness` | After implementation — 6-dimension correctness check (requirements, concurrency, errors, resources, boundaries, security) |
+| `code-foundations:cc-pseudocode-programming` | Large slices with complex logic — design via pseudocode-as-contract before implementation |
+| `code-foundations:cc-debugging` | When systematic-debugging is invoked — supplement with scientific method checklist |
+| `code-foundations:cc-refactoring-guidance` | Slice involves refactoring existing code — safe refactoring patterns and regression strategy |
+
+### Subagent Dispatch (for complex slices)
+
+For slices with 3+ tasks or independent subtasks, dispatch focused subagents using the prompt templates in `prompts/`:
+
+1. **Implementer** (`prompts/implementer-prompt.md`) — Dispatch one subagent per independent subtask. Paste the full task description into the prompt (don't make subagents read files). Subagent reports: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT.
+
+2. **Spec Compliance Review** (`prompts/spec-reviewer-prompt.md`) — After implementer reports DONE, dispatch a fresh subagent to verify the implementation matches the spec. Critical: this reviewer must read the actual code, not trust the implementer's report.
+
+3. **Code Quality Review** (`prompts/code-quality-reviewer-prompt.md`) — Only after spec compliance passes. Reviews architecture, code quality, testing, and maintainability. Returns APPROVED | CHANGES_REQUESTED.
+
+**When to use subagent dispatch vs direct implementation:**
+- Direct: simple slices (1-2 files, clear pattern, no unknowns)
+- Subagent: complex slices (3+ files, new patterns, cross-cutting changes)
+
+### Fallback
+
+If **no plugins** are installed: apply the discipline directly (write tests first, review your own code, check security manually). Do not skip the discipline — skip only the agent/skill invocation.
 
 ---
 
