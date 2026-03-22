@@ -30,28 +30,28 @@ echo "(only removes symlinks pointing into: $REPO_DIR)"
 echo ""
 
 # --- Commands ---
-for f in "$REPO_DIR/.claude/commands/"*.md; do
+for f in "$REPO_DIR/commands/"*.md; do
   [ -f "$f" ] || continue
   name="$(basename "$f")"
   remove_if_ours "$CLAUDE_DIR/commands/$name" "command: $name"
 done
 
 # --- Agents ---
-for f in "$REPO_DIR/.claude/agents/"*.md; do
+for f in "$REPO_DIR/agents/"*.md; do
   [ -f "$f" ] || continue
   name="$(basename "$f")"
   remove_if_ours "$CLAUDE_DIR/agents/$name" "agent:   $name"
 done
 
 # --- Skills ---
-for skill_dir in "$REPO_DIR/.claude/skills"/*/; do
+for skill_dir in "$REPO_DIR/skills"/*/; do
   [ -d "$skill_dir" ] || continue
   skill_name="$(basename "$skill_dir")"
   remove_if_ours "$CLAUDE_DIR/skills/$skill_name" "skill:   $skill_name"
 done
 
 # --- Hooks ---
-for f in "$REPO_DIR/.claude/hooks/"*.sh; do
+for f in "$REPO_DIR/hooks/"*.sh; do
   [ -f "$f" ] || continue
   name="$(basename "$f")"
   remove_if_ours "$CLAUDE_DIR/hooks/$name" "hook:    $name"
@@ -61,4 +61,5 @@ echo ""
 echo "Done. Symlinks removed."
 echo ""
 echo "To install as a plugin instead:"
-echo "  claude plugin add machillef/claude-code-bootstrap-commands --scope user"
+echo "  /plugin marketplace add machillef/claude-code-bootstrap-commands"
+echo "  /plugin install bootstrap-commands@claude-code-bootstrap-commands --scope user"

@@ -278,10 +278,11 @@ Periodic maintenance
 
 ### As a plugin (recommended)
 
-One command. All commands, skills, agents, and hooks are auto-loaded — no manual settings.json editing:
+Two commands. All commands, skills, agents, and hooks are auto-loaded — no manual settings.json editing:
 
 ```
-claude plugin add machillef/claude-code-bootstrap-commands --scope user
+/plugin marketplace add machillef/claude-code-bootstrap-commands
+/plugin install bootstrap-commands@claude-code-bootstrap-commands --scope user
 ```
 
 Updates are automatic when the repo is pushed to GitHub.
