@@ -194,31 +194,43 @@ Everything still works. The execution-loop checks for available agents before de
 
 The workflow includes a continuous improvement loop with both automatic and manual steps.
 
-### Automatic (via hooks)
+### Automatic (via hooks — all auto-loaded when installed as plugin)
 
 | Hook | Trigger | What it does |
 |---|---|---|
-| `session-skill-health-check.sh` | First `Read` call per session | Reminds you to run `/skill-health` if last run was >7 days ago |
-| `post-learn-eval-consolidate.sh` | After any `learn-eval` skill | Reminds you to run `/consolidate-learnings` |
+| `session-skill-health-check.sh` | First `Read` call per session | Reminds to run `/skill-health` if last run was >7 days ago |
+| `session-detour-check.sh` | First `Read` call per session | Warns about active detour worktrees that need finishing |
+| `session-stale-docs-check.sh` | First `Read` call per session | Warns about stale `docs/ai/` status files (>3 days, active repo) |
+| `post-learn-eval-consolidate.sh` | After any `learn-eval` skill | Reminds to run `/consolidate-learnings` |
+| `stop-learn-eval-suggest.sh` | Session end | Suggests `/everything-claude-code:learn-eval` after meaningful sessions |
+| `stop-detour-reminder.sh` | Session end | Reminds about active detour worktrees before closing |
 
 ECC plugin hooks (when installed) additionally:
 - Capture tool use observations for pattern extraction (async, every tool call)
 - Evaluate sessions for extractable patterns on session end (async)
 - Track token/cost metrics per session (async)
 
-### Manual (you invoke these)
+### Manual (you invoke these — hooks remind you when it's time)
 
-| Command | When to run | What it does |
+| Command | When to run | Hook that reminds you |
 |---|---|---|
-| `/everything-claude-code:learn-eval` | End of a meaningful session | Extracts reusable patterns from the session into `~/.claude/skills/learned/` |
-| `/consolidate-learnings` | After learn-eval, or weekly | Merges orphaned learned patterns into parent skill gotchas/references |
-| `/retro <initiative>` | After completing all slices | Extracts initiative-level metrics, patterns, and learnings |
-| `/skill-health` | Monthly, or after adding/modifying skills | Scores all skills against 8 structural criteria |
-| `/skill-improve <skill>` | After skill-health identifies gaps | Eval-driven improvement cycle for one specific skill |
+| `/everything-claude-code:learn-eval` | End of a meaningful session | `stop-learn-eval-suggest.sh` |
+| `/consolidate-learnings` | After learn-eval, or weekly | `post-learn-eval-consolidate.sh` |
+| `/retro <initiative>` | After completing all slices | execution-loop Step 12 |
+| `/skill-health` | Monthly, or after adding/modifying skills | `session-skill-health-check.sh` |
+| `/skill-improve <skill>` | After skill-health identifies gaps | (manual — run after reviewing scorecard) |
+| `/detour <init> finish` | When detour work is done | `session-detour-check.sh`, `stop-detour-reminder.sh` |
 
 ### The full loop
 
 ```
+Session starts
+    │
+    ├─ Hook: active detour? remind to continue/finish (automatic)
+    ├─ Hook: stale docs/ai/? remind to update (automatic)
+    ├─ Hook: /skill-health overdue? remind to run (automatic)
+    │
+    ▼
 Work happens (execution-loop runs slices)
     │
     ├─ ECC hooks silently capture observations (automatic)
@@ -226,13 +238,17 @@ Work happens (execution-loop runs slices)
     ▼
 End of session
     │
-    ├─ Run /everything-claude-code:learn-eval (manual)
+    ├─ Hook: suggest /everything-claude-code:learn-eval (automatic)
+    │
+    ├─ Run /everything-claude-code:learn-eval (manual, but prompted)
     │   └─ Extracts patterns → ~/.claude/skills/learned/
     │
-    ├─ Hook fires → reminds you to consolidate (automatic)
+    ├─ Hook: remind to consolidate (automatic)
     │
     ├─ Run /consolidate-learnings (manual, but prompted)
     │   └─ Merges patterns into parent skill gotchas
+    │
+    ├─ Hook: remind about active detours (automatic)
     │
     ▼
 End of initiative (all slices complete)
@@ -245,7 +261,7 @@ End of initiative (all slices complete)
     ▼
 Periodic maintenance
     │
-    ├─ Hook fires → reminds you if /skill-health is overdue (automatic)
+    ├─ Hook: /skill-health overdue reminder (automatic)
     │
     ├─ Run /skill-health (manual, but prompted)
     │   └─ Scores skills → recommends improvements
@@ -254,62 +270,41 @@ Periodic maintenance
         └─ Targeted improvement for one skill
 ```
 
-### Activating hooks
-
-The installer links hook scripts to `~/.claude/hooks/` but does **not** modify your `settings.json`. To activate them, merge these entries into your `~/.claude/settings.json` under the `hooks` key:
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/session-skill-health-check.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Skill",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/post-learn-eval-consolidate.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-If you already have entries in these arrays (e.g., from ECC plugin), add these alongside the existing ones — don't replace them.
-
 ## Prerequisites
 
 - [Claude Code](https://claude.ai/code)
 
 ## Installation
 
-### Linux / macOS / WSL
+### As a plugin (recommended)
 
+One command. All commands, skills, agents, and hooks are auto-loaded — no manual settings.json editing:
+
+```
+claude plugin add machillef/claude-code-bootstrap-commands --scope user
+```
+
+Updates are automatic when the repo is pushed to GitHub.
+
+### From source (symlink-based)
+
+For development or when you want to modify the workflows locally:
+
+**Linux / macOS / WSL:**
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-code-bootstrap-commands ~/claude-bootstrap
+git clone https://github.com/machillef/claude-code-bootstrap-commands ~/claude-bootstrap
 cd ~/claude-bootstrap && ./install.sh
 ```
 
-### Windows (PowerShell 7+, Developer Mode or Admin)
-
+**Windows (PowerShell 7+, Developer Mode or Admin):**
 ```powershell
-git clone https://github.com/YOUR_USERNAME/claude-code-bootstrap-commands C:\claude-bootstrap
+git clone https://github.com/machillef/claude-code-bootstrap-commands C:\claude-bootstrap
 cd C:\claude-bootstrap; .\install.ps1
 ```
 
 Both installers create symlinks from `~/.claude/` into this repo. `git pull` picks up updates — no re-install needed.
+
+> **Note:** Symlink installs require manual hook wiring in `settings.json`. Plugin installs do this automatically. See `hooks/hooks.json` for the hook definitions if you need to wire them manually.
 
 ### Codex variant
 
@@ -335,7 +330,7 @@ See [codex/README.md](codex/README.md) for Codex-specific details.
 
 What it **never** touches: your `CLAUDE.md`, `rules/`, custom skills, plugin configs, or any file it didn't install. Conflicts are skipped with a warning — use `--force` to override.
 
-**Hooks:** The installer links hook scripts to `~/.claude/hooks/`. See [Activating hooks](#activating-hooks) above to wire them into your `settings.json`.
+**Hooks:** 6 hooks that remind you when to run manual commands (see [Learning Lifecycle](#learning-lifecycle)). Auto-loaded when installed as a plugin. Symlink installs require manual wiring — see `hooks/hooks.json`.
 
 ## Self-Improvement Examples
 
