@@ -1,0 +1,67 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-skill-health-check.sh\"",
+            "description": "Remind about /skill-health if last run was >7 days ago (fires once per session)",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-detour-check.sh\"",
+            "description": "Remind about active detour worktrees (fires once per session)",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-stale-docs-check.sh\"",
+            "description": "Warn about stale docs/ai/ status files (fires once per session)",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/post-learn-eval-consolidate.sh\"",
+            "description": "Remind to run /consolidate-learnings after learn-eval",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-learn-eval-suggest.sh\"",
+            "description": "Suggest running /everything-claude-code:learn-eval after meaningful sessions",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-detour-reminder.sh\"",
+            "description": "Remind about active detour worktrees when session ends",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
