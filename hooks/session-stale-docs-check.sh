@@ -22,8 +22,14 @@ if [ -z "$STATUS_FILES" ]; then
   exit 0
 fi
 
+# Portable date-to-epoch: GNU date -d first, then macOS date -jf
+date_to_epoch() {
+  date -d "$1" +%s 2>/dev/null || date -jf "%Y-%m-%d" "$1" +%s 2>/dev/null
+}
+
 # Check each status file for staleness
 STALE_FILES=""
+TODAY_EPOCH=$(date +%s)
 for f in $STATUS_FILES; do
   # Get last modification date of the file in git
   LAST_COMMIT_DATE=$(git log -1 --format="%ai" -- "$f" 2>/dev/null | cut -d' ' -f1)
@@ -32,8 +38,7 @@ for f in $STATUS_FILES; do
   fi
 
   # Calculate days since last update
-  LAST_EPOCH=$(date -d "$LAST_COMMIT_DATE" +%s 2>/dev/null)
-  TODAY_EPOCH=$(date +%s)
+  LAST_EPOCH=$(date_to_epoch "$LAST_COMMIT_DATE")
 
   if [ -n "$LAST_EPOCH" ]; then
     DAYS_AGO=$(( (TODAY_EPOCH - LAST_EPOCH) / 86400 ))
@@ -50,7 +55,7 @@ done
 if [ -n "$STALE_FILES" ]; then
   INIT_NAME=$(echo "$STATUS_FILES" | head -1 | sed 's|docs/ai/||;s|-status.md||')
   echo "Stale docs/ai/ status file(s) — repo has recent commits but status hasn't been updated:"
-  echo -e "$STALE_FILES"
+  printf "%b\n" "$STALE_FILES"
   echo ""
   echo "Run /continue-work ${INIT_NAME} to resume and update docs."
 fi

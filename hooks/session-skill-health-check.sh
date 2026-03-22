@@ -30,8 +30,12 @@ if [ "$LAST_DATE" = "$TODAY" ]; then
   exit 0
 fi
 
-# Try GNU date for day delta, fall back to simple reminder
-LAST_EPOCH=$(date -d "$LAST_DATE" +%s 2>/dev/null)
+# Portable date-to-epoch: GNU date -d first, then macOS date -jf
+date_to_epoch() {
+  date -d "$1" +%s 2>/dev/null || date -jf "%Y-%m-%d" "$1" +%s 2>/dev/null
+}
+
+LAST_EPOCH=$(date_to_epoch "$LAST_DATE")
 TODAY_EPOCH=$(date +%s)
 
 if [ -n "$LAST_EPOCH" ]; then
