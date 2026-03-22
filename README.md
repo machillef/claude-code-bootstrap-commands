@@ -5,50 +5,46 @@ A disciplined workflow for Claude Code that stores all project state in `docs/ai
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           USER ENTRY POINTS                                 │
-├──────────────────┬──────────────────┬──────────────────┬────────────────────┤
-│  /quick-change   │ /bootstrap-      │ /bootstrap-new   │ /continue-work     │
-│  <description>   │ existing <init>  │ <project>        │ <initiative>       │
-│                  │                  │                  │                    │
-│  1-3 files       │  Medium / Large  │  Greenfield      │  Resume after      │
-│  Follows pattern │  existing repo   │  from scratch    │  any bootstrap     │
-└────────┬─────────┴────────┬─────────┴────────┬─────────┴──────────┬─────────┘
-         │                  │                  │                    │
-         ▼                  ▼                  ▼                    ▼
-┌─────────────────┐ ┌──────────────────┐ ┌──────────────────┐ ┌──────────────┐
-│ Inline workflow │ │ workflow-        │ │ workflow-        │ │ execution-   │
-│ (no skill)      │ │ existing-repo    │ │ new-repo         │ │ loop         │
-│                 │ │                  │ │                  │ │              │
-│ • Find pattern  │ │ • Triage size    │ │ • Requirements   │ │ • Stale check│
-│ • Apply change  │ │ • Detect stack   │ │ • brainstorm-    │ │ • Load state │
-│ • TDD if behav. │ │ • Map boundaries │ │   design skill   │ │ • Pick slice │
-│ • Self-review   │ │ • brainstorm-    │ │ • stack-advisor  │ │ • TDD        │
-│ • Log to        │ │   design skill   │ │   agent          │ │ • Implement  │
-│   quick-changes │ │ • Create docs/ai │ │ • Scaffold       │ │ • Verify     │
-│                 │ │ • First slice    │ │ • Create docs/ai │ │ • Re-assess  │
-│                 │ │ • STOP           │ │ • STOP           │ │ • Update docs│
-│                 │ │                  │ │                  │ │ • Learn      │
-│                 │ │  agents:         │ │  agents:         │ │ • STOP       │
-│                 │ │  architecture-   │ │  stack-advisor   │ │              │
-│                 │ │  discovery       │ │                  │ │  delegates:  │
-│                 │ │  (large only)    │ │                  │ │  plugin      │
-│                 │ │                  │ │                  │ │  agents      │
-└─────────────────┘ └───────┬──────────┘ └────────┬─────────┘ └──────┬───────┘
-                            │                     │                  │
-                            └──────────┬──────────┘                  │
-                                       ▼                             │
-                              ┌─────────────────┐                    │
-                              │   docs/ai/      │◄───────────────────┘
-                              │   (repo state)  │
-                              │                 │
-                              │ • status.md     │
-                              │ • slices.md     │
-                              │ • decisions.md  │
-                              │ • scope-map.md  │
-                              │ • design.md     │
-                              │ • ...           │
-                              └─────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                  USER ENTRY POINTS                                       │
+├──────────────┬──────────────┬──────────────┬──────────────────┬──────────────────────────┤
+│ /quick-change│ /bootstrap-  │ /bootstrap-  │ /continue-work   │ /detour                  │
+│ <description>│ existing     │ new          │ <initiative>     │ <initiative> <desc>       │
+│              │ <initiative> │ <project>    │                  │                          │
+│ 1-3 files    │ Medium/Large │ Greenfield   │ Resume after     │ Temporary diversion from  │
+│ Follows pat. │ existing repo│ from scratch │ any bootstrap    │ current slice plan        │
+└──────┬───────┴──────┬───────┴──────┬───────┴────────┬─────────┴────────────┬─────────────┘
+       │              │              │                │                      │
+       ▼              ▼              ▼                ▼                      ▼
+┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────────┐ ┌──────────────────────────┐
+│ Inline     │ │ workflow-  │ │ workflow-  │ │ execution-   │ │ Worktree isolation        │
+│ workflow   │ │ existing-  │ │ new-repo   │ │ loop         │ │                          │
+│            │ │ repo       │ │            │ │              │ │ • Pause current slice     │
+│ • Find pat.│ │            │ │ • Require- │ │ • Stale check│ │ • Create worktree         │
+│ • Apply    │ │ • Triage   │ │   ments    │ │ • Load state │ │ • Do the work (TDD)       │
+│ • TDD      │ │ • Detect   │ │ • brain-   │ │ • Pick slice │ │ • Merge back to branch    │
+│ • Self-    │ │ • Map scope│ │   storm    │ │ • TDD        │ │ • Clean up worktree       │
+│   review   │ │ • brain-   │ │ • stack-   │ │ • Implement  │ │ • Restore paused slice    │
+│ • Log      │ │   storm    │ │   advisor  │ │ • Verify     │ │ • Log in status.md        │
+│            │ │ • docs/ai  │ │ • Scaffold │ │ • Re-assess  │ │                          │
+│            │ │ • STOP     │ │ • docs/ai  │ │ • Update docs│ │ Modes: small (inline)     │
+│            │ │            │ │ • STOP     │ │ • Learn      │ │         big (mini-plan)   │
+│            │ │            │ │            │ │ • STOP       │ │                          │
+└────────────┘ └──────┬─────┘ └─────┬──────┘ └──────┬───────┘ └────────────┬──────────────┘
+                      │             │                │                      │
+                      └──────┬──────┘                │                      │
+                             ▼                       │                      │
+                    ┌─────────────────┐               │                      │
+                    │   docs/ai/      │◄──────────────┴──────────────────────┘
+                    │   (repo state)  │
+                    │                 │
+                    │ • status.md     │
+                    │ • slices.md     │
+                    │ • decisions.md  │
+                    │ • scope-map.md  │
+                    │ • design.md     │
+                    │ • ...           │
+                    └─────────────────┘
 ```
 
 ## Usage Examples
@@ -110,6 +106,31 @@ docs/ai/quick-changes-log.md.
 
 If it needs >3 files or no pattern exists, it stops and redirects
 you to /bootstrap-existing.
+```
+
+### Temporary diversion from the slice plan
+
+```
+> /detour file-explorer improve click sequence performance
+
+You're on slice 14, but want to do something outside the plan.
+Detour pauses slice 14 in status.md, creates a git worktree
+branched from your current working branch, and does the work
+in isolation.
+
+Small detours (< half day): inline TDD, self-review, done.
+Big detours (multi-session): creates a mini-plan, commits per step.
+
+> /detour file-explorer finish
+
+Merges the worktree branch back into your working branch,
+cleans up the worktree, logs the detour in status.md,
+and restores the paused slice as In Progress.
+
+> /detour file-explorer continue
+
+For big detours spanning multiple sessions — resumes work
+in the existing worktree.
 ```
 
 ### Running a retrospective after completing an initiative
@@ -306,7 +327,7 @@ See [codex/README.md](codex/README.md) for Codex-specific details.
 
 ## What Gets Installed
 
-**Commands:** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
+**Commands:** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/detour`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
 
 **Skills:** `workflow-existing-repo`, `workflow-new-repo`, `execution-loop`, `brainstorm-design`, `systematic-debugging` (each a folder with templates, gotchas, and/or scripts)
 
