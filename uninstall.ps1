@@ -44,22 +44,22 @@ Write-Host "(only removes symlinks pointing into: $RepoDir)"
 Write-Host ""
 
 # --- Commands ---
-foreach ($f in Get-ChildItem (Join-Path $RepoDir '.claude' 'commands') -Filter '*.md' -ErrorAction SilentlyContinue) {
+foreach ($f in Get-ChildItem (Join-Path $RepoDir 'commands') -Filter '*.md' -ErrorAction SilentlyContinue) {
     Remove-IfOurs -Destination (Join-Path $ClaudeDir 'commands' $f.Name) -Label "command: $($f.Name)"
 }
 
 # --- Agents ---
-foreach ($f in Get-ChildItem (Join-Path $RepoDir '.claude' 'agents') -Filter '*.md' -ErrorAction SilentlyContinue) {
+foreach ($f in Get-ChildItem (Join-Path $RepoDir 'agents') -Filter '*.md' -ErrorAction SilentlyContinue) {
     Remove-IfOurs -Destination (Join-Path $ClaudeDir 'agents' $f.Name) -Label "agent:   $($f.Name)"
 }
 
 # --- Skills ---
-foreach ($skillDir in Get-ChildItem (Join-Path $RepoDir '.claude' 'skills') -Directory -ErrorAction SilentlyContinue) {
+foreach ($skillDir in Get-ChildItem (Join-Path $RepoDir 'skills') -Directory -ErrorAction SilentlyContinue) {
     Remove-IfOurs -Destination (Join-Path $ClaudeDir 'skills' $skillDir.Name) -Label "skill:   $($skillDir.Name)"
 }
 
 # --- Hooks ---
-$hookFiles = Get-ChildItem (Join-Path $RepoDir '.claude' 'hooks' '*.sh') -ErrorAction SilentlyContinue
+$hookFiles = Get-ChildItem (Join-Path $RepoDir 'hooks' '*.sh') -ErrorAction SilentlyContinue
 foreach ($f in $hookFiles) {
     Remove-IfOurs -Destination (Join-Path $ClaudeDir 'hooks' $f.Name) -Label "hook:    $($f.Name)"
 }
@@ -68,4 +68,5 @@ Write-Host ""
 Write-Host "Done. Symlinks removed."
 Write-Host ""
 Write-Host "To install as a plugin instead:"
-Write-Host "  claude plugin add machillef/claude-code-bootstrap-commands --scope user"
+Write-Host "  /plugin marketplace add machillef/claude-code-bootstrap-commands"
+Write-Host "  /plugin install bootstrap-commands@claude-code-bootstrap-commands --scope user"

@@ -117,28 +117,28 @@ Write-Host ""
 # --- Commands ---
 $commandsDir = Join-Path $ClaudeDir 'commands'
 if (-not (Test-Path $commandsDir)) { New-Item -ItemType Directory -Path $commandsDir -Force | Out-Null }
-foreach ($f in Get-ChildItem (Join-Path $RepoDir '.claude' 'commands') -Filter '*.md') {
+foreach ($f in Get-ChildItem (Join-Path $RepoDir 'commands') -Filter '*.md') {
     Install-Link -Source $f.FullName -Destination (Join-Path $commandsDir $f.Name) -Label "command: $($f.Name)"
 }
 
 # --- Agents ---
 $agentsDir = Join-Path $ClaudeDir 'agents'
 if (-not (Test-Path $agentsDir)) { New-Item -ItemType Directory -Path $agentsDir -Force | Out-Null }
-foreach ($f in Get-ChildItem (Join-Path $RepoDir '.claude' 'agents') -Filter '*.md') {
+foreach ($f in Get-ChildItem (Join-Path $RepoDir 'agents') -Filter '*.md') {
     Install-Link -Source $f.FullName -Destination (Join-Path $agentsDir $f.Name) -Label "agent:   $($f.Name)"
 }
 
 # --- Skills ---
 $skillsDir = Join-Path $ClaudeDir 'skills'
 if (-not (Test-Path $skillsDir)) { New-Item -ItemType Directory -Path $skillsDir -Force | Out-Null }
-foreach ($skillDir in Get-ChildItem (Join-Path $RepoDir '.claude' 'skills') -Directory) {
+foreach ($skillDir in Get-ChildItem (Join-Path $RepoDir 'skills') -Directory) {
     Install-Link -Source $skillDir.FullName -Destination (Join-Path $skillsDir $skillDir.Name) -Label "skill:   $($skillDir.Name)"
 }
 
 # --- Hooks ---
 $hooksDir = Join-Path $ClaudeDir 'hooks'
 if (-not (Test-Path $hooksDir)) { New-Item -ItemType Directory -Path $hooksDir -Force | Out-Null }
-$hookFiles = Get-ChildItem (Join-Path $RepoDir '.claude' 'hooks' '*.sh') -ErrorAction SilentlyContinue
+$hookFiles = Get-ChildItem (Join-Path $RepoDir 'hooks' '*.sh') -ErrorAction SilentlyContinue
 foreach ($f in $hookFiles) {
     Install-Link -Source $f.FullName -Destination (Join-Path $hooksDir $f.Name) -Label "hook:    $($f.Name)"
 }
@@ -147,7 +147,7 @@ Write-Host ""
 Write-Host "Done. Restart Claude Code for changes to take effect."
 Write-Host ""
 Write-Host "HOOKS: Hook scripts have been linked to ~/.claude/hooks/."
-Write-Host "To activate them, add the entries from .claude/hooks/README.md to ~/.claude/settings.json."
+Write-Host "To activate them, add the entries from hooks/README.md to ~/.claude/settings.json."
 Write-Host "Future updates: git pull  (symlinks stay live -- no re-install needed)"
 Write-Host ""
 Write-Host "Available in every repo after restart:"

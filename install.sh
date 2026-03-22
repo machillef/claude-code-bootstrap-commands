@@ -72,28 +72,31 @@ echo ""
 
 # --- Commands ---
 mkdir -p "$CLAUDE_DIR/commands"
-for f in "$REPO_DIR/.claude/commands/"*.md; do
+for f in "$REPO_DIR/commands/"*.md; do
+  [ -f "$f" ] || continue
   name="$(basename "$f")"
   install_link "$f" "$CLAUDE_DIR/commands/$name" "command: $name"
 done
 
 # --- Agents ---
 mkdir -p "$CLAUDE_DIR/agents"
-for f in "$REPO_DIR/.claude/agents/"*.md; do
+for f in "$REPO_DIR/agents/"*.md; do
+  [ -f "$f" ] || continue
   name="$(basename "$f")"
   install_link "$f" "$CLAUDE_DIR/agents/$name" "agent:   $name"
 done
 
 # --- Skills ---
 mkdir -p "$CLAUDE_DIR/skills"
-for skill_dir in "$REPO_DIR/.claude/skills"/*/; do
+for skill_dir in "$REPO_DIR/skills"/*/; do
+  [ -d "$skill_dir" ] || continue
   skill_name="$(basename "$skill_dir")"
   install_link "${skill_dir%/}" "$CLAUDE_DIR/skills/$skill_name" "skill:   $skill_name"
 done
 
 # --- Hooks ---
 mkdir -p "$CLAUDE_DIR/hooks"
-for f in "$REPO_DIR/.claude/hooks/"*.sh; do
+for f in "$REPO_DIR/hooks/"*.sh; do
   [ -f "$f" ] || continue
   name="$(basename "$f")"
   install_link "$f" "$CLAUDE_DIR/hooks/$name" "hook:    $name"
@@ -103,7 +106,7 @@ echo ""
 echo "Done. Restart Claude Code for changes to take effect."
 echo ""
 echo "HOOKS: Hook scripts have been linked to ~/.claude/hooks/."
-echo "To activate them, add the entries from .claude/hooks/README.md to ~/.claude/settings.json."
+echo "To activate them, add the entries from hooks/README.md to ~/.claude/settings.json."
 echo "Future updates: git pull  (symlinks stay live — no re-install needed)"
 echo ""
 echo "Available in every repo after restart:"
