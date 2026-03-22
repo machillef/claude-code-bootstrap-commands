@@ -150,9 +150,11 @@ For slices with 3+ tasks or independent subtasks, dispatch focused subagents usi
 
 1. **Implementer** (`prompts/implementer-prompt.md`) — Dispatch one subagent per independent subtask. Paste the full task description into the prompt (don't make subagents read files). Subagent reports: DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT.
 
-2. **Spec Compliance Review** (`prompts/spec-reviewer-prompt.md`) — After implementer reports DONE, dispatch a fresh subagent to verify the implementation matches the spec. Critical: this reviewer must read the actual code, not trust the implementer's report.
+2. **Spec Compliance Review** (`prompts/spec-reviewer-prompt.md`) — After implementer reports DONE, dispatch a fresh subagent to verify the implementation matches the spec. Critical: this reviewer must read the actual code, not trust the implementer's report. **If issues found:** implementer fixes them, then spec reviewer re-reviews. Iterate until the spec reviewer returns APPROVED. Do not proceed to code quality review with unresolved spec issues.
 
-3. **Code Quality Review** (`prompts/code-quality-reviewer-prompt.md`) — Only after spec compliance passes. Reviews architecture, code quality, testing, and maintainability. Returns APPROVED | CHANGES_REQUESTED.
+3. **Code Quality Review** (`prompts/code-quality-reviewer-prompt.md`) — Only after spec compliance passes. Reviews architecture, code quality, testing, and maintainability. Returns APPROVED | CHANGES_REQUESTED. **If CHANGES_REQUESTED:** implementer fixes them, then quality reviewer re-reviews. Iterate until APPROVED.
+
+**Review loop guardrail:** If either review loop exceeds 3 iterations without convergence, stop and escalate to the user. Do not iterate indefinitely.
 
 **When to use subagent dispatch vs direct implementation:**
 - Direct: simple slices (1-2 files, clear pattern, no unknowns)
