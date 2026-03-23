@@ -309,11 +309,45 @@ Both installers create symlinks from `~/.claude/` into this repo. `git pull` pic
 
 ### Codex variant
 
+Codex does not use the Claude Code plugin system. Installation is via cloning the repo and running the installer, which symlinks skills into `~/.codex/` and conservatively merges a managed block into your `~/.codex/AGENTS.md` (your existing content is preserved).
+
+**First-time install:**
+
 ```bash
-./install-codex.sh    # or .\install-codex.ps1 on Windows
+# Linux / macOS / WSL
+git clone https://github.com/machillef/claude-code-bootstrap-commands ~/claude-bootstrap
+cd ~/claude-bootstrap && ./install-codex.sh
+
+# Windows (PowerShell 7+, Developer Mode or Admin)
+git clone https://github.com/machillef/claude-code-bootstrap-commands C:\claude-bootstrap
+cd C:\claude-bootstrap; .\install-codex.ps1
 ```
 
-See [codex/README.md](codex/README.md) for Codex-specific details.
+**Updating (after new features are merged):**
+
+Skills are symlinked, so `git pull` picks up skill changes automatically. However, if the managed AGENTS.md block changed (new session-start/end behaviors, new skills listed), re-run the installer to refresh it:
+
+```bash
+cd ~/claude-bootstrap && git pull && ./install-codex.sh
+# or on Windows:
+cd C:\claude-bootstrap; git pull; .\install-codex.ps1
+```
+
+**What it does:**
+- Symlinks 8 skills into `~/.codex/skills/` (auto-discovered, no manual registration)
+- Merges a managed block into `~/.codex/AGENTS.md` with session-start/end behavioral rules
+- Links a reference bundle to `~/.codex/bootstrap-reference/claude-code-bootstrap-commands/`
+
+**What it never touches:** Your `~/.codex/config.toml`, any content outside the managed `<!-- BEGIN/END -->` markers in AGENTS.md, or any files it didn't install. Conflicts are skipped with a warning — use `--force` to override.
+
+**Invoking skills** (Codex uses natural language, not slash commands):
+
+```text
+Use codex-continue-work for initiative migrate-to-react.
+Use codex-fix-bugs for initiative migrate-to-react — the sidebar doesn't scroll on mobile.
+```
+
+See [codex/README.md](codex/README.md) for Codex-specific details and the full skill list.
 
 ### Both CLIs
 
