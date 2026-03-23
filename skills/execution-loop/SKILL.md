@@ -66,6 +66,7 @@ Read:
 ## Step 2: Determine the Next Slice
 
 From status.md and slices.md:
+- Slice in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Run `/fix-bugs <initiative>` to address them before advancing." Do not proceed to implement the next slice.
 - Current in-progress slice (if any) → resume it
 - Otherwise: next planned slice
 - Check blockers or dependencies

@@ -1,5 +1,5 @@
 ## Slice <N>: <name>
-Status: <Not Started | In Progress | Complete | Blocked>
+Status: <Not Started | In Progress | Complete | Needs Fix | Blocked>
 Last updated: <date>
 
 ### What was implemented

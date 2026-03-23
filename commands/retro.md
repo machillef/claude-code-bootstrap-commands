@@ -32,6 +32,7 @@ Read:
 | Total commits | <count from git log> |
 | Decisions made | <count of ## Decision entries> |
 | Debugging escalations | <count of "escalated" in status.md> |
+| Post-acceptance fixes | <count of "### Fix:" entries in status.md> |
 | Learnings extracted | <count of learned skills created during this initiative> |
 ```
 
@@ -47,6 +48,7 @@ Answer these questions from the data:
 **What went wrong?**
 - Which slices required debugging escalation?
 - Which slices were blocked and why?
+- Which slices needed post-acceptance bug fixes (`/fix-bugs`)? What did Step 9 miss?
 - Were there scope creep indicators (slices added mid-initiative)?
 - Were there stale-doc incidents (Step 0 stale check caught drift)?
 

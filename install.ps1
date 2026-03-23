@@ -155,6 +155,7 @@ Write-Host "  /quick-change <description>        small change, 1-3 files, no boo
 Write-Host "  /bootstrap-existing <initiative>   medium or large change, creates docs/ai/"
 Write-Host "  /bootstrap-new <project>           greenfield project, creates docs/ai/"
 Write-Host "  /continue-work <initiative>        resume after bootstrap"
+Write-Host "  /fix-bugs <initiative> <description> fix bugs found during manual testing of a slice"
 Write-Host "  /detour <initiative> <description> temporary diversion from current slice plan"
 Write-Host "  /consolidate-learnings             merge learned skills into parent skill gotchas"
 Write-Host "  /skill-health                      audit skill structure against best practices"
