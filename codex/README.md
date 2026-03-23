@@ -23,6 +23,7 @@ The installer does **not** modify `~/.codex/config.toml`.
 - `codex-bootstrap-existing`
 - `codex-bootstrap-new`
 - `codex-continue-work`
+- `codex-fix-bugs`
 - `codex-brainstorm-design`
 - `codex-systematic-debugging`
 - `codex-orchestrate`
@@ -58,13 +59,15 @@ the ideas into their existing Codex setup intentionally.
 
 ## How To Invoke
 
-Codex does not use Claude-style slash commands. Ask for the skill directly:
+Use the `$` prefix for explicit invocation, or ask in natural language:
 
 ```text
-Use the codex-bootstrap-existing skill for initiative migrate-to-react.
-```
+# Explicit
+$codex-bootstrap-existing migrate-to-react
+$codex-continue-work migrate-to-react
+$codex-fix-bugs migrate-to-react — sidebar doesn't scroll on mobile
 
-```text
+# Natural language
 Use codex-continue-work for initiative migrate-to-react.
 ```
 
@@ -73,3 +76,25 @@ Use codex-continue-work for initiative migrate-to-react.
 The `docs/ai/` files are intentionally shared. Claude and Codex can both use
 the same initiative ledger as long as they both treat those files as the source
 of truth for active work.
+
+To let Codex read `CLAUDE.md` when no `AGENTS.md` exists, add to `~/.codex/config.toml`:
+
+```toml
+project_doc_fallback_filenames = ["CLAUDE.md"]
+```
+
+## Hooks
+
+Codex does not support Claude Code's hook system. This workflow compensates in
+two ways:
+
+1. **AGENTS.md behavioral rules** — The managed block in `~/.codex/AGENTS.md`
+   includes session-start/end instructions that simulate hook behaviors (stale
+   docs check, detour warnings, learn-eval suggestions). These are best-effort
+   model instructions, not enforced gates.
+
+2. **`userpromptsubmit` hook** (advanced) — Codex supports a hook that fires
+   before user prompts are processed. Advanced users can configure this in
+   `config.toml` to run stale-docs checks or other validations before each
+   prompt. See the [Codex advanced config docs](https://developers.openai.com/codex/config-advanced)
+   for details.

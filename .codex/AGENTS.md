@@ -15,6 +15,7 @@ primitives over Claude-plugin assumptions.
 - Prefer reference bundles and repo-local `.codex/` files over silent global rewrites
 - Treat `docs/ai/` as the shared initiative ledger between Claude and Codex
 - Port workflow mechanics, not Claude-only wrappers
+- Use `codex-fix-bugs` when manual testing reveals bugs in a completed slice
 
 ## Preferred Codex Roles
 

@@ -22,6 +22,7 @@ Before editing:
 
 1. Run a stale check against recent commits.
 2. Determine the in-progress or next planned slice.
+   - If any slice is in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Use `codex-fix-bugs` to address them before advancing." Do not proceed.
 3. Reconfirm the exact touched area and adjacent non-target areas.
 4. Research first:
    - search for existing repo patterns
@@ -50,7 +51,7 @@ Before editing:
 
 ```markdown
 ## Slice <N>: <name>
-Status: <Not Started | In Progress | Complete | Blocked>
+Status: <Not Started | In Progress | Complete | Needs Fix | Blocked>
 Last updated: <date>
 
 ### What was implemented
@@ -72,11 +73,13 @@ Last updated: <date>
 ## Output
 
 ```text
-Slice <N>: <name> — <Complete|In Progress|Blocked>
+Slice <N>: <name> — <Complete|In Progress|Needs Fix|Blocked>
 Changed: <file list>
 Validated: <commands and pass/fail>
 Remains: <what is left or "nothing">
+Manual check: <1-2 things to verify manually that automated tests cannot cover>
 Next: use codex-continue-work for <initiative> -> <next slice>
+      use codex-fix-bugs for <initiative> — if manual testing reveals bugs in this slice
 ```
 
 ## Rules
