@@ -1,4 +1,4 @@
-Slice <N>: <name> — <Complete|In Progress|Blocked>
+Slice <N>: <name> — <Complete|In Progress|Needs Fix|Blocked>
 Changed: <file list>
 Validated: <commands run and pass/fail>
 Remains: <what's left, or "nothing">

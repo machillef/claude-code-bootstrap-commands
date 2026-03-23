@@ -11,7 +11,7 @@ Intentionally conservative: one slice at a time, narrow implementation, clear ve
 
 ## Skill Contents
 
-- `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output)
+- `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output, fix-entry, fix-stop-output)
 - `gotchas/` — known failure patterns from real usage. **Read these before starting any slice.**
 - `prompts/` — subagent prompt templates for implementation dispatch (implementer, spec-reviewer, code-quality-reviewer)
 
