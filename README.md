@@ -340,11 +340,22 @@ cd C:\claude-bootstrap; git pull; .\install-codex.ps1
 
 **What it never touches:** Your `~/.codex/config.toml`, any content outside the managed `<!-- BEGIN/END -->` markers in AGENTS.md, or any files it didn't install. Conflicts are skipped with a warning — use `--force` to override.
 
-**Invoking skills** (Codex uses natural language, not slash commands):
+**Invoking skills:**
 
 ```text
+# Explicit invocation with $ prefix
+$codex-continue-work migrate-to-react
+$codex-fix-bugs migrate-to-react — the sidebar doesn't scroll on mobile
+
+# Or natural language
 Use codex-continue-work for initiative migrate-to-react.
 Use codex-fix-bugs for initiative migrate-to-react — the sidebar doesn't scroll on mobile.
+```
+
+**Cross-tool compatibility:** If you use both Claude Code and Codex, add this to your `~/.codex/config.toml` so Codex reads `CLAUDE.md` when no `AGENTS.md` exists:
+
+```toml
+project_doc_fallback_filenames = ["CLAUDE.md"]
 ```
 
 See [codex/README.md](codex/README.md) for Codex-specific details and the full skill list.
