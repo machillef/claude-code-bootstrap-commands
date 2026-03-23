@@ -11,7 +11,7 @@ Intentionally conservative: one slice at a time, narrow implementation, clear ve
 
 ## Skill Contents
 
-- `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output)
+- `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output, fix-entry, fix-stop-output)
 - `gotchas/` — known failure patterns from real usage. **Read these before starting any slice.**
 - `prompts/` — subagent prompt templates for implementation dispatch (implementer, spec-reviewer, code-quality-reviewer)
 
@@ -66,6 +66,7 @@ Read:
 ## Step 2: Determine the Next Slice
 
 From status.md and slices.md:
+- Slice in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Run `/fix-bugs <initiative>` to address them before advancing." Do not proceed to implement the next slice.
 - Current in-progress slice (if any) → resume it
 - Otherwise: next planned slice
 - Check blockers or dependencies

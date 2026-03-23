@@ -21,5 +21,6 @@ All slices are complete.
 <if all DoD criteria are met:>
 Initiative is complete. Consider running `/everything-claude-code:learn-eval` to extract reusable patterns from this initiative.
 <if any DoD criterion is NOT MET:>
-Run `/bootstrap-existing <initiative>-fixes` to address unmet criteria.
+If unmet criteria are bugs in completed slices: Run `/fix-bugs <initiative>` to address them.
+If unmet criteria require new work or re-design: Run `/bootstrap-existing <initiative>-fixes`.
 ---

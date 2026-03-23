@@ -323,7 +323,7 @@ See [codex/README.md](codex/README.md) for Codex-specific details.
 
 ## What Gets Installed
 
-**Commands:** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/detour`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
+**Commands:** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/fix-bugs`, `/detour`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
 
 **Skills:** `workflow-existing-repo`, `workflow-new-repo`, `execution-loop`, `brainstorm-design`, `systematic-debugging` (each a folder with templates, gotchas, and/or scripts)
 
