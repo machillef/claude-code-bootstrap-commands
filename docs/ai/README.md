@@ -57,6 +57,29 @@ Output from the `architecture-discovery` agent. Large changes only. Covers: stac
 ### `quick-changes-log.md`
 Lightweight audit trail for small changes that don't warrant a full initiative. Append-only.
 
+## Initiative Lifecycle
+
+```
+Bootstrap → Active (slices in progress) → Complete (all slices done) → Archived
+```
+
+- **Active:** initiative files live in `docs/ai/` at the top level
+- **Complete:** all slices are Complete (or Blocked). Execution-loop emits End of Plan.
+- **Archived:** after `/retro`, completed initiative files are moved to `docs/ai/archive/<initiative>/` via `git mv`. They remain in git history.
+- **Extending:** if you want more work on a completed initiative, run `/continue-work <initiative> <new objective>` — it adds new slices without re-bootstrapping
+
+Files that are **never archived** (they span initiatives): `retro-log.md`, `quick-changes-log.md`
+
+The archive folder grows slowly (a few KB per initiative). Pruning is a human decision — `git rm` when no longer needed. Everything is in git history regardless.
+
+## What to Store vs. What LLMs Discover
+
+LLMs can rapidly discover codebase structure, tech stack, function behavior, and file organization from code alone. Don't duplicate that here.
+
+**Store in docs/ai/:** dynamic state that can't be discovered from code — current slice progress, the plan, decisions and their rationale, what's been verified, what's blocked.
+
+**Don't store:** codebase structure descriptions, tech stack summaries, module explanations, or anything a fresh `git log` + code read would reveal.
+
 ## Rules
 
 - Every entry must be backed by a file path or concrete repo evidence.

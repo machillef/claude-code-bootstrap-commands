@@ -221,7 +221,7 @@ End of session
     ▼
 End of initiative (all slices complete)
     │
-    ├─ Run /retro <initiative> → metrics + learnings → retro-log.md
+    ├─ Run /retro <initiative> → metrics + learnings + archive docs
     │
     ▼
 Periodic maintenance
@@ -229,6 +229,21 @@ Periodic maintenance
     ├─ /skill-health → scores skills → recommends improvements
     └─ /skill-improve <skill> → targeted improvement
 ```
+
+## Knowledge Handling
+
+LLMs discover codebase structure, tech stack, and function behavior on their own — don't duplicate that in documentation files. The `docs/ai/` system stores only what agents **cannot discover from code**: current slice progress, the plan, decisions and their rationale, what's been verified, what's blocked.
+
+**Initiative lifecycle:**
+```
+Bootstrap → Active → Complete → Archived (via /retro)
+```
+
+- **Extending a completed initiative:** `/continue-work foo add loading states` — adds new slices without re-bootstrapping
+- **Archiving:** `/retro` moves completed initiative files to `docs/ai/archive/` (only if all slices are done). Stale-docs hooks ignore archived files.
+- **Long-running projects:** archives grow slowly (few KB per initiative). Pruning is a human decision — everything is in git history.
+
+See `docs/ai/README.md` for the full file set and lifecycle details.
 
 ## License
 

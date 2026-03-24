@@ -16,8 +16,8 @@ if [ ! -d "docs/ai" ]; then
   exit 0
 fi
 
-# Find status files
-STATUS_FILES=$(find docs/ai -name "*-status.md" -type f 2>/dev/null)
+# Find status files (exclude archived initiatives)
+STATUS_FILES=$(find docs/ai -maxdepth 1 -name "*-status.md" -type f 2>/dev/null)
 if [ -z "$STATUS_FILES" ]; then
   exit 0
 fi

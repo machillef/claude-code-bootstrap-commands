@@ -91,6 +91,18 @@ Create or append to `docs/ai/retro-log.md`:
 
 After extracting learnings, run `/consolidate-learnings` to ensure any new learned skills are merged into parent skills.
 
+### Step 7: Archive Completed Initiative
+
+**Only if ALL slices are either Complete or Blocked** (no In Progress, Not Started, or Needs Fix):
+
+1. Create `docs/ai/archive/<initiative>/` if it doesn't exist
+2. Move all `docs/ai/<initiative>-*` files into the archive directory using `git mv`
+3. Commit: `docs: archive completed initiative <initiative>`
+
+**If any slice is still active (In Progress, Not Started, Needs Fix):** Skip archival. State: "Initiative is still active — skipping archival. Run `/retro` again after all slices are complete to archive."
+
+This keeps the active `docs/ai/` directory clean. Archived files remain in git history and can be referenced anytime. The `retro-log.md` and `quick-changes-log.md` files are never archived — they span initiatives.
+
 ## When to Run
 
 - After the last slice of an initiative is marked Complete

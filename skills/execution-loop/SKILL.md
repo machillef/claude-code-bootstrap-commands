@@ -68,11 +68,28 @@ Read:
 From status.md and slices.md:
 - Slice in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Run `/fix-bugs <initiative>` to address them before advancing." Do not proceed to implement the next slice.
 - Current in-progress slice (if any) → resume it
+- **All slices Complete (or Complete + Blocked) and no slices Not Started or In Progress** → enter Extend mode (see below)
 - Otherwise: next planned slice
 - Check blockers or dependencies
 - Check validation requirements and rollback notes
 
 If the docs are inconsistent, fix them first. State the inconsistency explicitly before implementing.
+
+### Extend Mode (all slices done, user wants more work)
+
+If `/continue-work <initiative> <new objective>` is invoked and all slices are already Complete:
+
+1. Read the existing design doc and decisions
+2. Treat the `<new objective>` as a request to extend the initiative
+3. Ask brief clarifying questions about the new scope (this is NOT a full brainstorm-design — the design already exists)
+4. Propose new slices (numbered continuing from the last slice)
+5. Get user approval on the new slices
+6. Add them to slices.md and status.md (as Not Started)
+7. Continue with the first new slice using the normal execution loop
+
+If no new objective was provided (`/continue-work <initiative>` with no additional text), emit the End of Plan block as usual.
+
+This avoids re-bootstrapping when the user wants to add polishing, follow-up work, or additional features to an existing initiative.
 
 ---
 
