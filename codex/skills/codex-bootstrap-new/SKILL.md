@@ -30,7 +30,8 @@ Use this skill for a truly greenfield project.
    - `docs/ai/<initiative>-slices.md`
    - `docs/ai/<initiative>-status.md`
 11. Create or extend repo `AGENTS.md` with stable project facts only.
-12. Stop before implementing features.
+12. Verify user story traceability: every story from the design doc must be covered by at least one slice. If any are uncovered, add a slice or mark the story as out of scope.
+13. Stop before implementing features.
 
 ## Output
 

@@ -8,6 +8,7 @@
 - `codex-brainstorm-design` — collaborative design before implementation
 - `codex-systematic-debugging` — structured debugging when verification fails
 - `codex-orchestrate` — multi-agent orchestration for complex work
+- `codex-ubiquitous-language` — extract DDD-style domain glossary to UBIQUITOUS_LANGUAGE.md
 
 ### Session Start (do these before any implementation)
 - If `docs/ai/*-status.md` files exist: check their last modified date vs `git log --oneline -5`. If status is >3 days stale while repo has recent commits, warn and suggest using `codex-continue-work` to update docs first.

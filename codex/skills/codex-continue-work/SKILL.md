@@ -36,7 +36,7 @@ Before editing:
 7. Implement one slice only.
 8. If verification fails, invoke `codex-systematic-debugging`.
 9. Verify with the narrowest relevant command first.
-10. Review the diff critically for correctness, security, regressions, and missing tests.
+10. Review the diff critically for correctness, security, regressions, and missing tests. Check that the changes satisfy the user stories referenced by this slice — verify each story's "I want" and "so that" against actual behavior.
 11. Update `docs/ai/` docs to match reality.
 12. Stop with a clear next step.
 

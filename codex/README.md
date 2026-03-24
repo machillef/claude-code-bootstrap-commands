@@ -27,6 +27,7 @@ The installer does **not** modify `~/.codex/config.toml`.
 - `codex-brainstorm-design`
 - `codex-systematic-debugging`
 - `codex-orchestrate`
+- `codex-ubiquitous-language`
 
 ## ECC-Inspired Compatibility Layer
 
