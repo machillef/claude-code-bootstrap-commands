@@ -191,7 +191,7 @@ If **no plugins** are installed: apply the discipline directly (write tests firs
 
 ## Step 7: Verify (max 3 attempts)
 
-Verification means **build AND tests pass**. A build that compiles but whose tests haven't run is NOT a passed verification. Do not stop after a successful build — you still owe test execution + Steps 7b through 12.
+Verification means **build AND tests pass**. A build that compiles but whose tests haven't run is NOT a passed verification. Do not stop after a successful build — you still owe test execution + Steps 7b through 12. If no test command is configured, note "build-only verification — no test framework" and compensate with thorough manual checks in Step 9.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -211,6 +211,7 @@ Verification means **build AND tests pass**. A build that compiles but whose tes
 ```
 
 - Check `docs/ai/<initiative>-scope-map.md` for a `## Verification Commands` table. If it exists, use those exact commands. If not, infer from the stack.
+- **Execution order:** Build first, then run tests immediately — do not stop, summarize, or wait for input between them. Only evaluate after both have run.
 - Record failures honestly — do not retry blindly
 - Each attempt must change something (fix, different approach) — never re-run the exact same code expecting a different result
 

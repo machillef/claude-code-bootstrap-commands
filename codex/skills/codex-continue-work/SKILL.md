@@ -38,7 +38,7 @@ Before editing:
 6. Apply test-first discipline for behavioral changes.
 7. Implement one slice only.
 8. If verification fails, invoke `codex-systematic-debugging`. If verification passes, note "step 8 skipped — debugging not needed."
-9. Verify with the narrowest relevant command first. Verification means **build AND tests pass** — a build that compiles but whose tests haven't run is not verification. Do not stop after a successful build.
+9. Verify with the narrowest relevant command first. Verification means **build AND tests pass** — a build that compiles but whose tests haven't run is not verification. Do not stop after a successful build. Run build then tests back-to-back — do not stop or summarize between them. If no test command exists, note "build-only verification" and compensate in the review step.
 10. Review the diff critically for correctness, security, regressions, and missing tests. Check that the changes satisfy the user stories referenced by this slice — verify each story's "I want" and "so that" against actual behavior.
 11. Update `docs/ai/` docs to match reality.
 12. Stop with a clear next step.
