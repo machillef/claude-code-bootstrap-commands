@@ -27,6 +27,7 @@ The installer does **not** modify `~/.codex/config.toml`.
 - `codex-brainstorm-design`
 - `codex-systematic-debugging`
 - `codex-orchestrate`
+- `codex-ubiquitous-language`
 
 ## ECC-Inspired Compatibility Layer
 
@@ -36,6 +37,9 @@ portable parts of ECC in Codex-native form:
 
 - durable initiative state in `docs/ai/`
 - planner-style bootstrap before implementation
+- stress-test requirements and enumerate user stories before proposing designs
+- two-part design doc: requirements (what) approved before design (how)
+- ubiquitous language glossary for domain terminology consistency
 - research-first workflow before new code
 - TDD-first execution for behavioral changes
 - reviewer and security-review handoff discipline
@@ -66,9 +70,11 @@ Use the `$` prefix for explicit invocation, or ask in natural language:
 $codex-bootstrap-existing migrate-to-react
 $codex-continue-work migrate-to-react
 $codex-fix-bugs migrate-to-react — sidebar doesn't scroll on mobile
+$codex-ubiquitous-language
 
 # Natural language
 Use codex-continue-work for initiative migrate-to-react.
+Use codex-ubiquitous-language to formalize domain terms.
 ```
 
 ## Coexisting With Claude

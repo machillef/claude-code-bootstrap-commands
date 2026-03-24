@@ -129,6 +129,12 @@ The first slice must:
 - include a runnable validation command
 - avoid depending on unfinished work elsewhere
 
+Include a `User stories:` field in each slice referencing story numbers from the design doc.
+
+## Step 7b: Verify User Story Traceability
+
+Before stopping, verify that every user story from the design doc is covered by at least one slice. If any stories are uncovered, present the gaps to the user and either add a slice or mark the story as out of scope in the design doc.
+
 ## Step 8: Stop Cleanly
 
 End with a compact structured summary:
