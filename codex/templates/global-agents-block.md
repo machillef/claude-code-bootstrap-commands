@@ -14,6 +14,7 @@
 - If `docs/ai/*-status.md` files exist (top-level, NOT in `docs/ai/archive/`): check their last modified date vs `git log --oneline -5`. If status is >3 days stale while repo has recent commits, warn and suggest using `codex-continue-work` to update docs first.
 - Run `git worktree list`. If any `detour-*` worktrees exist, warn about them before proceeding.
 - Treat `docs/ai/` as the durable source of truth for active initiative state. Ignore `docs/ai/archive/` — those are completed initiatives.
+- If any top-level `docs/ai/*-status.md` has all slices Complete/Blocked and no entry exists in `docs/ai/retro-log.md` for that initiative, remind the user to run retro and archive.
 
 ### Session End (do these before stopping)
 - If you made 2+ commits this session, suggest extracting reusable patterns as learned skills.

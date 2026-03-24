@@ -178,7 +178,7 @@ See [codex/README.md](codex/README.md) for details.
 
 **Agents (2):** `architecture-discovery`, `stack-advisor`
 
-**Hooks (6):** Session-start reminders (skill health, detour check, stale docs), post-tool suggestions, session-end nudges. Auto-loaded as a plugin; symlink installs need manual wiring.
+**Hooks (7):** Session-start reminders (skill health, detour check, stale docs, retro reminder), post-tool suggestions, session-end nudges. Auto-loaded as a plugin; symlink installs need manual wiring.
 
 Never touches your `CLAUDE.md`, `rules/`, custom skills, or plugin configs. Conflicts are skipped with a warning — use `--force` to override.
 
@@ -205,6 +205,7 @@ Session starts
     │
     ├─ Hook: active detour? remind to continue/finish
     ├─ Hook: stale docs/ai/? remind to update
+    ├─ Hook: completed initiative without retro? remind to run /retro
     ├─ Hook: /skill-health overdue? remind to run
     │
     ▼

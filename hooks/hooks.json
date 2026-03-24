@@ -24,6 +24,13 @@
             "description": "Warn about stale docs/ai/ status files (fires once per session)",
             "async": true,
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-retro-reminder.sh\"",
+            "description": "Remind about completed initiatives that haven't had a retro yet (fires once per session)",
+            "async": true,
+            "timeout": 5
           }
         ]
       }
