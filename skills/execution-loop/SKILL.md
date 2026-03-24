@@ -28,6 +28,7 @@ Before doing anything else, execute these reads in order:
 
 1. Read `CLAUDE.md` — project rules and structure
 2. Read `docs/ai/<initiative>-status.md` — where are we?
+   - **If the file does not exist:** check `docs/ai/archive/<initiative>/`. If found there, the initiative was archived — see Extend Mode in Step 2. If not found anywhere, stop: "No initiative found for `<initiative>`. Run `/bootstrap-existing <initiative>` or `/bootstrap-new <initiative>` first."
 3. Read `docs/ai/<initiative>-slices.md` — what's the plan?
 4. Read `docs/ai/<initiative>-plan.md` (if it exists)
 5. Read any learned skills relevant to this initiative (`~/.claude/skills/learned/`)
@@ -190,14 +191,15 @@ If **no plugins** are installed: apply the discipline directly (write tests firs
 
 ## Step 7: Verify (max 3 attempts)
 
-Run targeted tests for the changed area first, broader build/test only as needed.
+Verification means **build AND tests pass**. A build that compiles but whose tests haven't run is NOT a passed verification. Do not stop after a successful build — you still owe test execution + Steps 7b through 12. If no test command is configured, note "build-only verification — no test framework" and compensate with thorough manual checks in Step 9.
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  7a. Run validation command for this slice.         │
+│  7a. Run validation: build + tests for this slice.  │
+│      Build alone is NOT verification.               │
 │                                                     │
-│  7b. EVALUATE                                       │
-│      PASS ──► Step 9                                │
+│  7b. EVALUATE (both build and tests)                │
+│      PASS ──► Step 9 (note: Step 8 skipped)         │
 │      FAIL ──► Read failure, update diagnosis,       │
 │               fix, loop back to 7a.                 │
 │                                                     │
@@ -209,6 +211,7 @@ Run targeted tests for the changed area first, broader build/test only as needed
 ```
 
 - Check `docs/ai/<initiative>-scope-map.md` for a `## Verification Commands` table. If it exists, use those exact commands. If not, infer from the stack.
+- **Execution order:** Build first, then run tests immediately — do not stop, summarize, or wait for input between them. Only evaluate after both have run.
 - Record failures honestly — do not retry blindly
 - Each attempt must change something (fix, different approach) — never re-run the exact same code expecting a different result
 
@@ -216,7 +219,7 @@ Run targeted tests for the changed area first, broader build/test only as needed
 
 ## Step 8: Systematic Debugging (if verification failed)
 
-If Step 7 verification passes, skip to Step 9.
+If Step 7 verification passes, note "Step 8 (debugging) — skipped, verification passed" and proceed to Step 9.
 
 If verification **fails**, invoke the `systematic-debugging` skill before attempting any fix. The skill enforces a mandatory 4-phase process:
 

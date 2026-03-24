@@ -20,6 +20,8 @@ repo files.
 If the user left details out, infer conservatively from the repo and ask only
 when the missing detail materially changes the plan.
 
+**Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative already exists with this name. Use `codex-continue-work` to resume it, or choose a different name." Do not overwrite active initiative docs.
+
 ## Step 0: Triage
 
 Classify before doing anything else:

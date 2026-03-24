@@ -21,6 +21,8 @@ The execution phase after bootstrap is identical — `/continue-work` uses the s
 
 Confirm this is actually a greenfield project. If the user already has code (even a scaffold, a fork, or a half-started project), use `workflow-existing-repo` instead.
 
+**Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue-work <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
+
 If greenfield: continue.
 
 ---

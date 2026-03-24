@@ -19,6 +19,8 @@ description: "Bootstrap existing repo: triage size, detect stack, map scope, cre
 
 If any input is missing, infer conservatively from the repo. Do not invent requirements.
 
+**Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue-work <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
+
 ---
 
 ## Step 0: Triage
