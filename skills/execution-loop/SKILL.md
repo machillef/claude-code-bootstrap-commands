@@ -79,6 +79,8 @@ If the docs are inconsistent, fix them first. State the inconsistency explicitly
 
 If `/continue-work <initiative> <new objective>` is invoked and all slices are already Complete:
 
+**If initiative files are not found in `docs/ai/`:** check `docs/ai/archive/<initiative>/`. If found there, restore them first: `git mv docs/ai/archive/<initiative>/* docs/ai/` and commit `docs: restore <initiative> from archive for extension`. Then continue below.
+
 1. Read the existing design doc and decisions
 2. Treat the `<new objective>` as a request to extend the initiative
 3. Ask brief clarifying questions about the new scope (this is NOT a full brainstorm-design — the design already exists)
