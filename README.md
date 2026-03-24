@@ -178,7 +178,7 @@ See [codex/README.md](codex/README.md) for details.
 
 **Agents (2):** `architecture-discovery`, `stack-advisor`
 
-**Hooks (6):** Session-start reminders (skill health, detour check, stale docs), post-tool suggestions, session-end nudges. Auto-loaded as a plugin; symlink installs need manual wiring.
+**Hooks (7):** Session-start reminders (skill health, detour check, stale docs, retro reminder), post-tool suggestions, session-end nudges. Auto-loaded as a plugin; symlink installs need manual wiring.
 
 Never touches your `CLAUDE.md`, `rules/`, custom skills, or plugin configs. Conflicts are skipped with a warning — use `--force` to override.
 
@@ -205,6 +205,7 @@ Session starts
     │
     ├─ Hook: active detour? remind to continue/finish
     ├─ Hook: stale docs/ai/? remind to update
+    ├─ Hook: completed initiative without retro? remind to run /retro
     ├─ Hook: /skill-health overdue? remind to run
     │
     ▼
@@ -221,7 +222,7 @@ End of session
     ▼
 End of initiative (all slices complete)
     │
-    ├─ Run /retro <initiative> → metrics + learnings → retro-log.md
+    ├─ Run /retro <initiative> → metrics + learnings + archive docs
     │
     ▼
 Periodic maintenance
@@ -229,6 +230,21 @@ Periodic maintenance
     ├─ /skill-health → scores skills → recommends improvements
     └─ /skill-improve <skill> → targeted improvement
 ```
+
+## Knowledge Handling
+
+LLMs discover codebase structure, tech stack, and function behavior on their own — don't duplicate that in documentation files. The `docs/ai/` system stores only what agents **cannot discover from code**: current slice progress, the plan, decisions and their rationale, what's been verified, what's blocked.
+
+**Initiative lifecycle:**
+```
+Bootstrap → Active → Complete → Archived (via /retro)
+```
+
+- **Extending a completed initiative:** `/continue-work foo add loading states` — adds new slices without re-bootstrapping
+- **Archiving:** `/retro` moves completed initiative files to `docs/ai/archive/` (only if all slices are done). Stale-docs hooks ignore archived files.
+- **Long-running projects:** archives grow slowly (few KB per initiative). Pruning is a human decision — everything is in git history.
+
+See `docs/ai/README.md` for the full file set and lifecycle details.
 
 ## License
 

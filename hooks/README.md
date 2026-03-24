@@ -9,6 +9,7 @@ These hooks provide automatic reminders for manual workflow steps. When installe
 | `session-skill-health-check.sh` | PreToolUse (Read) | Once per day | Reminds about `/skill-health` if last run was >7 days ago |
 | `session-detour-check.sh` | PreToolUse (Read) | Once per day | Warns about active detour worktrees |
 | `session-stale-docs-check.sh` | PreToolUse (Read) | Once per day | Warns about stale `docs/ai/` status files |
+| `session-retro-reminder.sh` | PreToolUse (Read) | Once per day | Reminds about completed initiatives that need `/retro` |
 | `post-learn-eval-consolidate.sh` | PostToolUse (Skill) | After learn-eval | Reminds to run `/consolidate-learnings` |
 | `stop-learn-eval-suggest.sh` | Stop | Session end | Suggests `/everything-claude-code:learn-eval` after meaningful work |
 | `stop-detour-reminder.sh` | Stop | Session end | Reminds about active detour worktrees |
@@ -39,6 +40,11 @@ If you installed via `install.sh` / `install.ps1` instead of as a plugin, hooks 
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/session-stale-docs-check.sh",
+            "async": true, "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-retro-reminder.sh",
             "async": true, "timeout": 5
           }
         ]

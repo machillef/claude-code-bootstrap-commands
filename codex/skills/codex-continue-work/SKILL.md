@@ -23,6 +23,8 @@ Before editing:
 1. Run a stale check against recent commits.
 2. Determine the in-progress or next planned slice.
    - If any slice is in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Use `codex-fix-bugs` to address them before advancing." Do not proceed.
+   - If all slices are Complete (or Complete + Blocked) and the user provided a new objective → enter **Extend Mode**: read existing design/decisions, ask brief clarifying questions, propose new slices (numbered from last), get approval, add to slices.md and status.md, then continue. This is lighter than re-bootstrapping. **But:** if the new objective is materially different from the original design (new domain, different architecture), recommend `codex-bootstrap-existing` for a fresh initiative instead. **If files are archived** (in `docs/ai/archive/<initiative>/`), restore them first with `git mv docs/ai/archive/<initiative>/* docs/ai/`.
+   - If all slices are Complete and no new objective → emit End of Plan block. Suggest archiving completed files: `git mv docs/ai/<initiative>-* docs/ai/archive/<initiative>/`.
 3. Reconfirm the exact touched area and adjacent non-target areas.
 4. Research first:
    - search for existing repo patterns

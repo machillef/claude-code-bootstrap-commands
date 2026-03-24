@@ -16,8 +16,8 @@ if [ ! -d "docs/ai" ]; then
   exit 0
 fi
 
-# Find status files
-STATUS_FILES=$(find docs/ai -name "*-status.md" -type f 2>/dev/null)
+# Find status files (exclude archived initiatives)
+STATUS_FILES=$(find docs/ai -maxdepth 1 -name "*-status.md" -type f 2>/dev/null)
 if [ -z "$STATUS_FILES" ]; then
   exit 0
 fi
@@ -31,6 +31,11 @@ date_to_epoch() {
 STALE_FILES=""
 TODAY_EPOCH=$(date +%s)
 for f in $STATUS_FILES; do
+  # Skip completed initiatives (no active slices remaining)
+  if ! grep -qE "Status: (Not Started|In Progress|Needs Fix)" "$f" 2>/dev/null; then
+    continue
+  fi
+
   # Get last modification date of the file in git
   LAST_COMMIT_DATE=$(git log -1 --format="%ai" -- "$f" 2>/dev/null | cut -d' ' -f1)
   if [ -z "$LAST_COMMIT_DATE" ]; then
