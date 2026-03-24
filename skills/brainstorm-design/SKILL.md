@@ -20,6 +20,7 @@ Before starting, read all existing docs/ai/ files for this initiative:
 - `docs/ai/<initiative>-scope-map.md` (if exists — existing-repo workflow)
 - `docs/ai/<initiative>-decisions.md` (if exists)
 - `CLAUDE.md` (project root, if exists)
+- `UBIQUITOUS_LANGUAGE.md` (if exists — use canonical terms consistently throughout the design dialogue)
 
 Use this context to ground your questions and avoid asking what's already documented.
 
