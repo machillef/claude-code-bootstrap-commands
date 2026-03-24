@@ -231,6 +231,7 @@ After verification passes, step back and evaluate the slice as a whole. This is 
 Re-read the slice definition from `docs/ai/<initiative>-slices.md`. Re-read the diff of what you actually changed.
 
 - Does the diff fully implement the slice goal, or is something partially done?
+- Do the changes satisfy the user stories referenced by this slice? Check each story's "I want" and "so that" against the actual behavior.
 - Does the diff touch anything outside the slice's declared "Touched area"?
 - Are there TODOs, hardcoded values, or placeholder implementations?
 - Did you change a contract (function signature, API shape, config key) that the slice didn't call for?

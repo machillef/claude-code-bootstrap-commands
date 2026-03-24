@@ -34,22 +34,28 @@ You MUST complete these steps in order:
 1. **Load initiative context** — read docs/ai/ files, CLAUDE.md, recent commits
 2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Propose 2-3 approaches** — with trade-offs and your recommendation
-5. **Present design** — in sections scaled to their complexity, get user approval after each section
-6. **Write design doc** — save to `docs/ai/<initiative>-design.md` and commit
-7. **Spec review loop** — dispatch spec-document-reviewer subagent with precisely crafted review context (never your session history); fix issues and re-dispatch until approved (max 5 iterations, then surface to human)
-8. **User reviews written spec** — ask user to review the spec file before proceeding
-9. **Return control** — hand back to the calling workflow skill (do NOT invoke implementation skills directly)
+4. **Stress-test requirements** — enumerate every open decision branch, walk each to resolution with a recommendation, resolve inter-decision dependencies. Do not exit until ALL branches are resolved. See "Stress-testing requirements" below.
+5. **Enumerate user stories** — draft an exhaustive numbered list of user stories using the template from `templates/user-stories-section.md`. Present to the user for review (some may be out of scope, some may be missing). Iterate until the user approves the story list.
+6. **Propose 2-3 approaches** — with trade-offs and your recommendation
+7. **Present design** — in sections scaled to their complexity, get user approval after each section
+8. **Write design doc** — save to `docs/ai/<initiative>-design.md` and commit. Include a "User Stories" section using the format from `templates/user-stories-section.md`.
+9. **Spec review loop** — dispatch spec-document-reviewer subagent with precisely crafted review context (never your session history); fix issues and re-dispatch until approved (max 5 iterations, then surface to human)
+10. **User reviews written spec** — ask user to review the spec file before proceeding
+11. **Return control** — hand back to the calling workflow skill (do NOT invoke implementation skills directly)
 
 ## Process Flow
 
 ```
 Load context → Visual companion offer? → Clarifying questions (one at a time)
-→ Propose 2-3 approaches → Present design sections → User approves?
-  → No: revise and re-present
-  → Yes: Write design doc → Spec review loop → User reviews spec
-    → Changes requested: update and re-review
-    → Approved: Return control to calling workflow
+→ Stress-test requirements (enumerate branches → resolve each with recommendation)
+  → Unresolved branches remain: keep walking the tree
+  → All resolved: Enumerate user stories → User reviews story list
+    → Missing/wrong stories: iterate until approved
+    → Approved: Propose 2-3 approaches → Present design sections → User approves?
+      → No: revise and re-present
+      → Yes: Write design doc (incl. User Stories section) → Spec review loop → User reviews spec
+        → Changes requested: update and re-review
+        → Approved: Return control to calling workflow
 ```
 
 ## The Process
@@ -63,6 +69,26 @@ Load context → Visual companion offer? → Clarifying questions (one at a time
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message — if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
+- Do NOT move to approaches until you have stress-tested the requirements (see below)
+
+**Stress-testing requirements:**
+
+Once you have enough landscape understanding from clarifying questions, shift into adversarial stress-test mode. The goal: interview relentlessly about every aspect of the plan until you reach a shared understanding with zero ambiguity.
+
+- **Enumerate branches:** List every open decision, assumption, or ambiguity as a numbered list. Present this list to the user: *"Before we move to approaches, here are the open decisions I see: [list]. Let's resolve each one."*
+- **Walk each branch:** For each decision, state YOUR recommended answer with reasoning. The user evaluates a concrete recommendation, not an open-ended question. Example: *"For auth, I recommend JWT with refresh tokens because [reasons]. Does that match your thinking, or do you see it differently?"*
+- **Resolve dependencies:** Some decisions depend on others. Identify and sequence them — resolve upstream decisions first, then revisit downstream ones that were blocked.
+- **Exit gate:** Do not proceed to "Propose approaches" until every branch on the list is resolved. If new branches surface during resolution, add them to the list and resolve those too.
+
+**Enumerating user stories:**
+
+After all decision branches are resolved, draft an exhaustive set of user stories before proposing approaches. This grounds the design in concrete user interactions, not abstract requirements.
+
+- Use the format from `templates/user-stories-section.md`: `N. As a <actor>, I want <feature>, so that <benefit>`
+- Cover every actor and every interaction — be exhaustive, not selective
+- Present the full numbered list to the user: *"Here are the user stories I've identified. Review them — some may be out of scope, and I may have missed some."*
+- Iterate: remove stories the user marks as out of scope, add stories the user identifies as missing, refine wording until the user approves
+- Do not proceed to approaches until the user approves the story list
 
 **Exploring approaches:**
 
@@ -72,15 +98,25 @@ Load context → Visual companion offer? → Clarifying questions (one at a time
 
 **Presenting the design:**
 
-- Once you believe you understand what you're building, present the design
+Structure the design doc in two parts. Part 1 captures requirements (what), Part 2 captures design (how). Present and get approval on Part 1 BEFORE drafting Part 2. This prevents designing solutions before requirements are fully captured. See `templates/design-doc-structure.md` for the expected layout.
+
+- **Part 1 — Requirements** (present first, get approval before continuing):
+  - Problem statement — what problem are we solving, from the user's perspective
+  - User stories — see `templates/user-stories-section.md` for format
+  - Out of scope — what this initiative will NOT do
+- **Part 2 — Design** (only after Part 1 is approved):
+  - Architecture and components
+  - Data flow
+  - Error handling
+  - Testing approach
 - Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
 - Ask after each section whether it looks right so far
-- Cover: architecture, components, data flow, error handling, testing
 - Be ready to go back and clarify if something doesn't make sense
 
 **Design for isolation and clarity:**
 
 - Break the system into smaller units that each have one clear purpose, communicate through well-defined interfaces, and can be understood and tested independently
+- Prefer deep modules over shallow ones — small interface hiding significant implementation (see [references/deep-modules.md](references/deep-modules.md))
 - For each unit, you should be able to answer: what does it do, how do you use it, and what does it depend on?
 - Can someone understand what a unit does without reading its internals? Can you change the internals without breaking consumers? If not, the boundaries need work.
 
@@ -95,6 +131,7 @@ Load context → Visual companion offer? → Clarifying questions (one at a time
 **Documentation:**
 
 - Write the validated design to `docs/ai/<initiative>-design.md`
+  - Include a "User Stories" section with the approved story list, using the format from `templates/user-stories-section.md`
   - (User preferences for spec location override this default)
 - Commit the design document to git
 
@@ -115,6 +152,8 @@ Wait for the user's response. If they request changes, make them and re-run the 
 **Return Control:**
 After user approves the spec, return control to the calling workflow. Do NOT invoke implementation skills directly. The workflow will continue with its next step (stack decision, slice definition, etc.).
 
+If the design discussion involved domain-specific terminology, suggest the user run `/ubiquitous-language` to formalize the terms before implementation begins.
+
 ## Spec Document Reviewer
 
 Dispatch as a subagent (Agent tool, general-purpose type) with this prompt:
@@ -130,6 +169,7 @@ You are a spec document reviewer. Verify this spec is complete and ready for pla
 |----------|------------------|
 | Completeness | TODOs, placeholders, "TBD", incomplete sections |
 | Coverage | Missing error handling, edge cases, integration points |
+| User story coverage | Every user story in the User Stories section is addressed by the design. No story is left without a corresponding component, flow, or explicit out-of-scope note |
 | Consistency | Internal contradictions, conflicting requirements |
 | Clarity | Ambiguous requirements |
 | YAGNI | Unrequested features, over-engineering |

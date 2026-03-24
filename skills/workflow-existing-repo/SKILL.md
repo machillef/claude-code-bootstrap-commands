@@ -192,6 +192,12 @@ State the first slice using the full slice format from Step 3.
 
 ---
 
+## Step 6b: Verify User Story Traceability
+
+Before stopping, verify traceability: every user story from the design doc must be covered by at least one slice. If any stories are uncovered, present the gaps to the user and either add a slice or mark the story as out of scope in the design doc.
+
+---
+
 ## Step 7: Stop in a Controlled State
 
 Bootstrap is complete when:

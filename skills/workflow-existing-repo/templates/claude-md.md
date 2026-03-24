@@ -13,6 +13,7 @@
 - Auth: <how auth is applied, e.g., "JWT middleware on all /api routes">
 - Errors: <how errors are handled, e.g., "Result<T, AppError> throughout">
 - Config: <how config is loaded, e.g., "dotenv via config/settings.py">
+- Domain terminology: see `UBIQUITOUS_LANGUAGE.md` (if it exists)
 
 ## Source of truth
 - `docs/ai/` — initiative planning, status, and decisions
