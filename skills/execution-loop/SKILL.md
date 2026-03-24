@@ -191,14 +191,15 @@ If **no plugins** are installed: apply the discipline directly (write tests firs
 
 ## Step 7: Verify (max 3 attempts)
 
-Run targeted tests for the changed area first, broader build/test only as needed.
+Verification means **build AND tests pass**. A build that compiles but whose tests haven't run is NOT a passed verification. Do not stop after a successful build — you still owe test execution + Steps 7b through 12.
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  7a. Run validation command for this slice.         │
+│  7a. Run validation: build + tests for this slice.  │
+│      Build alone is NOT verification.               │
 │                                                     │
-│  7b. EVALUATE                                       │
-│      PASS ──► Step 9                                │
+│  7b. EVALUATE (both build and tests)                │
+│      PASS ──► Step 9 (note: Step 8 skipped)         │
 │      FAIL ──► Read failure, update diagnosis,       │
 │               fix, loop back to 7a.                 │
 │                                                     │
@@ -217,7 +218,7 @@ Run targeted tests for the changed area first, broader build/test only as needed
 
 ## Step 8: Systematic Debugging (if verification failed)
 
-If Step 7 verification passes, skip to Step 9.
+If Step 7 verification passes, note "Step 8 (debugging) — skipped, verification passed" and proceed to Step 9.
 
 If verification **fails**, invoke the `systematic-debugging` skill before attempting any fix. The skill enforces a mandatory 4-phase process:
 
