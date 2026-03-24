@@ -30,7 +30,7 @@ Classify before doing anything else:
 
 State the classification explicitly.
 
-## Step 1: Discover the Repo
+## Step 1: Research First
 
 Before writing any plan or proposing net-new implementation, do research first:
 
@@ -42,7 +42,7 @@ Before writing any plan or proposing net-new implementation, do research first:
 If you have Codex role configs for `explorer` or `docs-researcher`, use them for
 evidence gathering and docs verification.
 
-## Step 2: Discover the Repo
+## Step 2: Catalog the Stack
 
 Catalog:
 
