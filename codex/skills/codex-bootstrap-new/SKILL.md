@@ -9,7 +9,7 @@ Use this skill for a truly greenfield project.
 
 ## Workflow
 
-1. Confirm the project is actually new. If there is already code, stop and use `codex-bootstrap-existing`.
+1. Confirm the project is actually new. If there is already code, stop and use `codex-bootstrap-existing`. Also check for name collision: if `docs/ai/<initiative>-status.md` already exists with active slices, warn the user and suggest `codex-continue-work` or a different name.
 2. Capture missing requirements:
    - what is being built
    - expected scale and lifetime

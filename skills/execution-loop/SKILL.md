@@ -28,6 +28,7 @@ Before doing anything else, execute these reads in order:
 
 1. Read `CLAUDE.md` — project rules and structure
 2. Read `docs/ai/<initiative>-status.md` — where are we?
+   - **If the file does not exist:** check `docs/ai/archive/<initiative>/`. If found there, the initiative was archived — see Extend Mode in Step 2. If not found anywhere, stop: "No initiative found for `<initiative>`. Run `/bootstrap-existing <initiative>` or `/bootstrap-new <initiative>` first."
 3. Read `docs/ai/<initiative>-slices.md` — what's the plan?
 4. Read `docs/ai/<initiative>-plan.md` (if it exists)
 5. Read any learned skills relevant to this initiative (`~/.claude/skills/learned/`)

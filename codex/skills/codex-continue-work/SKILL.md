@@ -13,6 +13,7 @@ Before editing:
 
 1. Read repo `AGENTS.md` if present.
 2. Read `docs/ai/<initiative>-status.md`.
+   - If not found: check `docs/ai/archive/<initiative>/`. If there, the initiative was archived — see Extend Mode in step 2. If not found anywhere, stop: "No initiative found. Use `codex-bootstrap-existing` or `codex-bootstrap-new` first."
 3. Read `docs/ai/<initiative>-slices.md`.
 4. Read `docs/ai/<initiative>-plan.md` if it exists.
 5. Read `docs/ai/<initiative>-decisions.md` if it exists.
