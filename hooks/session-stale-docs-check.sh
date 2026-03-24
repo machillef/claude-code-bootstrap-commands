@@ -31,6 +31,11 @@ date_to_epoch() {
 STALE_FILES=""
 TODAY_EPOCH=$(date +%s)
 for f in $STATUS_FILES; do
+  # Skip completed initiatives (no active slices remaining)
+  if ! grep -qE "Status: (Not Started|In Progress|Needs Fix)" "$f" 2>/dev/null; then
+    continue
+  fi
+
   # Get last modification date of the file in git
   LAST_COMMIT_DATE=$(git log -1 --format="%ai" -- "$f" 2>/dev/null | cut -d' ' -f1)
   if [ -z "$LAST_COMMIT_DATE" ]; then
