@@ -188,7 +188,7 @@ Must:
 - Have a clear, runnable validation command
 - Not depend on unfinished work elsewhere
 
-State the first slice using the full slice format from Step 3.
+State the first slice using `templates/slice-format.md` from this skill directory.
 
 ---
 

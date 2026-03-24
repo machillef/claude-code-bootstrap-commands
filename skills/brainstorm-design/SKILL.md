@@ -7,7 +7,7 @@ description: "Design exploration before implementation. Dialogue → 2-3 approac
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
-Start by understanding the current project context and any existing docs/ai/ files, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+Start by understanding the current project context, then ask clarifying questions, stress-test every decision branch, and enumerate user stories — all before proposing any design. Present requirements (Part 1) for approval before drafting the design (Part 2). The checklist below is the authoritative sequence.
 
 <HARD-GATE>
 Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
