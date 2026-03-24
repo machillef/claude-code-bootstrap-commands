@@ -76,6 +76,7 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 **Feature in an existing repo:**
 ```
 /bootstrap-existing add-batch-rename     → creates docs/ai/, defines slices
+/ubiquitous-language                     → formalize domain terms (if any emerged)
 /continue-work add-batch-rename          → implements slice 1
 /continue-work add-batch-rename          → implements slice 2 (repeat)
 /fix-bugs add-batch-rename — rename fails on network paths
@@ -85,6 +86,7 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 **Greenfield project:**
 ```
 /bootstrap-new file-explorer             → requirements, stack, scaffold, docs/ai/
+/ubiquitous-language                     → formalize domain terms (if any emerged)
 /continue-work file-explorer             → slice by slice until done
 ```
 
@@ -152,6 +154,7 @@ cd C:\claude-bootstrap; .\install-codex.ps1
 ```
 $codex-continue-work migrate-to-react
 $codex-fix-bugs migrate-to-react — sidebar doesn't scroll
+$codex-ubiquitous-language
 ```
 
 **Cross-tool compatibility:** Add to `~/.codex/config.toml`:
