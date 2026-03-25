@@ -12,6 +12,7 @@ Extract from `$ARGUMENTS`:
 - **Initiative name** (required)
 - **--passes N** (optional) — review passes after all slices complete (default: 0)
 - **--max-slices N** (optional) — safety limit on slices to process (default: all remaining)
+- **--converge** (optional flag) — passed through to review-loop in Phase 3. Enables convergence mode where reviewers re-dispatch after fixes until APPROVED (max 3 iterations per pass).
 
 If no initiative name is provided, stop: "Usage: `/loop-work <initiative> [--passes N] [--max-slices N]`"
 
@@ -77,6 +78,32 @@ EOF
 - **Step 9:** Re-assessment (completeness + risk)
 - **Step 10:** Update `docs/ai/<initiative>-status.md` and other docs
 - **Step 11:** Cross-initiative learning
+
+### Lightweight harness check (every 5 slices)
+
+After every 5th completed slice, auto-invoke a lightweight harness self-assessment. This is informational — the loop continues immediately after reporting.
+
+**What to check:** Read the last 5 slice entries from `docs/ai/<initiative>-status.md`. For each execution-loop step (Research, TDD, Plugin Delegation, Verify, Debug, Re-assessment), assess:
+- Was this step consistently skipped or produced no findings across all 5 slices?
+- Was any step consistently the bottleneck (most time/attempts spent)?
+
+**Report format:**
+```
+HARNESS CHECK (slices <N-4> through <N>)
+========================================
+Steps consistently skipped or no-op in last 5 slices:
+  - <Step name>: skipped/no-op in 5/5 slices
+
+Steps consistently load-bearing:
+  - <Step name>: caught issues in N/5 slices
+
+No action needed — loop continuing.
+(To adjust: interrupt with your instructions, e.g., "skip Step 4 for remaining slices")
+```
+
+If ALL steps added value (or the assessment is inconclusive), emit: "Harness check: all steps load-bearing. Continuing."
+
+This check does NOT pause the loop. It emits the report and immediately proceeds to the next slice. The user can interrupt (stop condition #5) if they want to act on the findings.
 
 ### After each slice completes
 

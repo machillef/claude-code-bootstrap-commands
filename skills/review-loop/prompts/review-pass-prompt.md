@@ -29,6 +29,8 @@ Read each of these files using the Read tool:
 
 ## Output Format
 
+### Standard mode (no eval-criteria file)
+
 Return your assessment in this exact format:
 
 ```
@@ -50,6 +52,25 @@ ISSUES: None
 PASS DETAILS:
 - <criterion>: PASS — <brief detail>
 ```
+
+### Scored mode (when eval-criteria provided)
+
+When `{{EVAL_CRITERIA}}` is present below, score each criterion on a 1-5 scale against its definition. A criterion below its threshold triggers CHANGES_REQUESTED.
+
+```
+VERDICT: APPROVED | CHANGES_REQUESTED
+
+SCORES:
+- <criterion>: <score>/5 (threshold: <N>) — PASS | FAIL — <reasoning>
+
+ISSUES:
+- [file:line] <issue description> — SUGGESTED FIX: <what to change>
+
+PASS DETAILS:
+- <criterion>: <score>/5 — <brief detail>
+```
+
+{{EVAL_CRITERIA}}
 
 ---
 
