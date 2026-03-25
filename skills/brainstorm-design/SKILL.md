@@ -33,16 +33,17 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST complete these steps in order:
 
 1. **Load initiative context** — read docs/ai/ files, CLAUDE.md, recent commits
-2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
+2. **Offer visual companion** (MANDATORY when visual trigger detected) — this is its own message, not combined with a clarifying question. See the Visual Companion section below for trigger conditions.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Stress-test requirements** — enumerate every open decision branch, walk each to resolution with a recommendation, resolve inter-decision dependencies. Do not exit until ALL branches are resolved. See "Stress-testing requirements" below.
 5. **Enumerate user stories** — draft an exhaustive numbered list of user stories using the template from `templates/user-stories-section.md`. Present to the user for review (some may be out of scope, some may be missing). Iterate until the user approves the story list.
 6. **Propose 2-3 approaches** — with trade-offs and your recommendation
 7. **Present design** — in sections scaled to their complexity, get user approval after each section
 8. **Write design doc** — save to `docs/ai/<initiative>-design.md` and commit. Include a "User Stories" section using the format from `templates/user-stories-section.md`.
-9. **Spec review loop** — dispatch spec-document-reviewer subagent with precisely crafted review context (never your session history); fix issues and re-dispatch until approved (max 5 iterations, then surface to human)
-10. **User reviews written spec** — ask user to review the spec file before proceeding
-11. **Return control** — hand back to the calling workflow skill (do NOT invoke implementation skills directly)
+9. **Offer evaluation criteria** (if subjective quality dimensions detected) — offer to create `docs/ai/<initiative>-eval-criteria.md` with scoring thresholds for review-loop. See "Evaluation criteria" section below.
+10. **Spec review loop** — dispatch spec-document-reviewer subagent with precisely crafted review context (never your session history); fix issues and re-dispatch until approved (max 5 iterations, then surface to human)
+11. **User reviews written spec** — ask user to review the spec file before proceeding
+12. **Return control** — hand back to the calling workflow skill (do NOT invoke implementation skills directly)
 
 ## Process Flow
 
@@ -54,7 +55,7 @@ Load context → Visual companion offer? → Clarifying questions (one at a time
     → Missing/wrong stories: iterate until approved
     → Approved: Propose 2-3 approaches → Present design sections → User approves?
       → No: revise and re-present
-      → Yes: Write design doc (incl. User Stories section) → Spec review loop → User reviews spec
+      → Yes: Write design doc (incl. User Stories section) → Offer eval criteria? → Spec review loop → User reviews spec
         → Changes requested: update and re-review
         → Approved: Return control to calling workflow
 ```
@@ -136,6 +137,40 @@ Structure the design doc in two parts. Part 1 captures requirements (what), Part
   - (User preferences for spec location override this default)
 - Commit the design document to git
 
+**Evaluation criteria (optional — Step 9):**
+
+After writing the design doc, assess whether this initiative has **subjective quality dimensions** — aspects where "does this work?" (testable) is not sufficient and "is this good?" (judgmental) matters. Examples: UI/UX design quality, content tone, visual aesthetics, product polish, API ergonomics.
+
+If subjective dimensions are detected, ask the user:
+
+> "This initiative has quality dimensions that can't be fully captured by pass/fail tests (e.g., [detected dimensions]). Want me to draft evaluation criteria with scoring thresholds? These would be used by the review-loop to score each review pass, catching 'technically correct but mediocre' outputs."
+
+If the user agrees, create `docs/ai/<initiative>-eval-criteria.md` using this format:
+
+```markdown
+# Evaluation Criteria: <initiative>
+
+## Scoring
+- Each criterion scored 1-5
+- Threshold: minimum score to pass (per criterion)
+- Weight: relative importance (higher = more influence on overall verdict)
+- Overall FAIL if ANY criterion falls below its threshold
+
+## Criteria
+
+### 1. <Criterion Name>
+**Weight:** high | medium | low
+**Threshold:** 3
+**What good looks like:** <concrete description of quality>
+**What fails:** <concrete anti-patterns to penalize>
+```
+
+Draft 3-5 criteria tailored to the initiative. Emphasize the dimensions where the model is weakest (typically design quality and originality over technical correctness). Present the draft to the user for approval before saving.
+
+If the user declines or the initiative has no subjective dimensions, skip this step.
+
+If eval-criteria was created, commit it alongside or immediately after the design doc.
+
 **Spec Review Loop:**
 After writing the spec document:
 
@@ -211,8 +246,25 @@ Look especially hard for:
 
 A browser-based companion for showing mockups, diagrams, and visual options during brainstorming. Available as a tool — not a mode. Accepting the companion means it's available for questions that benefit from visual treatment; it does NOT mean every question goes through the browser.
 
-**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent:
-> "Some of what we're working on might be easier to explain if I can show it to you in a web browser. I can put together mockups, diagrams, comparisons, and other visuals as we go. Want to try it? (Requires opening a local URL)"
+**Trigger conditions — offer is MANDATORY when ANY of these are true:**
+
+Scan the initiative objective, requirements, user brief, and docs/ai/ context for these signals:
+
+| Signal | Examples |
+|---|---|
+| UI/UX keywords | UI, UX, user interface, user experience, usability, interaction design |
+| Visual design keywords | design, redesign, look, look-and-feel, visual, aesthetic, theme, styling, appearance |
+| Frontend surface keywords | layout, mockup, wireframe, prototype, responsive, breakpoint, viewport |
+| Component keywords | icons, buttons, navigation, sidebar, header, footer, modal, dialog, toast, card, panel, dashboard |
+| Style keywords | CSS, colors, colour, palette, typography, font, spacing, animation, dark mode, light mode |
+| Asset keywords | images, illustrations, logos, branding, favicon |
+
+If ANY signal is detected: the visual companion offer is **mandatory**. Do not skip it. Do not judge "this is too simple for visuals." The user working on icons needs to SEE the icons.
+
+If NO signal is detected: the offer is still available at your discretion for other topics that could benefit from visual treatment (architecture diagrams, data flow illustrations), but is not mandatory.
+
+**The offer itself:**
+> "This initiative involves visual/UI work. I can show you mockups, layout comparisons, and design options in a web browser as we work through the design. Want to try it? (Requires opening a local URL)"
 
 **This offer MUST be its own message.** Do not combine it with clarifying questions, context summaries, or any other content. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
 

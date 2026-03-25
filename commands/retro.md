@@ -87,11 +87,30 @@ Create or append to `docs/ai/retro-log.md`:
 - <recommendation>
 ```
 
-### Step 6: Run Consolidation
+### Step 6: Harness Audit
+
+Auto-invoke the ECC `harness-optimizer` agent to evaluate the execution-loop configuration used during this initiative.
+
+**Detection:** Check if the `harness-optimizer` agent is available (e.g., `find ~/.claude/plugins -name harness-optimizer.md -path '*/agents/*' 2>/dev/null`). If not found, skip this step silently. Do not fail the retro.
+
+**Input to the agent:**
+- The metrics computed in Step 2
+- The patterns identified in Step 3
+- The initiative's `docs/ai/<initiative>-status.md` (all slice entries showing which steps were used)
+
+**What the agent evaluates:**
+- Which execution-loop steps were consistently load-bearing (caught real issues, produced actionable output)?
+- Which steps were consistently no-op (skipped, produced no findings)?
+- Are there harness components that encode assumptions about model limitations that may no longer hold?
+- Cost/benefit of each step based on the initiative's actual usage data
+
+**Output:** The agent produces a harness audit report appended to the retro output. Recommendations are advisory — they inform the user's decisions about harness configuration for the next initiative.
+
+### Step 7: Run Consolidation
 
 After extracting learnings, run `/consolidate-learnings` to ensure any new learned skills are merged into parent skills.
 
-### Step 7: Archive Completed Initiative
+### Step 8: Archive Completed Initiative
 
 **Only if ALL slices are either Complete or Blocked** (no In Progress, Not Started, or Needs Fix):
 
