@@ -33,7 +33,7 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST complete these steps in order:
 
 1. **Load initiative context** — read docs/ai/ files, CLAUDE.md, recent commits
-2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
+2. **Offer visual companion** (MANDATORY when visual trigger detected) — this is its own message, not combined with a clarifying question. See the Visual Companion section below for trigger conditions.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Stress-test requirements** — enumerate every open decision branch, walk each to resolution with a recommendation, resolve inter-decision dependencies. Do not exit until ALL branches are resolved. See "Stress-testing requirements" below.
 5. **Enumerate user stories** — draft an exhaustive numbered list of user stories using the template from `templates/user-stories-section.md`. Present to the user for review (some may be out of scope, some may be missing). Iterate until the user approves the story list.
@@ -246,8 +246,25 @@ Look especially hard for:
 
 A browser-based companion for showing mockups, diagrams, and visual options during brainstorming. Available as a tool — not a mode. Accepting the companion means it's available for questions that benefit from visual treatment; it does NOT mean every question goes through the browser.
 
-**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent:
-> "Some of what we're working on might be easier to explain if I can show it to you in a web browser. I can put together mockups, diagrams, comparisons, and other visuals as we go. Want to try it? (Requires opening a local URL)"
+**Trigger conditions — offer is MANDATORY when ANY of these are true:**
+
+Scan the initiative objective, requirements, user brief, and docs/ai/ context for these signals:
+
+| Signal | Examples |
+|---|---|
+| UI/UX keywords | UI, UX, user interface, user experience, usability, interaction design |
+| Visual design keywords | design, redesign, look, look-and-feel, visual, aesthetic, theme, styling, appearance |
+| Frontend surface keywords | layout, mockup, wireframe, prototype, responsive, breakpoint, viewport |
+| Component keywords | icons, buttons, navigation, sidebar, header, footer, modal, dialog, toast, card, panel, dashboard |
+| Style keywords | CSS, colors, colour, palette, typography, font, spacing, animation, dark mode, light mode |
+| Asset keywords | images, illustrations, logos, branding, favicon |
+
+If ANY signal is detected: the visual companion offer is **mandatory**. Do not skip it. Do not judge "this is too simple for visuals." The user working on icons needs to SEE the icons.
+
+If NO signal is detected: the offer is still available at your discretion for other topics that could benefit from visual treatment (architecture diagrams, data flow illustrations), but is not mandatory.
+
+**The offer itself:**
+> "This initiative involves visual/UI work. I can show you mockups, layout comparisons, and design options in a web browser as we work through the design. Want to try it? (Requires opening a local URL)"
 
 **This offer MUST be its own message.** Do not combine it with clarifying questions, context summaries, or any other content. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
 
