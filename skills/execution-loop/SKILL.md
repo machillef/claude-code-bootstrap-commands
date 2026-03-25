@@ -191,27 +191,31 @@ If **no plugins** are installed: apply the discipline directly (write tests firs
 
 ## Step 7: Verify (max 3 attempts)
 
-Verification means **build AND tests pass**. A build that compiles but whose tests haven't run is NOT a passed verification. Do not stop after a successful build — you still owe test execution + Steps 7b through 12. If no test command is configured, note "build-only verification — no test framework" and compensate with thorough manual checks in Step 9.
+Build and tests are separate sub-steps. Execute them in order — do not skip 7c after build passes.
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  7a. Run validation: build + tests for this slice.  │
-│      Build alone is NOT verification.               │
+│  7a. BUILD the slice.                               │
 │                                                     │
-│  7b. EVALUATE (both build and tests)                │
-│      PASS ──► Step 9 (note: Step 8 skipped)         │
-│      FAIL ──► Read failure, update diagnosis,       │
-│               fix, loop back to 7a.                 │
+│  7b. Build result:                                  │
+│      FAIL ──► diagnose, fix, loop to 7a             │
+│      PASS ──► proceed to 7c IMMEDIATELY             │
 │                                                     │
-│  After 3 consecutive failures on the same slice:    │
-│  STOP. Record what you know in status.md, mark      │
-│  the slice as Blocked, and report to the user.      │
-│  Do not keep looping.                               │
+│  7c. RUN TESTS. Do not stop, summarize, or wait     │
+│      for input between build success and tests.     │
+│      If no test command exists: note "build-only     │
+│      verification" and skip to 7d.                  │
+│                                                     │
+│  7d. EVALUATE (both build and tests)                │
+│      ALL PASS ──► Step 9 (note: Step 8 skipped)     │
+│      TEST FAIL ──► diagnose, fix, loop to 7a        │
+│                                                     │
+│  After 3 total attempts (build+test cycles):        │
+│  STOP. Mark slice as Blocked. Report to user.       │
 └─────────────────────────────────────────────────────┘
 ```
 
 - Check `docs/ai/<initiative>-scope-map.md` for a `## Verification Commands` table. If it exists, use those exact commands. If not, infer from the stack.
-- **Execution order:** Build first, then run tests immediately — do not stop, summarize, or wait for input between them. Only evaluate after both have run.
 - Record failures honestly — do not retry blindly
 - Each attempt must change something (fix, different approach) — never re-run the exact same code expecting a different result
 
