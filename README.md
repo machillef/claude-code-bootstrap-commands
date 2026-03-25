@@ -12,47 +12,41 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 ## How It Works
 
 ```
-┌──────────────────────────────────────────────────────────────────────────────────────────┐
-│                                  USER ENTRY POINTS                                       │
-├──────────────┬──────────────┬──────────────┬──────────────────┬──────────────────────────┤
-│/quick-change │ /bootstrap-  │ /bootstrap-  │ /continue-work   │ /detour                  │
-│<description> │ existing     │ new          │ <initiative>     │ <initiative> <desc>      │
-│              │ <initiative> │ <project>    │                  │                          │
-│ 1-3 files    │ Medium/Large │ Greenfield   │ Resume after     │ Temporary diversion from │
-│ Follows pat. │ existing repo│ from scratch │ any bootstrap    │ current slice plan       │
-└──────┬───────┴──────┬───────┴──────┬───────┴────────┬─────────┴────────────┬─────────────┘
-       │              │              │                │                      │
-       ▼              ▼              ▼                ▼                      ▼
-┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────────┐ ┌───────────────────────────┐
-│ Inline     │ │ workflow-  │ │ workflow-  │ │ execution-   │ │ Worktree isolation        │
-│ workflow   │ │ existing-  │ │ new-repo   │ │ loop         │ │                           │
-│            │ │ repo       │ │            │ │              │ │ • Pause current slice     │
-│ • Find pat.│ │            │ │ • Require- │ │ • Stale check│ │ • Create worktree         │
-│ • Apply    │ │ • Triage   │ │   ments    │ │ • Load state │ │ • Do the work (TDD)       │
-│ • TDD      │ │ • Detect   │ │ • Stress-  │ │ • Pick slice │ │ • Merge back to branch    │
-│ • Self-    │ │ • Map scope│ │   test     │ │ • TDD        │ │ • Clean up worktree       │
-│   review   │ │ • Stress-  │ │ • User     │ │ • Implement  │ │ • Restore paused slice    │
-│ • Log      │ │   test     │ │   stories  │ │ • Verify     │ │ • Log in status.md        │
-│            │ │ • User     │ │ • stack-   │ │ • Re-assess  │ │                           │
-│            │ │   stories  │ │   advisor  │ │ • Update docs│ │ Modes: small (inline)     │
-│            │ │ • Design   │ │ • Scaffold │ │ • Learn      │ │         big (mini-plan)   │
-│            │ │ • docs/ai  │ │ • docs/ai  │ │ • STOP       │ │                           │
-│            │ │ • STOP     │ │ • STOP     │ │              │ │                           │
-└────────────┘ └──────┬─────┘ └─────┬──────┘ └──────┬───────┘ └────────────┬──────────────┘
-                      │             │               │                      │
-                      └──────┬──────┘               │                      │
-                             ▼                      │                      │
-                    ┌─────────────────┐             │                      │
-                    │   docs/ai/      │◄────────────┴──────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                        USER ENTRY POINTS                                          │
+├──────────────┬──────────────┬──────────────┬────────────────┬──────────────┬──────────────────────┤
+│/quick-change │ /bootstrap-  │ /bootstrap-  │ /continue-work │ /loop-work   │ /detour              │
+│<description> │ existing     │ new          │ <initiative>   │ <initiative> │ <init> <desc>        │
+│              │ <initiative> │ <project>    │                │ [--passes N] │                      │
+│ 1-3 files    │ Medium/Large │ Greenfield   │ One slice at   │ All slices + │ Temporary diversion  │
+│ Follows pat. │ existing repo│ from scratch │ a time         │ QA + review  │ in worktree          │
+└──────┬───────┴──────┬───────┴──────┬───────┴───────┬────────┴──────┬───────┴──────────┬───────────┘
+       │              │              │               │              │                  │
+       ▼              ▼              ▼               ▼              ▼                  ▼
+┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────────┐ ┌─────────────────┐
+│ Inline     │ │ workflow-  │ │ workflow-  │ │ execution- │ │ execution-   │ │ Worktree        │
+│ workflow   │ │ existing-  │ │ new-repo   │ │ loop       │ │ loop (chain) │ │ isolation       │
+│            │ │ repo       │ │            │ │            │ │ + review-loop│ │                 │
+│ • Find pat.│ │ • Triage   │ │ • Require- │ │ One slice: │ │              │ │ • Pause slice   │
+│ • Apply    │ │ • Detect   │ │   ments    │ │ • Load     │ │ All slices:  │ │ • Create wt     │
+│ • TDD      │ │ • Map scope│ │ • Stress-  │ │ • TDD      │ │ • Load once  │ │ • Do work (TDD) │
+│ • Self-    │ │ • Stress-  │ │   test     │ │ • Verify   │ │ • Loop slices│ │ • Merge back    │
+│   review   │ │   test     │ │ • User     │ │ • Re-assess│ │ • Accum. QA  │ │ • Restore slice │
+│ • Log      │ │ • Design   │ │   stories  │ │ • Docs     │ │ • Review     │ │                 │
+│            │ │ • docs/ai  │ │ • Scaffold │ │ • STOP     │ │ • QA report  │ │                 │
+└────────────┘ └──────┬─────┘ └─────┬──────┘ └──────┬─────┘ └──────┬───────┘ └───────┬─────────┘
+                      │             │               │              │                  │
+                      └──────┬──────┘               └──────┬───────┘                  │
+                             ▼                             │                          │
+                    ┌─────────────────┐                    │                          │
+                    │   docs/ai/      │◄───────────────────┴──────────────────────────┘
                     │   (repo state)  │
-                    │                 │
-                    │ • status.md     │
-                    │ • slices.md     │
-                    │ • design.md     │
-                    │ • decisions.md  │
-                    │ • scope-map.md  │
-                    │ • ...           │
-                    └─────────────────┘
+                    │ • status.md     │ ┌──────────────────────────────────────────┐
+                    │ • slices.md     │ │ /review-loop [init] [--passes N]        │
+                    │ • design.md     │ │ Standalone multi-pass review.           │
+                    │ • decisions.md  │ │ Works with or without an initiative.    │
+                    │ • scope-map.md  │ │ Each pass = fresh subagent context.     │
+                    └─────────────────┘ └──────────────────────────────────────────┘
 ```
 
 ## Commands
@@ -63,7 +57,9 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 | `/bootstrap-existing <name>` | Existing repo — triage, detect stack, stress-test requirements, user stories, design, slices |
 | `/continue-work <name>` | Pick next slice, TDD, verify, update docs. Add a constraint: `/continue-work foo focus on auth` |
 | `/quick-change <desc>` | Small change (1-3 files) following existing patterns. Escalates if scope grows. |
-| `/fix-bugs <name> — <desc>` | Fix bugs found after a slice passed verification. Systematic debugging + TDD. |
+| `/loop-work <name> [--passes N]` | Chain all remaining slices in one session. Accumulates QA checklist. Optional review passes at end. |
+| `/review-loop [<name>] [--passes N]` | Multi-pass code review with fresh subagent isolation per pass. Works with or without an initiative. |
+| `/fix-bugs <name> — <desc>` | Fix bugs found after a slice passed verification. Systematic debugging + TDD. Supports `--review-after`. |
 | `/detour <name> <desc>` | Temporary diversion in an isolated git worktree. Also: `finish`, `continue` |
 | `/ubiquitous-language` | Extract DDD-style domain glossary from conversation → `UBIQUITOUS_LANGUAGE.md` |
 | `/retro <name>` | Post-initiative retrospective — metrics, learnings, gotchas |
@@ -73,7 +69,7 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 
 ## Typical Flows
 
-**Feature in an existing repo:**
+**Feature in an existing repo (one slice at a time):**
 ```
 /bootstrap-existing add-batch-rename     → creates docs/ai/, defines slices
 /ubiquitous-language                     → formalize domain terms (if any emerged)
@@ -83,16 +79,32 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 /retro add-batch-rename                  → extract metrics + learnings
 ```
 
+**Feature in an existing repo (accelerated loop):**
+```
+/bootstrap-existing add-batch-rename     → creates docs/ai/, defines slices
+/loop-work add-batch-rename --passes 2   → chains ALL slices + 2 review passes
+                                         → presents consolidated QA checklist
+/fix-bugs add-batch-rename — rename fails on network paths
+/retro add-batch-rename                  → extract metrics + learnings
+```
+
 **Greenfield project:**
 ```
 /bootstrap-new file-explorer             → requirements, stack, scaffold, docs/ai/
 /ubiquitous-language                     → formalize domain terms (if any emerged)
-/continue-work file-explorer             → slice by slice until done
+/loop-work file-explorer --passes 1      → chain all slices + 1 review pass
 ```
 
-**Quick one-off:**
+**Quick one-off with review:**
 ```
 /quick-change add dark mode toggle to settings panel
+/review-loop --passes 1                  → review the changes
+```
+
+**Ad-hoc work with review:**
+```
+(make changes directly, no initiative)
+/review-loop --passes 2                  → multi-pass review of recent changes
 ```
 
 **Mid-initiative detour:**
@@ -172,9 +184,9 @@ See [codex/README.md](codex/README.md) for details.
 
 ## What Gets Installed
 
-**Commands (11):** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/fix-bugs`, `/detour`, `/ubiquitous-language`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
+**Commands (13):** `/quick-change`, `/bootstrap-existing`, `/bootstrap-new`, `/continue-work`, `/loop-work`, `/review-loop`, `/fix-bugs`, `/detour`, `/ubiquitous-language`, `/consolidate-learnings`, `/skill-health`, `/skill-improve`, `/retro`
 
-**Skills (6):** `workflow-existing-repo`, `workflow-new-repo`, `execution-loop`, `brainstorm-design`, `systematic-debugging`, `ubiquitous-language`
+**Skills (7):** `workflow-existing-repo`, `workflow-new-repo`, `execution-loop`, `review-loop`, `brainstorm-design`, `systematic-debugging`, `ubiquitous-language`
 
 **Agents (2):** `architecture-discovery`, `stack-advisor`
 

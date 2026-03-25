@@ -3,6 +3,8 @@
 ### Available Skills
 - `codex-bootstrap-existing`, `codex-bootstrap-new` — initialize initiatives
 - `codex-continue-work` — resume and implement next slice
+- `codex-loop-work` — chain all remaining slices + optional review passes + QA checklist
+- `codex-review-loop` — multi-pass code review with isolated contexts per pass
 - `codex-fix-bugs` — fix bugs found during manual testing of a completed slice
 - `codex-quick-change` — small bounded changes (1-3 files)
 - `codex-brainstorm-design` — collaborative design before implementation

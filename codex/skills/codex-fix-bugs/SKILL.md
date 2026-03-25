@@ -12,6 +12,7 @@ Use this skill when manual or acceptance testing reveals bugs in a slice that al
 - Initiative name (required)
 - Bug description (required — what was observed, expected vs actual)
 - Slice number (optional — defaults to the most recently completed slice)
+- --review-after (optional flag) — run a review pass after all fixes are applied
 
 ## Procedure
 
@@ -112,7 +113,19 @@ Transition status back to `Complete`.
 
 Update `docs/ai/<initiative>-decisions.md` if the fix changed the approach.
 
-### 8. Stop Cleanly
+### 8. Review After Fixes (if --review-after)
+
+If `--review-after` was specified, invoke `codex-review-loop` after all fixes are verified:
+
+- Initiative: `<initiative>`
+- Passes: 1 (single code-quality pass is sufficient post-fix)
+- Scope: files changed by the fix
+
+This catches follow-on issues that the fix may have introduced. If the review finds issues, fix them and re-verify before proceeding to Step 9.
+
+If `--review-after` was not specified, skip this step.
+
+### 9. Stop Cleanly
 
 Always end with structured output:
 
@@ -123,6 +136,7 @@ Root cause: <one-line root cause>
 Fix: <file list changed>
 Tests added: <test names>
 Validated: <commands and pass/fail>
+Review: <"1 pass — clean" or "1 pass — N issues fixed" or "skipped (no --review-after)">
 Manual retest: <what the user should re-verify>
 Next: use codex-continue-work for <initiative> -> Slice <N+1>: <name>
       use codex-fix-bugs for <initiative> — if more bugs found after retesting
