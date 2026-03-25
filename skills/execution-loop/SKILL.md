@@ -216,7 +216,7 @@ Build and tests are separate sub-steps. Execute them in order — do not skip 7c
 ```
 
 - Check `docs/ai/<initiative>-scope-map.md` for a `## Verification Commands` table. If it exists, use those exact commands. If not, infer from the stack.
-- **After each build attempt, state your position:** `"Build FAILED (attempt N/3) — diagnosing [error]"` or `"Build PASSED — Step 7c: running tests now."` This self-prompt keeps your sub-step position in recent context even after long retry sequences.
+- **After each build attempt, state your position:** `"Build FAILED — diagnosing [error]"` or `"Build PASSED — Step 7c: running tests now."` This self-prompt keeps your sub-step position in recent context even after long retry sequences.
 - Record failures honestly — do not retry blindly
 - Each attempt must change something (fix, different approach) — never re-run the exact same code expecting a different result
 
