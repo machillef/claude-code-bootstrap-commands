@@ -23,6 +23,8 @@ The installer does **not** modify `~/.codex/config.toml`.
 - `codex-bootstrap-existing`
 - `codex-bootstrap-new`
 - `codex-continue-work`
+- `codex-loop-work`
+- `codex-review-loop`
 - `codex-fix-bugs`
 - `codex-brainstorm-design`
 - `codex-systematic-debugging`
