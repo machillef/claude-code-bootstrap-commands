@@ -208,5 +208,5 @@ These are **critical**. Without them, the natural tendency is to stop after each
 - One slice at a time within the loop — do not parallelize slices.
 - Do not silently widen scope on any slice.
 - QA accumulator must be accurate — it is the user's manual testing guide.
-- Clean up `.claude/loop-qa.local.md` is the user's responsibility after QA. Do not delete it.
+- Cleaning up `.claude/loop-qa.local.md` is the user's responsibility after QA. Do not delete it.
 - If the user has not set `--passes`, do NOT suggest running review passes. Respect the default.

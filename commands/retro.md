@@ -91,7 +91,7 @@ Create or append to `docs/ai/retro-log.md`:
 
 Auto-invoke the ECC `harness-optimizer` agent to evaluate the execution-loop configuration used during this initiative.
 
-**Detection:** Check if the `harness-optimizer` agent is available by looking for it in the agent registry (e.g., `ls ~/.claude/plugins/*/agents/harness-optimizer.md 2>/dev/null`). If not found, skip this step silently. Do not fail the retro.
+**Detection:** Check if the `harness-optimizer` agent is available (e.g., `find ~/.claude/plugins -name harness-optimizer.md -path '*/agents/*' 2>/dev/null`). If not found, skip this step silently. Do not fail the retro.
 
 **Input to the agent:**
 - The metrics computed in Step 2

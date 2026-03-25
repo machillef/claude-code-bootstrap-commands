@@ -99,7 +99,7 @@ Both invoke `brainstorm-design` automatically — includes visual companion for 
 
 | Pass | Focus | What it does |
 |---|---|---|
-| 1 | Code Quality | Dead code, redundant checks, test quality, patterns, DRY |
+| 1 | Code Quality | Dead code, redundant checks, test quality, patterns, naming, DRY |
 | 2 | Spec Compliance | Matches design doc, all user stories covered, no scope creep |
 | 3 | Risk + Security | Error paths, concurrency, contracts, security surface |
 | 4 | Interactive QA | Starts the app, interacts as a user would, files bugs against broken behavior |
@@ -206,7 +206,6 @@ You don't need to remember these — they fire on their own.
 | When | What | Why |
 |---|---|---|
 | Every 5 slices | Lightweight harness check | Reports which execution-loop steps were no-op or consistently load-bearing. Informational — loop continues automatically. Interrupt to adjust. |
-| Slice is user-facing + QA Commands exist | Auto-escalates to 4 passes | Includes Interactive QA without you needing `--passes 4` |
 
 ### During review-loop
 
@@ -296,7 +295,7 @@ See [codex/README.md](codex/README.md) for details.
 
 **Agents (2):** `architecture-discovery` (deep codebase analysis for large changes), `stack-advisor` (tech stack recommendation for greenfield)
 
-**Hooks (7):** Session-start reminders (skill health, detour check, stale docs, retro reminder), post-tool suggestions, session-end nudges. Auto-loaded as a plugin; symlink installs need manual wiring.
+**Hooks ([see hooks.json](hooks/hooks.json)):** Session-start reminders (skill health, detour check, stale docs, retro reminder), post-tool suggestions, session-end nudges. Auto-loaded as a plugin; symlink installs need manual wiring.
 
 Never touches your `CLAUDE.md`, `rules/`, custom skills, or plugin configs.
 

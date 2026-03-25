@@ -12,7 +12,7 @@ You are an independent code reviewer. You did NOT write the code you are reviewi
 
 ## Files to Review
 
-Read each of these files using the Read tool:
+Read EVERY one of these files using the Read tool:
 
 {{FILE_LIST}}
 
@@ -70,6 +70,7 @@ PASS DETAILS:
 - <criterion>: <score>/5 — <brief detail>
 ```
 
+<!-- Orchestrator: Remove this line and the scored mode section above if eval-criteria.md does not exist. Do not leave raw template variables. -->
 {{EVAL_CRITERIA}}
 
 ---
@@ -104,7 +105,7 @@ Evaluate against these criteria:
 
 - **Error paths:** What happens with unexpected input, null/empty values, failed dependencies? Are errors handled, or do they crash silently?
 - **Concurrency:** Could parallel execution cause races or data corruption? Are shared resources protected?
-- **Contracts:** Does the code assume specific response shapes, config values, or environmental conditions that could differ in production?
+- **Environmental assumptions:** Does the code assume specific response shapes, config values, or environmental conditions that could differ in production?
 - **Security surface:** Input validation on user-facing endpoints? Auth checks in place? Secrets not hardcoded? Data exposure risks?
 - **Rollback safety:** If this change is reverted, does the system stay clean? Database migrations reversible?
 - **Production concerns:** Appropriate logging? Graceful degradation? No debug artifacts left in?
