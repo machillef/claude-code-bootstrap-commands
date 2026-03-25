@@ -19,8 +19,8 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
 │<description> │ existing     │ new          │ <initiative>   │ <initiative> │ <init> <desc>        │
 │              │ <initiative> │ <project>    │                │ [--passes N] │                      │
 │ 1-3 files    │ Medium/Large │ Greenfield   │ One slice at   │ All slices + │ Temporary diversion  │
-│ Follows pat. │ existing repo│ from scratch │ a time         │ QA + review  │ in worktree          │
-└──────┬───────┴──────┬───────┴──────┬───────┴───────┬────────┴──────┬───────┴──────────┬───────────┘
+│ Follows pat. │ existing repo│ from scratch │ , a time         │ QA + review  │ in worktree        │
+└──────┬───────┴──────┬───────┴──────┬───────┴───────┬────────┴─────┬───────┴──────────┬────────────┘
        │              │              │               │              │                  │
        ▼              ▼              ▼               ▼              ▼                  ▼
 ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────────┐ ┌─────────────────┐
@@ -42,10 +42,10 @@ Disciplined workflows for Claude Code. All project state lives in `docs/ai/` fil
                     │   docs/ai/      │◄───────────────────┴──────────────────────────┘
                     │   (repo state)  │
                     │ • status.md     │ ┌──────────────────────────────────────────┐
-                    │ • slices.md     │ │ /review-loop [init] [--passes N]        │
-                    │ • design.md     │ │ Standalone multi-pass review.           │
-                    │ • decisions.md  │ │ Works with or without an initiative.    │
-                    │ • scope-map.md  │ │ Each pass = fresh subagent context.     │
+                    │ • slices.md     │ │ /review-loop [init] [--passes N]         │
+                    │ • design.md     │ │ Standalone multi-pass review.            │
+                    │ • decisions.md  │ │ Works with or without an initiative.     │
+                    │ • scope-map.md  │ │ Each pass = fresh subagent context.      │
                     └─────────────────┘ └──────────────────────────────────────────┘
 ```
 
