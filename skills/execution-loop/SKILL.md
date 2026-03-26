@@ -156,6 +156,12 @@ ls .claude/agents/ 2>/dev/null || echo "No agents available"
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 | Language-specific (`golang-patterns`, `python-patterns`, `frontend-patterns`, `springboot-patterns`, etc.) | Slice implements new code in that stack — use for idiomatic guidance during implementation |
 
+### Built-in Skills (from bootstrap-commands)
+
+| Skill | Invoke when |
+|---|---|
+| `security-audit` | Slice touches auth, input validation, data persistence, secrets, or external calls — use for deeper tool-assisted scanning when ECC `security-reviewer` is not installed, or as a complement to it |
+
 ### code-foundations Skills (if code-foundations plugin is installed)
 
 | Skill | Invoke when |
