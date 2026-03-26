@@ -33,6 +33,39 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-careful.sh\"",
+            "description": "Warn before destructive commands (kubectl delete, terraform destroy, git checkout ., etc.)",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-freeze.sh\"",
+            "description": "Block edits outside the freeze boundary (set via /freeze)",
+            "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-freeze.sh\"",
+            "description": "Block writes outside the freeze boundary (set via /freeze)",
+            "timeout": 3
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -64,6 +97,13 @@
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-detour-reminder.sh\"",
             "description": "Remind about active detour worktrees when session ends",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-freeze-reminder.sh\"",
+            "description": "Remind about active freeze boundary when session ends",
             "async": true,
             "timeout": 5
           }
