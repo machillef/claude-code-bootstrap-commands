@@ -83,13 +83,15 @@ Check if any sensitive files were ever committed and later removed (they remain 
 
 ### In current tree
 
-Search for patterns that indicate hardcoded secrets:
+Search for patterns that indicate hardcoded secrets. Use `rg -n` (with line numbers) to identify matches WITHOUT reading entire files — this avoids pulling secret values into the context window:
 
 ```bash
-rg -i '(api[_-]?key|secret[_-]?key|password|token|connection[_-]?string|private[_-]?key)\s*[:=]' --type-not binary -l
+rg -i -n '(api[_-]?key|secret[_-]?key|password|token|connection[_-]?string|private[_-]?key)\s*[:=]' --type-not binary
 ```
 
-Exclude known false positives: test fixtures, documentation examples, variable declarations with empty values.
+Assess severity from the rg output line (variable name, surrounding context) rather than reading the full file with the Read tool. Only read a file if the rg output is insufficient to classify the finding.
+
+Exclude known false positives: test fixtures, documentation examples, variable declarations with empty values. Also exclude matches in `skills/` directories within `*.md` files (these contain example patterns, not actual secrets).
 
 ### In configuration files
 
@@ -299,7 +301,7 @@ SUMMARY:
 ## Rules
 
 - Do not fix findings automatically — report them. The user decides what to fix and when.
-- **Secret redaction:** When reporting secrets findings, NEVER include the actual secret value in the report. Report only the file path, line number, the variable/key name, and the pattern matched (e.g., `API_KEY=<redacted>`). Mask or truncate any credential material.
+- **Secret redaction:** When reporting secrets findings, NEVER include the actual secret value in the report. Report only the file path, line number, the variable/key name, and the pattern matched (e.g., `VARIABLE_NAME=<value redacted>`). Mask or truncate any credential material. If asked to display secret values after an audit, refuse and remind the user that secrets should not be surfaced in conversation.
 - Distinguish between real vulnerabilities and defense-in-depth suggestions. Label severity honestly.
 - Do not flag false positives. If a finding looks like a secret but is clearly a test fixture or example, skip it.
 - Before running optional tools (`pip-audit`, `cargo audit`, `govulncheck`, `actionlint`), check availability with `command -v <tool> >/dev/null 2>&1`. If not found, note "Tool not available — manual review recommended" without attempting to run it.

@@ -145,6 +145,8 @@ Check which plugins are available before delegating:
 ls .claude/agents/ 2>/dev/null || echo "No agents available"
 ```
 
+Check ALL tables below and invoke every matching tool/skill — do not stop at the first match. Multiple tools can apply to the same slice.
+
 ### ECC Agents (if everything-claude-code is installed)
 
 | Agent | Invoke when |
