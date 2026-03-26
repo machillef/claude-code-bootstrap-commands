@@ -228,17 +228,25 @@ Build and tests are separate sub-steps. Execute them in order — do not skip 7c
 
 Before spending attempts on a test failure, classify whether it was caused by your branch or is pre-existing.
 
-**Primary method — diff-based heuristic (preferred):** Check which test files your slice touched via `git diff --name-only main...HEAD`. If the failing test file was NOT modified by the slice, the failure is likely pre-existing. Verify by checking `git log --oneline -5 -- <failing-test-file>` — if the last change predates your branch, it is pre-existing.
+**Detect the base branch first:** Do not hardcode `main`. Determine the base branch dynamically:
+```bash
+BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+[ -z "$BASE" ] && for b in main master develop trunk; do git show-ref --verify --quiet "refs/heads/$b" 2>/dev/null && BASE="$b" && break; done
+```
+
+**Primary method — diff-based heuristic (preferred):** Check which test files your slice touched via `git diff --name-only ${BASE}...HEAD`. If the failing test file was NOT modified by the slice, the failure is likely pre-existing. Verify by checking `git log --oneline -5 -- <failing-test-file>` — if the last change predates your branch, it is pre-existing.
+
+If a modified test file has multiple failures and some may be pre-existing, use the secondary method to triage individual test cases, not just the file.
 
 **Secondary method — worktree isolation (when the heuristic is inconclusive):** Run the failing test against the base branch without modifying the working tree:
 ```bash
-git worktree add /tmp/triage-check main 2>/dev/null
+git worktree add /tmp/triage-check "$BASE" 2>/dev/null
 (cd /tmp/triage-check && <test command>); TRIAGE_EXIT=$?
 git worktree remove /tmp/triage-check 2>/dev/null
 ```
-If the test also fails on main (`TRIAGE_EXIT != 0`), it is pre-existing. If it passes on main, it is in-branch.
+If the test also fails on the base branch (`TRIAGE_EXIT != 0`), it is pre-existing. If it passes, it is in-branch.
 
-**Do NOT use `git stash && git checkout main`** — this modifies the working tree and can strand the repo on the wrong branch if the test command fails mid-chain.
+**Do NOT use `git stash && git checkout`** — this modifies the working tree and can strand the repo on the wrong branch if the test command fails mid-chain.
 
 Classify each failure:
 
@@ -248,7 +256,7 @@ Classify each failure:
 | **Pre-existing** | Failure exists on the base branch too. Do NOT fix it and do NOT count it toward the 3-attempt limit. Note it in the status entry as "Pre-existing failure: `<test name>`". |
 | **Flaky** | Failure is intermittent (passes on retry without code changes). Note it as flaky. Do not count toward the 3-attempt limit. |
 
-Only in-branch failures block the slice. Pre-existing and flaky failures are documented but do not prevent proceeding to Step 9.
+Only in-branch failures block the slice. Pre-existing and flaky failures are documented but do not prevent proceeding to Step 7f (UI check) then Step 9.
 
 ### 7f. UI-Aware Verification (when slice touches UI files)
 
