@@ -35,5 +35,6 @@ Run `/unfreeze` to remove the restriction. The freeze persists across sessions u
 
 - Only one freeze boundary at a time (new freeze overwrites old)
 - The boundary applies to Edit and Write tools only — Read, Bash, and Grep are unaffected. Bash can still write files via redirects, cp, mv, sed -i, etc. This is a scope-discipline tool, not access control.
+- `docs/ai/` and `.claude/` paths are always exempt from the freeze boundary. Every workflow requires updating initiative status docs, and blocking these would break execution-loop, systematic-debugging, and loop-work.
 - The freeze state is system-wide (`/tmp/.claude-freeze-dir`). Concurrent Claude sessions share the same boundary. If you run multiple sessions, only the most recent `/freeze` takes effect.
 - Do not auto-freeze without user intent (the command is always explicit)

@@ -42,6 +42,15 @@ fi
 FILE_PATH=$(realpath -m "$FILE_PATH" 2>/dev/null || echo "$FILE_PATH" | sed 's|/\+|/|g; s|/$||')
 FREEZE_DIR=$(realpath -m "$FREEZE_DIR" 2>/dev/null || echo "$FREEZE_DIR" | sed 's|/\+|/|g; s|/$||')
 
+# Always-allowed paths: workflow state and plugin config must remain editable
+# regardless of freeze boundary. Without this, every execution-loop, debugging,
+# and loop-work session would be blocked from mandatory status updates.
+case "$FILE_PATH" in
+  */docs/ai/*|*/.claude/*)
+    exit 0
+    ;;
+esac
+
 # Check if file is inside the freeze boundary
 case "$FILE_PATH" in
   "${FREEZE_DIR}"|"${FREEZE_DIR}"/*)
