@@ -59,7 +59,9 @@ case "$FILE_PATH" in
     ;;
   *)
     # Outside boundary — deny
-    echo "{\"permissionDecision\":\"deny\",\"message\":\"[freeze] Blocked: ${FILE_PATH} is outside the freeze boundary (${FREEZE_DIR}). Run /unfreeze to remove the restriction.\"}"
+    # Use jq to construct valid JSON — raw string interpolation breaks on quotes/backslashes
+    jq -n --arg msg "[freeze] Blocked: ${FILE_PATH} is outside the freeze boundary (${FREEZE_DIR}). Run /unfreeze to remove the restriction." '{"permissionDecision":"deny","message":$msg}' 2>/dev/null \
+      || echo "{\"permissionDecision\":\"deny\",\"message\":\"[freeze] edit blocked by freeze boundary\"}"
     exit 0
     ;;
 esac

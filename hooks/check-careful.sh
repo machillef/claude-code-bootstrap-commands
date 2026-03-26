@@ -93,7 +93,9 @@ if [ -n "$WARNINGS" ]; then
 
   if [ "$SAFE" = false ]; then
     SHORT_CMD=$(echo "$CMD" | cut -c1-120)
-    echo "{\"permissionDecision\":\"ask\",\"message\":\"[careful] ${WARNINGS}: ${SHORT_CMD}\"}"
+    # Use jq to construct valid JSON — raw string interpolation breaks on quotes/backslashes
+    jq -n --arg msg "[careful] ${WARNINGS}: ${SHORT_CMD}" '{"permissionDecision":"ask","message":$msg}' 2>/dev/null \
+      || echo "{\"permissionDecision\":\"ask\",\"message\":\"[careful] destructive command detected\"}"
   fi
 fi
 
