@@ -234,17 +234,25 @@ BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remot
 [ -z "$BASE" ] && for b in main master develop trunk; do git show-ref --verify --quiet "refs/heads/$b" 2>/dev/null && BASE="$b" && break; done
 ```
 
+If BASE is empty after both methods, warn "Could not detect base branch — skipping triage, treating all failures as in-branch" and proceed without classification.
+
 **Primary method — diff-based heuristic (preferred):** Check which test files your slice touched via `git diff --name-only ${BASE}...HEAD`. If the failing test file was NOT modified by the slice, the failure is likely pre-existing. Verify by checking `git log --oneline -5 -- <failing-test-file>` — if the last change predates your branch, it is pre-existing.
 
-If a modified test file has multiple failures and some may be pre-existing, use the secondary method to triage individual test cases, not just the file.
+If a modified test file has multiple failures and some may be pre-existing, use the secondary method to triage individual test cases, not just the file. Also use the secondary method if the failing test imports or references any file that WAS modified by the branch (transitive breakage), since the diff heuristic only considers direct file modifications.
 
 **Secondary method — worktree isolation (when the heuristic is inconclusive):** Run the failing test against the base branch without modifying the working tree:
 ```bash
-git worktree add /tmp/triage-check "$BASE" 2>/dev/null
-(cd /tmp/triage-check && <test command>); TRIAGE_EXIT=$?
-git worktree remove /tmp/triage-check 2>/dev/null
+git worktree remove /tmp/triage-check 2>/dev/null  # clean up stale worktree from previous run
+TRIAGE_DIR="/tmp/triage-check-$$"                   # unique path avoids collisions
+git worktree add "$TRIAGE_DIR" "$BASE" 2>/dev/null
+if [ $? -eq 0 ]; then
+  (cd "$TRIAGE_DIR" && <test command>); TRIAGE_EXIT=$?
+  git worktree remove "$TRIAGE_DIR" 2>/dev/null
+else
+  echo "Worktree creation failed — falling back to diff heuristic"
+fi
 ```
-If the test also fails on the base branch (`TRIAGE_EXIT != 0`), it is pre-existing. If it passes, it is in-branch.
+If the test also fails on the base branch (`TRIAGE_EXIT != 0`), it is pre-existing. If it passes, it is in-branch. If worktree creation fails, fall back to the diff heuristic and note the limitation.
 
 **Do NOT use `git stash && git checkout`** — this modifies the working tree and can strand the repo on the wrong branch if the test command fails mid-chain.
 

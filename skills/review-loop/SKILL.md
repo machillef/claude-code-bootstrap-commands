@@ -60,9 +60,11 @@ Run:
 git diff --name-only HEAD~5
 ```
 
-If on a feature branch:
+If on a feature branch, detect the base branch dynamically (do not hardcode `main`):
 ```bash
-git diff --name-only main...HEAD
+BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+[ -z "$BASE" ] && for b in main master develop trunk; do git show-ref --verify --quiet "refs/heads/$b" 2>/dev/null && BASE="$b" && break; done
+git diff --name-only ${BASE}...HEAD
 ```
 
 Collect the changed file list. This is the review scope.
@@ -77,7 +79,7 @@ Before dispatching review passes, mechanically verify that what was built matche
 
 1. Extract actionable items from `docs/ai/<initiative>-slices.md` — each slice's goal, acceptance criteria, and "Touched area"
 2. Extract user stories from `docs/ai/<initiative>-design.md` (if exists)
-3. Run `git diff --stat` against the base branch to get the actual changed files
+3. Detect the base branch dynamically (same method as Step 1) and run `git diff --stat ${BASE}...HEAD` to get the actual changed files
 4. Cross-reference and classify each planned item:
 
 | Status | Meaning |
