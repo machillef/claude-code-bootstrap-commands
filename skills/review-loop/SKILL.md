@@ -67,6 +67,40 @@ git diff --name-only main...HEAD
 
 Collect the changed file list. This is the review scope.
 
+---
+
+## Step 1.5: Scope Drift Detection
+
+Before dispatching review passes, mechanically verify that what was built matches what was planned. This catches "did they build what was requested" before evaluating code quality.
+
+### With initiative
+
+1. Extract actionable items from `docs/ai/<initiative>-slices.md` — each slice's goal, acceptance criteria, and "Touched area"
+2. Extract user stories from `docs/ai/<initiative>-design.md` (if exists)
+3. Run `git diff --stat` against the base branch to get the actual changed files
+4. Cross-reference and classify each planned item:
+
+| Status | Meaning |
+|--------|---------|
+| **DONE** | Planned item is fully implemented in the diff |
+| **PARTIAL** | Planned item is started but incomplete (e.g., missing edge cases) |
+| **NOT DONE** | Planned item has no corresponding changes in the diff |
+| **CHANGED** | Implementation differs materially from what was specified |
+
+5. Check for **scope creep**: files changed that are not listed in any slice's "Touched area" and are not test files or docs. Flag these as "Unplanned changes."
+6. Feed the classification into the Pass 2 (Spec Compliance) subagent prompt as additional context.
+
+### Without initiative
+
+Skip this step — there is no spec to drift from. Proceed directly to Step 2.
+
+### Resolution
+
+- If NOT DONE items exist: flag them in the consolidated report, not as review blockers. The review evaluates what was built, not what wasn't.
+- If scope creep is detected: include it in the Pass 2 context so the spec compliance reviewer can evaluate whether the unplanned changes are justified.
+
+---
+
 ### Scored evaluation mode
 
 Check if `docs/ai/<initiative>-eval-criteria.md` exists. If it does, review-loop switches to **scored mode** for this initiative:
@@ -115,6 +149,7 @@ For each pass:
 - Pass-specific rubric (from the template)
 - If initiative: relevant excerpt from the design doc (user stories, architecture decisions)
 - If no initiative: brief description of what the changes are for
+- If Step 1.5 produced scope drift data: include the classification table (DONE/PARTIAL/NOT DONE/CHANGED) and any unplanned-changes list in the Pass 2 (Spec Compliance) subagent prompt. This gives the spec reviewer concrete evidence to evaluate against.
 - If scored mode is active: paste the contents of `docs/ai/<initiative>-eval-criteria.md` into the `{{EVAL_CRITERIA}}` placeholder. If scored mode is not active, remove the `{{EVAL_CRITERIA}}` placeholder and the scored mode instructions entirely from the prompt — do not leave raw template variables in the subagent prompt.
 - For Pass 4 (Interactive QA): use `prompts/qa-pass-prompt.md` instead, filling `{{QA_COMMANDS}}` from the scope-map's QA Commands section.
 
