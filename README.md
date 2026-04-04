@@ -123,7 +123,7 @@ Runs automatically every session — no manual commands needed:
 
 Data: `~/.claude/arc/projects/<hash>/` (per-project), `~/.claude/arc/instincts/global/` (cross-project).
 
-Optional: `/evolve` (cluster instincts into skills), `/promote` (project → global), `/prune` (remove stale).
+Planned maintenance commands: `evolve` (cluster instincts into skills), `promote` (project → global), `prune` (remove stale). These will be added in a future release.
 
 ## Architecture
 
