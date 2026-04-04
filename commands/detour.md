@@ -27,7 +27,7 @@ Read:
 - `docs/ai/<initiative>-status.md` — current slice state
 - `docs/ai/<initiative>-slices.md` — slice plan
 
-Identify the current in-progress slice (if any). If no initiative docs exist, stop and tell the user to run `/bootstrap-existing` or `/bootstrap-new` first.
+Identify the current in-progress slice (if any). If no initiative docs exist, stop and tell the user to run `/new-feature` or `/new-project` first.
 
 ### 2. Triage Detour Size
 
@@ -229,7 +229,7 @@ Commit: `docs: log detour completion, restore slice <N>`
 Detour complete: <description>
 Merged into: <working-branch>
 Restored: Slice <N> (<slice-name>) is now In Progress
-Next: /continue-work <initiative>
+Next: /continue <initiative>
 ```
 
 ---
@@ -241,7 +241,7 @@ Next: /continue-work <initiative>
 - Always merge back to the branch you started from, not to main.
 - Always run tests before merging. Do not merge broken code.
 - For big detours spanning multiple sessions, leave the worktree in place until explicitly finished.
-- If the detour reveals something that affects the initiative plan (e.g., "slice 18 is now unnecessary because this detour handled it"), note it in the finish log but do not modify slices.md — let the user decide during `/continue-work`.
+- If the detour reveals something that affects the initiative plan (e.g., "slice 18 is now unnecessary because this detour handled it"), note it in the finish log but do not modify slices.md — let the user decide during `/continue`.
 
 ## Gotchas
 

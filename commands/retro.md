@@ -43,12 +43,12 @@ Answer these questions from the data:
 **What went well?**
 - Which slices completed cleanly on first attempt?
 - Which decisions were validated by subsequent work?
-- Which ECC agents were most useful?
+- Which arc agents were most useful?
 
 **What went wrong?**
 - Which slices required debugging escalation?
 - Which slices were blocked and why?
-- Which slices needed post-acceptance bug fixes (`/fix-bugs`)? What did Step 9 miss?
+- Which slices needed post-acceptance bug fixes (`/fix`)? What did Step 9 miss?
 - Were there scope creep indicators (slices added mid-initiative)?
 - Were there stale-doc incidents (Step 0 stale check caught drift)?
 
@@ -87,30 +87,19 @@ Create or append to `docs/ai/retro-log.md`:
 - <recommendation>
 ```
 
-### Step 6: Harness Audit
+### Step 6: Harness Self-Assessment
 
-Auto-invoke the ECC `harness-optimizer` agent to evaluate the execution-loop configuration used during this initiative.
+Evaluate the execution-loop configuration used during this initiative based on the metrics and patterns gathered.
 
-**Detection:** Check if the `harness-optimizer` agent is available (e.g., `find ~/.claude/plugins -name harness-optimizer.md -path '*/agents/*' 2>/dev/null`). If not found, skip this step silently. Do not fail the retro.
-
-**Input to the agent:**
-- The metrics computed in Step 2
-- The patterns identified in Step 3
-- The initiative's `docs/ai/<initiative>-status.md` (all slice entries showing which steps were used)
-
-**What the agent evaluates:**
+**What to evaluate:**
 - Which execution-loop steps were consistently load-bearing (caught real issues, produced actionable output)?
 - Which steps were consistently no-op (skipped, produced no findings)?
-- Are there harness components that encode assumptions about model limitations that may no longer hold?
+- Which arc agents were most useful vs. never invoked?
 - Cost/benefit of each step based on the initiative's actual usage data
 
-**Output:** The agent produces a harness audit report appended to the retro output. Recommendations are advisory — they inform the user's decisions about harness configuration for the next initiative.
+**Output:** Append a harness assessment section to the retro output. Recommendations are advisory — they inform the user's decisions about workflow configuration for the next initiative.
 
-### Step 7: Run Consolidation
-
-After extracting learnings, run `/consolidate-learnings` to ensure any new learned skills are merged into parent skills.
-
-### Step 8: Archive Completed Initiative
+### Step 7: Archive Completed Initiative
 
 **Only if ALL slices are either Complete or Blocked** (no In Progress, Not Started, or Needs Fix):
 

@@ -10,3 +10,12 @@ Thumbs.db
 .env
 *.pem
 *.key
+
+# Node.js
+node_modules/
+
+# Learning system data (user-specific, not committed)
+learning/observations/
+
+# Worktrees
+.worktrees/

@@ -3,6 +3,8 @@ name: workflow-new-repo
 description: "Bootstrap greenfield project: gather requirements, decide stack, scaffold, create docs/ai/, define first slice. Does not implement."
 ---
 
+> **Platform:** This skill works on Claude Code and Codex. See `references/platform-map.md` for tool mapping.
+
 # Workflow: Bootstrap New Repo
 
 Use this when starting from scratch — no existing code, no existing constraints to discover.
@@ -13,7 +15,7 @@ This skill shares templates with `workflow-existing-repo/templates/` (CLAUDE.md,
 
 The key difference from `workflow-existing-repo`: there is nothing to inspect. The challenge here is **decisions**, not discovery. Stack, structure, and conventions are chosen upfront and documented so they survive across sessions.
 
-The execution phase after bootstrap is identical — `/continue-work` uses the same execution-loop regardless of whether the project was new or existing.
+The execution phase after bootstrap is identical — `/continue` uses the same execution-loop regardless of whether the project was new or existing.
 
 ---
 
@@ -21,7 +23,7 @@ The execution phase after bootstrap is identical — `/continue-work` uses the s
 
 Confirm this is actually a greenfield project. If the user already has code (even a scaffold, a fork, or a half-started project), use `workflow-existing-repo` instead.
 
-**Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue-work <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
+**Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
 
 If greenfield: continue.
 
@@ -66,7 +68,7 @@ Write findings to `docs/ai/<initiative>-requirements.md`:
 
 Before making stack decisions, explore the design space with the user.
 
-Invoke the `brainstorm-design` skill with the initiative name and requirements from Step 1. The skill will:
+Invoke the `superpowers:brainstorming` skill with the initiative name and requirements from Step 1. The skill will:
 - Load the requirements doc from Step 1
 - Ask clarifying questions one at a time
 - Propose 2-3 approaches with trade-offs
@@ -75,9 +77,11 @@ Invoke the `brainstorm-design` skill with the initiative name and requirements f
 - Run a spec review loop
 - Return control here after user approves the spec
 
-**Do not proceed to Step 3 until brainstorm-design completes and the user has approved the design.**
+**Do not proceed to Step 3 until superpowers:brainstorming completes and the user has approved the design.**
 
-For truly trivial projects where the design is self-evident from the requirements (e.g., a single CLI utility with one command), the brainstorm-design output can be brief — but it must still exist and be approved.
+If superpowers is not installed, conduct the design exploration directly: propose 2-3 approaches with trade-offs, discuss with the user, write the design doc to `docs/ai/<initiative>-design.md`, and wait for user approval before proceeding.
+
+For truly trivial projects where the design is self-evident from the requirements (e.g., a single CLI utility with one command), the superpowers:brainstorming output can be brief — but it must still exist and be approved.
 
 ---
 
@@ -103,7 +107,7 @@ Scaffold source: <CLI command or URL>
 Reply YES to proceed with scaffolding, or tell me what to change.
 ```
 
-Do not proceed to Step 3 until the user confirms. If the user overrides, update decisions.md with the new rationale and continue.
+Do not proceed to Step 4 until the user confirms. If the user overrides, update decisions.md with the new rationale and continue.
 
 ---
 
@@ -139,7 +143,7 @@ After verifying the scaffold, create a minimal `CLAUDE.md` using the template fr
 **Rules for CLAUDE.md:**
 - Stable facts only — stack, structure, build/test commands. Nothing time-sensitive.
 - No rules that duplicate the global `~/.claude/CLAUDE.md`.
-- 30 lines maximum.
+- 40 lines maximum.
 - Do not create if `CLAUDE.md` already exists — append missing sections instead.
 
 ---
@@ -152,7 +156,7 @@ Create these six files (scaled for a new project — no scope-map or contracts y
 Already written in Step 1.
 
 ### `docs/ai/<initiative>-design.md`
-Already written in Step 2 by the brainstorm-design skill.
+Already written in Step 2 by the superpowers:brainstorming skill.
 
 ### `docs/ai/<initiative>-decisions.md`
 Already populated in Steps 3 and 4. Will grow as more decisions are made during execution.
@@ -183,31 +187,28 @@ First slice for a new project is almost always: **"Verify scaffold builds, tests
 
 ### `docs/ai/<initiative>-status.md`
 
-Write the completed bootstrap as Slice 0 (Complete), then the first real slice as Not Started. Use `execution-loop/templates/status-entry.md` format for each slice so `/continue-work` can read it without ambiguity.
+Write the completed bootstrap as Slice 0 (Complete), then the first real slice as Not Started. Use `execution-loop/templates/status-entry.md` format for each slice so `/continue` can read it without ambiguity.
 
 ---
 
-## Step 6: Wire ECC Skills Where Relevant
+## Step 6: Wire Arc Agents
 
-ECC agents are available only if ECC is installed in the current project. Check before referencing:
-
-```bash
-ls .claude/agents/ 2>/dev/null || echo "ECC not installed"
-```
-
-If ECC is installed, invoke its agents according to these criteria:
+Reference bundled agents in `agents/` for language-specific review and build resolution:
 
 | Agent | Invoke when |
 |---|---|
-| `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
-| `code-reviewer` | Always after implementation — every slice gets a review |
-| `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
-| `e2e-runner` | Slice completes a navigable route or user-visible UI journey |
-| `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
+| `cpp-reviewer` | Slice implements C or C++ code |
+| `rust-reviewer` | Slice implements Rust code |
+| `python-reviewer` | Slice implements Python code |
+| `csharp-reviewer` | Slice implements C#/.NET code |
+| `typescript-reviewer` | Slice implements TypeScript/JavaScript code |
+| `powershell-reviewer` | Slice implements PowerShell scripts |
+| `kubernetes-reviewer` | Slice modifies Kubernetes manifests, Helm charts, or YAML configs |
+| `cpp-build-resolver` | C++ build fails (CMake, compilation, linker errors) |
+| `rust-build-resolver` | Rust build fails (cargo, borrow checker, dependency errors) |
+| `security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
 
-Language-specific: Go → `golang-patterns` + `golang-testing`; Python → `python-patterns`; React/Next.js → `frontend-patterns`; Java/Spring → `springboot-patterns`; Postgres → `postgres-patterns`.
-
-If ECC is **not** installed: apply the discipline directly (write tests first, review your own code critically, check security manually). Do not skip the discipline — skip the agent invocation.
+For languages without a bundled reviewer (e.g., Go, Java), defer to `superpowers:requesting-code-review` for a language-agnostic review. If superpowers is not installed, review your own code using the standard review rubric (correctness, security, testing, maintainability).
 
 ---
 
@@ -235,7 +236,7 @@ Test runner: <command to run a single test, or "needs setup — first slice shou
 First slice: <name and goal>
 Validation command: <exact command>
 TDD: mandatory from Slice 1 — all behavioral changes require tests first
-Next: /continue-work <initiative>
+Next: /continue <initiative>
 ```
 
 Do not replace this with a conversational summary. Do not end with "let me know if..." or any question. The structured output is mandatory.

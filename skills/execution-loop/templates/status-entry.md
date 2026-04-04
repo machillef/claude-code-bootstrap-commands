@@ -15,4 +15,4 @@ Last updated: <date>
 <any issues blocking completion, or "None">
 
 ### Next recommended step
-<exact action: "Run /continue-work <initiative> to start Slice N+1" or specific blocker resolution>
+<exact action: "Run /continue <initiative> to start Slice N+1" or specific blocker resolution>

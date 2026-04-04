@@ -90,6 +90,6 @@ Append to `.claude/skill-health-history.jsonl` if it exists.
 ## Composing with Other Commands
 
 - Run `/skill-health` first to identify which skill to improve
-- Run `/consolidate-learnings` before improving to ensure gotchas are current
+- Check recent instincts (`/instinct-status`) before improving to ensure gotchas are current
 - Run `/retro <initiative>` to discover improvement signals from real usage
 - After improving, run `/skill-health` again to verify score increased

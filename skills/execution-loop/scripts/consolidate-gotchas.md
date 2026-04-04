@@ -1,6 +1,6 @@
 # Gotcha Consolidation Prompt
 
-Run this periodically (or as part of `/everything-claude-code:learn-eval`) to consolidate orphaned learned skills into parent skill gotchas.
+Run this periodically to consolidate orphaned learned skills into parent skill gotchas.
 
 ## What to do
 
@@ -11,7 +11,7 @@ Run this periodically (or as part of `/everything-claude-code:learn-eval`) to co
 2. **For each learned skill, determine its parent:**
    - Does it describe an execution-loop failure? → `execution-loop/gotchas/`
    - Does it describe a code-review pattern? → `code-review/references/`
-   - Does it describe a debugging technique? → `systematic-debugging/`
+   - Does it describe a debugging technique? → `execution-loop/gotchas/` (debugging patterns are used by `superpowers:systematic-debugging`)
    - Does it describe a UI/CSS/Tailwind issue? → `ux-craft/references/`
    - Does it describe a portal-specific issue? → `portal-qa/` or `portal-ui/`
    - Does it describe a standalone runbook? → Promote to its own skill
@@ -24,6 +24,6 @@ Run this periodically (or as part of `/everything-claude-code:learn-eval`) to co
 
 4. **Report what was consolidated and what was left orphaned.**
 
-## Integration with ECC
+## Integration with Learning System
 
-If `/everything-claude-code:learn-eval` is available, run it first to extract new patterns from the current session, THEN run this consolidation step. The two-step process ensures new patterns are captured AND placed in the right location.
+The arc learning system captures patterns automatically via observation hooks. Run this consolidation step periodically to ensure patterns are placed in the right parent skill location rather than left orphaned in `learned/`.

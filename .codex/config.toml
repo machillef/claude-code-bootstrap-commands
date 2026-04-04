@@ -6,6 +6,27 @@
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 
+persistent_instructions = """
+# Arc Safety Rules (equivalent to Claude Code hooks)
+# These rules MUST be followed — they replace system-level enforcement.
+
+1. NEVER use --no-verify with git commit, push, or merge commands
+2. NEVER modify linter/formatter config files (.eslintrc, .prettierrc, biome.json, ruff.toml, etc.) to make checks pass — fix the source code instead
+3. NEVER run destructive commands without explicit user confirmation:
+   - git push --force, git reset --hard, git checkout ., git clean -f
+   - kubectl delete namespace, helm uninstall, docker system prune
+   - rm with recursive flag on dangerous paths
+   - DROP TABLE, DROP DATABASE, TRUNCATE
+   - terraform destroy, chmod 777, npm publish
+4. ALWAYS use specific file paths with git add (never git add . or git add -A)
+5. ALWAYS check for secrets (API keys, tokens, passwords) before committing
+6. When editing files outside the current project, warn the user first
+
+# Arc Learning Guidance
+When the user corrects you or shares a preference, note it for future sessions.
+After completing a complex task (5+ tool calls), reflect on what worked.
+"""
+
 [features]
 multi_agent = true
 

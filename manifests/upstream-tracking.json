@@ -1,0 +1,51 @@
+{
+  "version": "1.0",
+  "description": "Tracks upstream repos for changes relevant to arc",
+  "tracked": [
+    {
+      "name": "superpowers",
+      "local_path": "~/projects/superpowers",
+      "remote": "https://github.com/obra/superpowers",
+      "type": "plugin-dependency",
+      "watch_paths": ["skills/", "hooks/", "agents/"],
+      "ignore_paths": ["docs/", "tests/", "scripts/"],
+      "last_checked_sha": "HEAD",
+      "notes": "External plugin — do not absorb, track for updates"
+    },
+    {
+      "name": "everything-claude-code",
+      "local_path": "~/projects/everything-claude-code",
+      "remote": "https://github.com/affaan-m/everything-claude-code",
+      "type": "source-fork",
+      "watch_paths": [
+        "agents/cpp-reviewer.md", "agents/rust-reviewer.md", "agents/python-reviewer.md",
+        "agents/csharp-reviewer.md", "agents/typescript-reviewer.md",
+        "agents/cpp-build-resolver.md", "agents/rust-build-resolver.md",
+        "scripts/hooks/config-protection.js", "scripts/hooks/governance-capture.js",
+        "scripts/hooks/pre-bash-commit-quality.js",
+        "skills/continuous-learning-v2/", "skills/safety-guard/"
+      ],
+      "ignore_paths": [
+        "skills/laravel-*", "skills/django-*", "skills/springboot-*",
+        "skills/kotlin-*", "skills/healthcare-*", "skills/supply-*",
+        "skills/carrier-*", "skills/x-api/", "skills/crosspost/",
+        "skills/investor-*", "skills/market-*", "skills/social-*"
+      ],
+      "last_checked_sha": "HEAD",
+      "notes": "Agents and hooks absorbed into arc v2.0.0. Track for upstream improvements to absorbed assets."
+    },
+    {
+      "name": "hermes-agent",
+      "local_path": "~/projects/hermes-agent",
+      "remote": "https://github.com/NousResearch/hermes-agent",
+      "type": "inspiration",
+      "watch_paths": [
+        "tools/memory_tool.py", "tools/skill_manager_tool.py",
+        "agent/memory_manager.py", "agent/builtin_memory_provider.py"
+      ],
+      "ignore_paths": ["gateway/", "website/", "environments/", "plugins/"],
+      "last_checked_sha": "HEAD",
+      "notes": "Instinct architecture inspiration. Track memory/skill management for learning system improvements."
+    }
+  ]
+}
