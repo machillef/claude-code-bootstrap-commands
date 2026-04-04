@@ -2,45 +2,26 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-skill-health-check.sh\"",
-            "description": "Remind about /skill-health if last run was >7 days ago (fires once per session)",
-            "async": true,
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-detour-check.sh\"",
-            "description": "Remind about active detour worktrees (fires once per session)",
-            "async": true,
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-stale-docs-check.sh\"",
-            "description": "Warn about stale docs/ai/ status files (fires once per session)",
-            "async": true,
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/session-retro-reminder.sh\"",
-            "description": "Remind about completed initiatives that haven't had a retro yet (fires once per session)",
-            "async": true,
-            "timeout": 5
-          }
-        ]
-      },
-      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-careful.sh\"",
-            "description": "Warn before destructive commands (kubectl delete, terraform destroy, git checkout ., etc.)",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/block-no-verify.js\"",
+            "timeout": 3
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/destructive-guard.js\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/commit-quality.js\"",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/broad-git-add-warn.js\"",
             "timeout": 3
           }
         ]
@@ -50,8 +31,12 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-freeze.sh\"",
-            "description": "Block edits outside the freeze boundary (set via /freeze)",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/config-protection.js\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/outside-project-warn.js\"",
             "timeout": 3
           }
         ]
@@ -61,23 +46,66 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/check-freeze.sh\"",
-            "description": "Block writes outside the freeze boundary (set via /freeze)",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/config-protection.js\"",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/safety/outside-project-warn.js\"",
             "timeout": 3
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/operational/stale-docs-check.js\"",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/operational/detour-check.js\"",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/operational/retro-reminder.js\"",
+            "async": true,
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/learning/ambient-learning-nudge.js\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/learning/observation-capture.js\"",
+            "async": true,
+            "timeout": 10
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Skill",
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/post-learn-eval-consolidate.sh\"",
-            "description": "Remind to run /consolidate-learnings after learn-eval",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/learning/observation-capture.js\"",
             "async": true,
-            "timeout": 5
+            "timeout": 10
           }
         ]
       }
@@ -88,24 +116,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-learn-eval-suggest.sh\"",
-            "description": "Suggest running /everything-claude-code:learn-eval after meaningful sessions",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/operational/desktop-notify.js\"",
             "async": true,
-            "timeout": 5
+            "timeout": 10
           },
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-detour-reminder.sh\"",
-            "description": "Remind about active detour worktrees when session ends",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/learning/session-end-observer.js\"",
             "async": true,
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-freeze-reminder.sh\"",
-            "description": "Remind about active freeze boundary when session ends",
-            "async": true,
-            "timeout": 5
+            "timeout": 15
           }
         ]
       }

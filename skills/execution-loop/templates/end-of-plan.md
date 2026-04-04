@@ -19,8 +19,8 @@ All slices are complete.
 
 ### Next Step
 <if all DoD criteria are met:>
-Initiative is complete. Consider running `/everything-claude-code:learn-eval` to extract reusable patterns from this initiative.
+Initiative is complete. The arc learning system captures patterns automatically via observation hooks.
 <if any DoD criterion is NOT MET:>
-If unmet criteria are bugs in completed slices: Run `/fix-bugs <initiative>` to address them.
-If unmet criteria require new work or re-design: Run `/bootstrap-existing <initiative>-fixes`.
+If unmet criteria are bugs in completed slices: Run `/fix <initiative>` to address them.
+If unmet criteria require new work or re-design: Run `/new-feature <initiative>-fixes`.
 ---

@@ -1,0 +1,25 @@
+{
+  "name": "arc",
+  "version": "2.0.0",
+  "description": "Disciplined development workflows for Codex: docs/ai/-driven initiative management, TDD execution loops, multi-pass reviews, self-learning, and worktree-isolated detours",
+  "author": {
+    "name": "machillef"
+  },
+  "homepage": "https://github.com/machillef/claude-code-bootstrap-commands",
+  "repository": "https://github.com/machillef/claude-code-bootstrap-commands",
+  "license": "MIT",
+  "keywords": [
+    "arc",
+    "workflows",
+    "tdd",
+    "initiative-management",
+    "codex",
+    "self-learning"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Arc",
+    "shortDescription": "Disciplined development workflows with self-learning",
+    "category": "Productivity"
+  }
+}

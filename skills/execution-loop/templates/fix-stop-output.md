@@ -5,5 +5,5 @@ Fix: <file list changed>
 Tests added: <test names>
 Validated: <commands run and pass/fail>
 Manual retest: <what the user should re-verify>
-Next: /continue-work <initiative> → Slice <N+1>: <name>
-      /fix-bugs <initiative> — if more bugs found after retesting
+Next: /continue <initiative> → Slice <N+1>: <name>
+      /fix <initiative> — if more bugs found after retesting

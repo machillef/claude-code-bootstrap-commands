@@ -1,6 +1,6 @@
 ---
 name: stack-advisor
-description: Opinionated tech stack recommendation for new projects. Ask 4 high-signal questions, make a confident recommendation with rationale, and output a decision record. Use only during /bootstrap-new — not for existing repos.
+description: Opinionated tech stack recommendation for new projects. Ask 4 high-signal questions, make a confident recommendation with rationale, and output a decision record. Use only during /new-project — not for existing repos.
 model: claude-opus-4-5
 tools:
   - Read

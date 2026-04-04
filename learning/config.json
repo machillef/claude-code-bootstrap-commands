@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "observer": {
+    "enabled": true,
+    "min_observations_before_analysis": 20,
+    "confidence_threshold_for_nudge": 0.5
+  },
+  "instinct": {
+    "default_scope": "project",
+    "promotion_threshold": 0.8,
+    "promotion_min_projects": 2,
+    "max_age_days_pending": 30
+  },
+  "storage": {
+    "base_dir": "~/.claude/arc",
+    "project_dir_pattern": "projects/{project_hash}",
+    "global_instincts_dir": "instincts/global",
+    "observations_file": "observations.jsonl",
+    "max_observations_size_mb": 10
+  }
+}

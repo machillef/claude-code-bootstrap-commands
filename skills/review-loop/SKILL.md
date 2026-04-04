@@ -1,7 +1,9 @@
 ---
 name: review-loop
-description: "Multi-pass code review with fresh subagent isolation per pass. Standalone or composed into loop-work/fix-bugs."
+description: "Multi-pass code review with fresh subagent isolation per pass. Standalone or composed into /loop or /fix."
 ---
+
+> **Platform:** This skill works on Claude Code and Codex. See `references/platform-map.md` for tool mapping.
 
 # Review Loop
 
@@ -14,9 +16,9 @@ Multi-pass review using separate subagent contexts per pass. Each reviewer is in
 
 ## When to Use
 
-- After any code changes (ad-hoc, quick-change, README updates, refactors)
-- As part of `/loop-work` (invoked automatically when `--passes` is set)
-- After `/fix-bugs` with `--review-after`
+- After any code changes (ad-hoc, `/quick`, README updates, refactors)
+- As part of `/loop` (invoked automatically when `--passes` is set)
+- After `/fix` with `--review-after`
 - Any time you want deeper review than a single pass provides
 - The user explicitly asks to review changes ("check this again", "review my changes")
 
@@ -78,7 +80,7 @@ Before dispatching review passes, mechanically verify that what was built matche
 ### With initiative
 
 1. Extract actionable items from `docs/ai/<initiative>-slices.md` — each slice's goal, acceptance criteria, and "Touched area"
-2. Extract user stories from `docs/ai/<initiative>-design.md` (if exists)
+2. Extract user stories from `docs/ai/<initiative>-design.md` (if exists). If the design doc does not exist (optional for standard-tier initiatives), skip user story extraction and perform drift detection using slice definitions only.
 3. Detect the base branch dynamically (same method as Step 1) and run `git diff --stat ${BASE}...HEAD` to get the actual changed files
 4. Cross-reference and classify each planned item:
 

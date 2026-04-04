@@ -3,14 +3,16 @@ name: security-audit
 description: "Structured security audit for application code and infrastructure. Covers secrets, dependencies, CI/CD, IaC, and OWASP top risks."
 ---
 
+> **Platform:** This skill works on Claude Code and Codex. See `references/platform-map.md` for tool mapping.
+
 # Security Audit
 
 Structured security review adapted for multi-stack environments (.NET/C#, Python, PowerShell, React, IaC). Two modes: quick scan (targeted, 5-10 min) and comprehensive (full surface, 30-60 min).
 
 ## When to Use
 
-- Manually via `/security-audit` or `/security-audit --comprehensive`
-- As a complement to the execution-loop's `security-reviewer` agent when deeper tool-assisted scanning is warranted
+- Manually via `/security` or `/security --comprehensive`
+- As a complement to the execution-loop's security step when deeper tool-assisted scanning is warranted
 - Before shipping code that handles user input, payment flows, or credential management
 - Periodically as a hygiene check (e.g., monthly)
 
@@ -25,7 +27,12 @@ Structured security review adapted for multi-stack environments (.NET/C#, Python
 
 ### Quick mode (default)
 
-Run Phases 1-2 in full. Run Phases 3-4 only on files in the provided scope or files changed in the current branch (`git diff --name-only main...HEAD`). Skip findings that require deep manual review.
+Run Phases 1-2 in full. Run Phases 3-4 only on files in the provided scope or files changed in the current branch. Detect the default branch dynamically:
+```bash
+BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@') || BASE="main"
+git diff --name-only ${BASE}...HEAD
+```
+Skip findings that require deep manual review.
 
 ### Comprehensive mode (`--comprehensive`)
 

@@ -3,6 +3,8 @@ name: execution-loop
 description: "Continue initiative work: load docs/ai, pick next slice, TDD, verify, update status. One slice at a time."
 ---
 
+> **Platform:** This skill works on Claude Code and Codex. See `references/platform-map.md` for tool mapping.
+
 # Execution Loop
 
 Use this workflow to continue an existing initiative after bootstrap.
@@ -22,20 +24,9 @@ Intentionally conservative: one slice at a time, narrow implementation, clear ve
 
 ---
 
-## Session Start Checklist
+## Session Start
 
-Before doing anything else, execute these reads in order:
-
-1. Read `CLAUDE.md` — project rules and structure
-2. Read `docs/ai/<initiative>-status.md` — where are we?
-   - **If the file does not exist:** check `docs/ai/archive/<initiative>/`. If found there, the initiative was archived — see Extend Mode in Step 2. If not found anywhere, stop: "No initiative found for `<initiative>`. Run `/bootstrap-existing <initiative>` or `/bootstrap-new <initiative>` first."
-3. Read `docs/ai/<initiative>-slices.md` — what's the plan?
-4. Read `docs/ai/<initiative>-plan.md` (if it exists)
-5. Read any learned skills relevant to this initiative (`~/.claude/skills/learned/`)
-6. Read `gotchas/` in this skill directory — known failure patterns
-7. Run `git log --oneline -10` — what changed since last session?
-
-Only then proceed. Do not skip this checklist.
+Before executing any step, confirm you have fresh context. Steps 0 and 1 below handle all required reads.
 
 ---
 
@@ -60,6 +51,7 @@ Read:
 - `docs/ai/<initiative>-slices.md`
 - `docs/ai/<initiative>-plan.md` (if it exists)
 - `docs/ai/<initiative>-decisions.md` (if it exists)
+- Read `docs/ai/<initiative>-scope-map.md` (if exists) — verification commands, contracts
 - Any other initiative docs that materially affect the current slice
 
 ---
@@ -67,7 +59,7 @@ Read:
 ## Step 2: Determine the Next Slice
 
 From status.md and slices.md:
-- Slice in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Run `/fix-bugs <initiative>` to address them before advancing." Do not proceed to implement the next slice.
+- Slice in "Needs Fix" state → **STOP.** Tell the user: "Slice <N> has reported bugs. Run `/fix <initiative>` to address them before advancing." Do not proceed to implement the next slice.
 - Current in-progress slice (if any) → resume it
 - **All slices Complete (or Complete + Blocked) and no slices Not Started or In Progress** → enter Extend mode (see below)
 - Otherwise: next planned slice
@@ -78,21 +70,21 @@ If the docs are inconsistent, fix them first. State the inconsistency explicitly
 
 ### Extend Mode (all slices done, user wants more work)
 
-If `/continue-work <initiative> <new objective>` is invoked and all slices are already Complete:
+If `/continue <initiative> <new objective>` is invoked and all slices are already Complete:
 
 **If initiative files are not found in `docs/ai/`:** check `docs/ai/archive/<initiative>/`. If found there, restore them first: `git mv docs/ai/archive/<initiative>/* docs/ai/` and commit `docs: restore <initiative> from archive for extension`. Then continue below.
 
 1. Read the existing design doc and decisions
 2. Treat the `<new objective>` as a request to extend the initiative
-3. Ask brief clarifying questions about the new scope (this is NOT a full brainstorm-design — the design already exists)
+3. Ask brief clarifying questions about the new scope (this is NOT a full superpowers:brainstorming session — the design already exists)
 4. Propose new slices (numbered continuing from the last slice)
 5. Get user approval on the new slices
 6. Add them to slices.md and status.md (as Not Started)
 7. Continue with the first new slice using the normal execution loop
 
-If no new objective was provided (`/continue-work <initiative>` with no additional text), emit the End of Plan block as usual.
+If no new objective was provided (`/continue <initiative>` with no additional text), emit the End of Plan block as usual.
 
-**Triage gate:** If the new objective is materially different from the original design (new domain, different architecture, unrelated feature), recommend `/bootstrap-existing` for a fresh initiative instead of extending. Extend mode is for follow-up work within the same design, not for starting something new.
+**Triage gate:** If the new objective is materially different from the original design (new domain, different architecture, unrelated feature), recommend `/new-feature` for a fresh initiative instead of extending. Extend mode is for follow-up work within the same design, not for starting something new.
 
 This avoids re-bootstrapping when the user wants to add polishing, follow-up work, or additional features to an existing initiative.
 
@@ -137,43 +129,24 @@ If skipping TDD, state why in a single line before proceeding. "Not practical" i
 
 ---
 
-## Step 6: Use Bounded Plugin Delegation
+## Step 6: Bounded Agent Delegation
 
-Check which plugins are available before delegating:
+Check ALL tables below and invoke every matching agent — do not stop at the first match. Multiple agents can apply to the same slice.
 
-```bash
-ls .claude/agents/ 2>/dev/null || echo "No agents available"
-```
-
-Check ALL tables below and invoke every matching tool/skill — do not stop at the first match. Multiple tools can apply to the same slice.
-
-### ECC Agents (if everything-claude-code is installed)
+### Arc Agents (bundled)
 
 | Agent | Invoke when |
 |---|---|
-| `tdd-guide` | Any slice that adds or changes behavior (the default for most slices) |
-| `code-reviewer` | Always after implementation — every slice gets a review |
-| `security-reviewer` | Slice touches auth, input validation, data persistence, or external calls |
-| `e2e-runner` | Slice completes a navigable route or user-visible UI journey |
-| `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
-| Language-specific (`golang-patterns`, `python-patterns`, `frontend-patterns`, `springboot-patterns`, etc.) | Slice implements new code in that stack — use for idiomatic guidance during implementation |
-
-### Built-in Skills (from bootstrap-commands)
-
-| Skill | Invoke when |
-|---|---|
-| `security-audit` | Slice touches auth, input validation, data persistence, secrets, or external calls — use for deeper tool-assisted scanning when ECC `security-reviewer` is not installed, or as a complement to it |
-
-### code-foundations Skills (if code-foundations plugin is installed)
-
-| Skill | Invoke when |
-|---|---|
-| `code-foundations:cc-quality-practices` | After implementation alongside code-reviewer — checklist-based quality review (115 checks) |
-| `code-foundations:cc-defensive-programming` | Slice touches error handling, input validation, or resource management |
-| `code-foundations:aposd-verifying-correctness` | After implementation — 6-dimension correctness check (requirements, concurrency, errors, resources, boundaries, security) |
-| `code-foundations:cc-pseudocode-programming` | Large slices with complex logic — design via pseudocode-as-contract before implementation |
-| `code-foundations:cc-debugging` | When systematic-debugging is invoked — supplement with scientific method checklist |
-| `code-foundations:cc-refactoring-guidance` | Slice involves refactoring existing code — safe refactoring patterns and regression strategy |
+| `cpp-reviewer` | Slice implements C or C++ code |
+| `rust-reviewer` | Slice implements Rust code |
+| `python-reviewer` | Slice implements Python code |
+| `csharp-reviewer` | Slice implements C#/.NET code |
+| `typescript-reviewer` | Slice implements TypeScript/JavaScript code |
+| `powershell-reviewer` | Slice implements PowerShell scripts |
+| `kubernetes-reviewer` | Slice modifies Kubernetes manifests, Helm charts, or YAML configs |
+| `cpp-build-resolver` | C++ build fails (CMake, compilation, linker errors) |
+| `rust-build-resolver` | Rust build fails (cargo, borrow checker, dependency errors) |
+| `security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
 
 ### Subagent Dispatch (for complex slices)
 
@@ -193,7 +166,7 @@ For slices with 3+ tasks or independent subtasks, dispatch focused subagents usi
 
 ### Fallback
 
-If **no plugins** are installed: apply the discipline directly (write tests first, review your own code, check security manually). Do not skip the discipline — skip only the agent/skill invocation.
+For languages without a bundled reviewer (e.g., Go, Java), defer to `superpowers:requesting-code-review` for a language-agnostic review. If superpowers is not installed, review your own code using the standard review rubric (correctness, security, testing, maintainability).
 
 ---
 
@@ -282,7 +255,7 @@ When the slice touches frontend or UI files, suggest browser-based verification 
 
 If triggered:
 - Suggest: "This slice touches UI files. Consider running `/ui-smoke-test <url>` or `/ui-review <url>` for visual verification."
-- If brainstorm-design's visual companion was used during planning, suggest reviewing the implemented UI against the design mockups.
+- If `superpowers:brainstorming`'s visual companion was used during planning, suggest reviewing the implemented UI against the design mockups.
 - Do not block on UI verification — suggest it as an additional quality step.
 
 This is informational only. The slice is not blocked if UI verification is skipped.
@@ -293,7 +266,7 @@ This is informational only. The slice is not blocked if UI verification is skipp
 
 If Step 7 verification passes, note "Step 8 (debugging) — skipped, verification passed" and proceed to Step 9.
 
-If verification **fails**, invoke the `systematic-debugging` skill before attempting any fix. The skill enforces a mandatory 4-phase process:
+If verification **fails**, invoke the `superpowers:systematic-debugging` skill for the mandatory 4-phase process. If superpowers is not installed, apply the 4-phase debugging discipline directly: (1) Root Cause Investigation, (2) Pattern Analysis, (3) Hypothesis Testing, (4) Implementation.
 
 1. **Root Cause Investigation** — read errors carefully, reproduce, check recent changes, gather evidence, trace data flow
 2. **Pattern Analysis** — find working examples, compare against references, identify differences
@@ -307,12 +280,6 @@ If verification **fails**, invoke the `systematic-debugging` skill before attemp
 - Do NOT continue to Step 9 — wait for user acknowledgment
 
 After successful debugging, return to Step 7 to re-verify, then continue to Step 9.
-
-Supporting techniques available in `.claude/skills/systematic-debugging/`:
-- `root-cause-tracing.md` — backward tracing through call stacks
-- `defense-in-depth.md` — multi-layer validation after fix
-- `condition-based-waiting.md` — replace arbitrary timeouts with condition polling
-- `find-polluter.sh` — bisection script for test pollution
 
 ---
 
@@ -370,7 +337,7 @@ Do not summarize vaguely. A fresh session reading only this file must be able to
 
 **Mandatory** after every completed slice (skip only for blocked/abandoned slices).
 
-After updating docs, check if this slice revealed a reusable pattern:
+The arc learning system captures patterns automatically via observation hooks. Instincts are created at session end without manual invocation. If a pattern warrants explicit documentation beyond what the learning system captures, add it to `gotchas/` in this skill directory.
 
 1. **Did you discover something that applies beyond this slice?** Examples:
    - A retry pattern that other suites/modules will need
@@ -378,15 +345,9 @@ After updating docs, check if this slice revealed a reusable pattern:
    - A tool/library behavior that wasn't obvious
    - A failure mode category (infra vs product vs test code)
 
-2. **If yes:** save it in the right place:
-   - **Execution-loop failure patterns** → add to `gotchas/` in this skill directory (one file per pattern)
-   - **Cross-project patterns** → global (`~/.claude/skills/learned/`)
-   - **Project-specific patterns** → project (`.claude/skills/learned/`)
-   - Use the `learn-eval` skill if available, or write directly
+2. **If yes:** add it to `gotchas/` in this skill directory (one file per pattern). The learning system handles cross-project and project-specific pattern capture automatically.
 
-3. **Consolidation check:** If the learning relates to an existing skill (not just execution-loop), add it to that skill's gotchas or references — don't leave it orphaned in `~/.claude/skills/learned/` if it has a natural parent.
-
-4. **If no:** move on — not every slice produces a learning. Don't force it.
+3. **If no:** move on — not every slice produces a learning. Don't force it.
 
 The goal is cumulative intelligence: each initiative should make the next one faster. Patterns discovered in Suite A should inform Suite B without re-discovery.
 

@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This repository uses a disciplined, repo-state-driven workflow for substantial work.
+This is the **arc** plugin — disciplined, repo-state-driven workflows for Claude Code and Codex.
 
-Claude should prefer:
+Arc prefers:
 - explicit scope control
 - test-first or test-driven changes where practical
 - smallest safe validating steps
@@ -25,7 +25,7 @@ Claude should prefer:
 
 Scale docs/ai/ to change size. See `docs/ai/README.md` for the full file set and scaling rules.
 
-Bootstrap commands create a minimal `CLAUDE.md` in target repos containing only stable project facts: stack, build/test commands, file structure, and a pointer to `docs/ai/`. Do not add rules, session state, or anything that duplicates the global `~/.claude/CLAUDE.md`. Keep it under 40 lines. If one already exists, add only missing sections — do not overwrite.
+Arc creates a minimal `CLAUDE.md` in target repos containing only stable project facts: stack, build/test commands, file structure, and a pointer to `docs/ai/`. Do not add rules, session state, or anything that duplicates the global `~/.claude/CLAUDE.md`. Keep it under 40 lines. If one already exists, add only missing sections — do not overwrite.
 
 ## Default execution behavior
 

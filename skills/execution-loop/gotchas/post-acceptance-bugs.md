@@ -2,7 +2,7 @@
 
 ## Pattern
 
-A slice passes automated verification (Step 7) and re-assessment (Step 9), is marked Complete, and the stop output directs the user to `/continue-work`. The user then manually tests the changes and discovers bugs that automated tests didn't catch.
+A slice passes automated verification (Step 7) and re-assessment (Step 9), is marked Complete, and the stop output directs the user to `/continue`. The user then manually tests the changes and discovers bugs that automated tests didn't catch.
 
 ## Why This Happens
 
@@ -12,10 +12,10 @@ A slice passes automated verification (Step 7) and re-assessment (Step 9), is ma
 
 ## What to Do
 
-Direct the user to run `/fix-bugs <initiative>` with a description of the bugs. This command:
+Direct the user to run `/fix <initiative>` with a description of the bugs. This command:
 
 1. Reopens the slice (transitions to "Needs Fix" status)
-2. Diagnoses with systematic-debugging principles
+2. Diagnoses with `superpowers:systematic-debugging` principles
 3. Fixes with TDD discipline
 4. Re-verifies with both new and original tests
 5. Updates docs with a Fix entry in status.md
@@ -23,9 +23,9 @@ Direct the user to run `/fix-bugs <initiative>` with a description of the bugs. 
 
 Do NOT:
 - Use `/detour` — the bug is in the slice's work, not a diversion
-- Use `/quick-change` — this loses initiative context
+- Use `/quick` — this loses initiative context
 - Fix freehand without a command — this bypasses workflow discipline
-- Use `/continue-work` — the execution-loop will block if a slice is in "Needs Fix" state
+- Use `/continue` — the execution-loop will block if a slice is in "Needs Fix" state
 
 ## Prevention
 

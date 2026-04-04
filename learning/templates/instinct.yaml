@@ -1,0 +1,27 @@
+# Arc Instinct Template
+# Created by the session-end observer when patterns are detected
+---
+id: "{kebab-case-id}"
+trigger: "{when this condition is observed}"
+action: "{what to do}"
+confidence: 0.3
+domain: "{code-style|testing|git|debugging|workflow|security|tooling}"
+source: "session-observation"
+scope: "project"
+project_id: "{12-char-hash}"
+project_name: "{repo-name}"
+created: "{ISO-8601-timestamp}"
+last_seen: "{ISO-8601-timestamp}"
+observations: 1
+---
+
+# {Title}
+
+## Trigger
+{Detailed description of when this instinct applies}
+
+## Action
+{What to do when the trigger is detected}
+
+## Evidence
+- {First observation that created this instinct}

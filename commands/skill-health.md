@@ -40,7 +40,7 @@ For each skill, evaluate these criteria (1 point each, max 8):
 |---|---|---|
 | execution-loop | 7/8 | scripts |
 | code-review | 5/8 | gotchas, scripts, progressive disclosure |
-| quick-change | 3/8 | folder structure, templates, gotchas, scripts, progressive disclosure |
+| quick | 3/8 | folder structure, templates, gotchas, scripts, progressive disclosure |
 | ... | ... | ... |
 
 ### Summary
@@ -67,5 +67,5 @@ Append current results:
 ## When to Run
 
 - After adding or modifying skills
-- After running `/consolidate-learnings` to see if scores improved
+- After the arc learning system evolves instincts into skills
 - Monthly as a hygiene check

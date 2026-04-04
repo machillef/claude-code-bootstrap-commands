@@ -1,7 +1,9 @@
 ---
 name: ubiquitous-language
-description: "Extract a DDD-style ubiquitous language glossary from the current conversation. Scans for domain nouns, verbs, and concepts — flags ambiguities, picks canonical terms, and writes UBIQUITOUS_LANGUAGE.md."
+description: "Build a DDD glossary from conversation context. Use after design sessions or when terminology drifts across code, docs, or discussion."
 ---
+
+> **Platform:** This skill works on Claude Code and Codex. See `references/platform-map.md` for tool mapping.
 
 # Ubiquitous Language Extraction
 

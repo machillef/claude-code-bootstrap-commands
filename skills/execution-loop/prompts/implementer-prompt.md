@@ -3,7 +3,7 @@
 Use this template when dispatching an implementer subagent for a slice task.
 
 ```
-Task tool (general-purpose):
+Agent tool:
   description: "Implement Task N: [task name]"
   prompt: |
     You are implementing Task N: [task name]

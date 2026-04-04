@@ -1,16 +1,16 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "claude-code-bootstrap-commands",
-  "description": "Disciplined development workflows for Claude Code: docs/ai/-driven initiative management, TDD execution loops, worktree-isolated detours, and continuous learning",
+  "name": "arc",
+  "description": "Disciplined development workflows for Claude Code & Codex: docs/ai/-driven initiative management, TDD execution loops, multi-pass reviews, self-learning, and worktree-isolated detours",
   "owner": {
     "name": "machillef"
   },
   "plugins": [
     {
-      "name": "bootstrap-commands",
+      "name": "arc",
       "source": "./",
-      "description": "Disciplined development workflows for Claude Code: docs/ai/-driven initiative management, TDD execution loops, worktree-isolated detours, and continuous learning",
-      "version": "1.6.0",
+      "description": "Disciplined development workflows for Claude Code & Codex: docs/ai/-driven initiative management, TDD execution loops, multi-pass reviews, self-learning, and worktree-isolated detours",
+      "version": "2.0.0",
       "author": {
         "name": "machillef"
       },
@@ -18,14 +18,16 @@
       "repository": "https://github.com/machillef/claude-code-bootstrap-commands",
       "license": "MIT",
       "keywords": [
+        "arc",
         "workflows",
         "tdd",
         "initiative-management",
         "docs-ai",
         "execution-loop",
-        "bootstrap",
-        "continuous-learning",
-        "worktrees"
+        "self-learning",
+        "code-review",
+        "worktrees",
+        "cross-platform"
       ],
       "category": "workflow",
       "strict": false
