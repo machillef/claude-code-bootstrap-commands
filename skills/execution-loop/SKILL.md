@@ -145,6 +145,8 @@ Check which plugins are available before delegating:
 ls .claude/agents/ 2>/dev/null || echo "No agents available"
 ```
 
+Check ALL tables below and invoke every matching tool/skill — do not stop at the first match. Multiple tools can apply to the same slice.
+
 ### ECC Agents (if everything-claude-code is installed)
 
 | Agent | Invoke when |
@@ -155,6 +157,12 @@ ls .claude/agents/ 2>/dev/null || echo "No agents available"
 | `e2e-runner` | Slice completes a navigable route or user-visible UI journey |
 | `planner` | Slice has more than 3 unknowns or cross-cutting dependencies |
 | Language-specific (`golang-patterns`, `python-patterns`, `frontend-patterns`, `springboot-patterns`, etc.) | Slice implements new code in that stack — use for idiomatic guidance during implementation |
+
+### Built-in Skills (from bootstrap-commands)
+
+| Skill | Invoke when |
+|---|---|
+| `security-audit` | Slice touches auth, input validation, data persistence, secrets, or external calls — use for deeper tool-assisted scanning when ECC `security-reviewer` is not installed, or as a complement to it |
 
 ### code-foundations Skills (if code-foundations plugin is installed)
 
