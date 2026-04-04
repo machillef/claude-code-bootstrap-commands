@@ -207,10 +207,14 @@ Build and tests are separate sub-steps. Execute them in order — do not skip 7c
 │      verification" and skip to 7d.                  │
 │                                                     │
 │  7d. EVALUATE (both build and tests)                │
-│      ALL PASS ──► Step 9 (note: Step 8 skipped)     │
-│      TEST FAIL ──► diagnose, fix, loop to 7a        │
+│      ALL PASS ──► Step 7f (UI check) then Step 9    │
+│      TEST FAIL ──► 7e: triage first                 │
 │                                                     │
-│  After 3 total attempts (build+test cycles):        │
+│  7e. TRIAGE test failures                           │
+│      In-branch ──► fix, loop to 7a                  │
+│      Pre-existing/Flaky ──► document, continue      │
+│                                                     │
+│  After 3 in-branch attempts (build+test cycles):    │
 │  STOP. Mark slice as Blocked. Report to user.       │
 └─────────────────────────────────────────────────────┘
 ```
@@ -219,6 +223,61 @@ Build and tests are separate sub-steps. Execute them in order — do not skip 7c
 - **After each build attempt, state your position:** `"Build FAILED — diagnosing [error]"` or `"Build PASSED — Step 7c: running tests now."` This self-prompt keeps your sub-step position in recent context even after long retry sequences.
 - Record failures honestly — do not retry blindly
 - Each attempt must change something (fix, different approach) — never re-run the exact same code expecting a different result
+
+### 7e. Test Failure Triage (when tests fail)
+
+Before spending attempts on a test failure, classify whether it was caused by your branch or is pre-existing.
+
+**Detect the base branch first:** Do not hardcode `main`. Determine the base branch dynamically:
+```bash
+BASE=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+[ -z "$BASE" ] && for b in main master develop trunk; do git show-ref --verify --quiet "refs/heads/$b" 2>/dev/null && BASE="$b" && break; done
+```
+
+If BASE is empty after both methods, warn "Could not detect base branch — skipping triage, treating all failures as in-branch" and proceed without classification.
+
+**Primary method — diff-based heuristic (preferred):** Check which test files your slice touched via `git diff --name-only ${BASE}...HEAD`. If the failing test file was NOT modified by the slice, the failure is likely pre-existing. Verify by checking `git log --oneline -5 -- <failing-test-file>` — if the last change predates your branch, it is pre-existing.
+
+If a modified test file has multiple failures and some may be pre-existing, use the secondary method to triage individual test cases, not just the file. Also use the secondary method if the failing test imports or references any file that WAS modified by the branch (transitive breakage), since the diff heuristic only considers direct file modifications.
+
+**Secondary method — worktree isolation (when the heuristic is inconclusive):** Run the failing test against the base branch without modifying the working tree:
+```bash
+git worktree remove /tmp/triage-check 2>/dev/null  # clean up stale worktree from previous run
+TRIAGE_DIR="/tmp/triage-check-$$"                   # unique path avoids collisions
+git worktree add "$TRIAGE_DIR" "$BASE" 2>/dev/null
+if [ $? -eq 0 ]; then
+  (cd "$TRIAGE_DIR" && <test command>); TRIAGE_EXIT=$?
+  git worktree remove "$TRIAGE_DIR" 2>/dev/null
+else
+  echo "Worktree creation failed — falling back to diff heuristic"
+fi
+```
+If the test also fails on the base branch (`TRIAGE_EXIT != 0`), it is pre-existing. If it passes, it is in-branch. If worktree creation fails, fall back to the diff heuristic and note the limitation.
+
+**Do NOT use `git stash && git checkout`** — this modifies the working tree and can strand the repo on the wrong branch if the test command fails mid-chain.
+
+Classify each failure:
+
+| Classification | Action |
+|----------------|--------|
+| **In-branch** | Failure is caused by your changes. Fix it — this counts toward the 3-attempt limit. |
+| **Pre-existing** | Failure exists on the base branch too. Do NOT fix it and do NOT count it toward the 3-attempt limit. Note it in the status entry as "Pre-existing failure: `<test name>`". |
+| **Flaky** | Failure is intermittent (passes on retry without code changes). Note it as flaky. Do not count toward the 3-attempt limit. |
+
+Only in-branch failures block the slice. Pre-existing and flaky failures are documented but do not prevent proceeding to Step 7f (UI check) then Step 9.
+
+### 7f. UI-Aware Verification (when slice touches UI files)
+
+When the slice touches frontend or UI files, suggest browser-based verification after build+test passes.
+
+**Trigger patterns:** `*.razor`, `*.cshtml`, `*.tsx`, `*.jsx`, `*.vue`, `*.svelte`, `*.css`, `*.scss`, `*.html`, or when the slice description mentions UI, frontend, layout, design, Blazor, or React.
+
+If triggered:
+- Suggest: "This slice touches UI files. Consider running `/ui-smoke-test <url>` or `/ui-review <url>` for visual verification."
+- If brainstorm-design's visual companion was used during planning, suggest reviewing the implemented UI against the design mockups.
+- Do not block on UI verification — suggest it as an additional quality step.
+
+This is informational only. The slice is not blocked if UI verification is skipped.
 
 ---
 
