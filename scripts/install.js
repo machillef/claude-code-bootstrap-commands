@@ -117,14 +117,13 @@ function main() {
   console.log('  Check upstream?      \u2192  /upstream');
   console.log('');
 
-  // Install instructions — local path, no @ prefix
   if (tools.claudeCode) {
     log('To install as Claude Code plugin:');
-    console.log(`  /plugin install ${ARC_ROOT}`);
-    console.log('');
-    console.log('  Or from the marketplace:');
     console.log('  /plugin marketplace add machillef/claude-code-bootstrap-commands');
-    console.log('  /plugin install arc@claude-code-bootstrap-commands');
+    console.log('  /plugin install arc@machillef-arc');
+    console.log('');
+    console.log('  Or from local clone:');
+    console.log(`  /plugin install ${ARC_ROOT}`);
     console.log('');
   }
 

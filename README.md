@@ -1,4 +1,4 @@
-# arc v2.1.0
+# arc v2.1.1
 
 Disciplined development workflows for Claude Code and Codex. One plugin for the full lifecycle: bootstrap, plan, build (TDD), review, ship, learn.
 
@@ -25,8 +25,9 @@ Evolve instincts?    →  /evolve, /promote, /prune
 ## Getting Started
 
 ```bash
-# 1. Install
-/plugin install https://github.com/machillef/claude-code-bootstrap-commands
+# 1. Install (one-time)
+/plugin marketplace add machillef/claude-code-bootstrap-commands
+/plugin install arc@machillef-arc
 
 # 2. Start a feature in your repo
 /new-feature Add user authentication
@@ -191,26 +192,30 @@ Arc orchestrates *what* to do; [superpowers](https://github.com/obra/superpowers
 **Prerequisite:** Node.js v18+
 
 ```bash
-# Claude Code (simplest — from URL)
-/plugin install https://github.com/machillef/claude-code-bootstrap-commands
-
-# Claude Code (from marketplace)
+# Step 1: Add the marketplace (one-time)
 /plugin marketplace add machillef/claude-code-bootstrap-commands
-/plugin install arc@claude-code-bootstrap-commands
 
-# Claude Code (from local clone)
+# Step 2: Install the plugin
+/plugin install arc@machillef-arc
+
+# Optional: run setup helper (creates learning dirs)
+# git clone https://github.com/machillef/claude-code-bootstrap-commands
+# node scripts/install.js
+```
+
+**Alternative — local clone:**
+```bash
+git clone https://github.com/machillef/claude-code-bootstrap-commands
 /plugin install /path/to/claude-code-bootstrap-commands
+```
 
-# Codex
+**Codex:**
+```bash
 git clone https://github.com/machillef/claude-code-bootstrap-commands && cd claude-code-bootstrap-commands
 codex plugin install ./
-
-# After install, run setup helper (creates learning dirs):
-node scripts/install.js
-
-# Uninstall
-node scripts/uninstall.js
 ```
+
+**Uninstall:** `/plugin uninstall arc@machillef-arc`
 
 **Recommended companion:** Install [superpowers](https://github.com/obra/superpowers) for the full workflow:
 ```
