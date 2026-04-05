@@ -22,7 +22,7 @@ assumptions.
 | Command | Purpose |
 |---------|---------|
 | `/new-project` | Bootstrap a greenfield project |
-| `/new-feature` | Bootstrap an existing-repo initiative |
+| `/initiative` | Bootstrap an existing-repo initiative |
 | `/continue` | Continue an existing initiative (pick next slice) |
 | `/loop` | Chain all remaining slices in one session |
 | `/fix` | Fix bugs found during manual or acceptance testing |

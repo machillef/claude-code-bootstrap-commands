@@ -92,7 +92,7 @@ If `/continue <initiative> <new objective>` is invoked and all slices are alread
 
 If no new objective was provided (`/continue <initiative>` with no additional text), emit the End of Plan block as usual.
 
-**Triage gate:** If the new objective is materially different from the original design (new domain, different architecture, unrelated feature), recommend `/new-feature` for a fresh initiative instead of extending. Extend mode is for follow-up work within the same design, not for starting something new.
+**Triage gate:** If the new objective is materially different from the original design (new domain, different architecture, unrelated feature), recommend `/initiative` for a fresh initiative instead of extending. Extend mode is for follow-up work within the same design, not for starting something new.
 
 This avoids re-bootstrapping when the user wants to add polishing, follow-up work, or additional features to an existing initiative.
 

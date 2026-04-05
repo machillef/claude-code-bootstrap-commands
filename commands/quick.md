@@ -13,7 +13,7 @@ Small, bounded change in an existing codebase. No bootstrap. No full docs/ai/. M
 - Find how the codebase already does this (Grep/Glob, read 2-3 representative files)
 - Locate exact file(s) to change
 
-**Escalation gate:** If the change requires >3 files or the pattern doesn't exist yet, stop and tell the user to run `/new-feature` instead.
+**Escalation gate:** If the change requires >3 files or the pattern doesn't exist yet, stop and tell the user to run `/initiative` instead.
 
 ### 2. Apply Minimal Change (with TDD)
 - Replicate existing pattern. Do not improve surrounding code.

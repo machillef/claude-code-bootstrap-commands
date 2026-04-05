@@ -1,4 +1,4 @@
-# arc v2.1.1
+# arc v2.2.0
 
 Disciplined development workflows for Claude Code and Codex. One plugin for the full lifecycle: bootstrap, plan, build (TDD), review, ship, learn.
 
@@ -7,7 +7,7 @@ Arc solves the problem of multi-session software work losing context. Instead of
 ## Quick Reference
 
 ```
-Starting something?  →  /new-feature (existing code) or /new-project (from scratch)
+Starting something?  →  /initiative (existing code) or /new-project (from scratch)
 Working on it?       →  /continue (one slice) or /loop (chain all slices)
 Something broke?     →  /fix
 Need a review?       →  /review-loop
@@ -30,7 +30,7 @@ Evolve instincts?    →  /evolve, /promote, /prune
 /plugin install arc@machillef-arc
 
 # 2. Start a feature in your repo
-/new-feature Add user authentication
+/initiative Add user authentication
 
 # 3. Follow the guided design, then execute slice-by-slice:
 /continue auth-feature
@@ -42,7 +42,7 @@ Evolve instincts?    →  /evolve, /promote, /prune
 ## How It Works
 
 ```
-/new-feature or /new-project
+/initiative or /new-project
     ↓
 Design exploration → docs/ai/ created
     ↓
@@ -58,7 +58,7 @@ Learning system captures patterns automatically
 ### Example: Adding a Feature
 
 ```
-> /new-feature Add dark mode to the settings page
+> /initiative Add dark mode to the settings page
 
 Arc triages (medium), detects your React/TypeScript stack,
 runs design exploration, creates docs/ai/dark-mode-*, defines 3 slices.
@@ -95,7 +95,7 @@ Arc reopens the slice, runs 4-phase debugging (root cause → pattern analysis
 
 | Command | What it does |
 |---------|-------------|
-| `/new-feature` | Bootstrap existing repo: triage, design, docs/ai/, first slice |
+| `/initiative` | Bootstrap existing repo: triage, design, docs/ai/, first slice |
 | `/new-project` | Greenfield: requirements, stack, scaffold, docs/ai/ |
 | `/continue` | Execute next slice with TDD, verification, doc updates |
 | `/loop` | Chain all remaining slices in one session |
@@ -121,8 +121,8 @@ File set scales with scope:
 | Scope | Trigger | Files |
 |-------|---------|-------|
 | **Quick** | `/quick` | Log entry in `quick-changes-log.md` |
-| **Standard** | `/new-feature` (medium) | 4 files: status, slices, design, decisions |
-| **Full** | `/new-feature` (large), `/new-project` | 10 files: standard + scope-map, contracts, risks, plan, requirements, architecture-discovery |
+| **Standard** | `/initiative` (medium) | 4 files: status, slices, design, decisions |
+| **Full** | `/initiative` (large), `/new-project` | 10 files: standard + scope-map, contracts, risks, plan, requirements, architecture-discovery |
 
 ## Bundled Agents
 
@@ -232,7 +232,7 @@ node scripts/install.js              # Install v2
 
 | v1 | v2 |
 |----|-----|
-| `/bootstrap-existing` | `/new-feature` |
+| `/bootstrap-existing` | `/initiative` |
 | `/bootstrap-new` | `/new-project` |
 | `/continue-work` | `/continue` |
 | `/loop-work` | `/loop` |

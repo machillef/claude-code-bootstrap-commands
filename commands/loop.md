@@ -16,11 +16,11 @@ Extract from `$ARGUMENTS`:
 
 **How to identify the initiative name:** The initiative name is the first non-flag token that matches an existing `docs/ai/<token>-status.md` file. If no token matches, trigger auto-detection.
 
-**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature` or `/new-project`.
+**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/initiative` or `/new-project`.
 
 ## Prerequisites
 
-If `docs/ai/<initiative>-status.md` does not exist, stop: "No initiative found for `<initiative>`. Run `/new-feature <initiative>` or `/new-project <initiative>` first."
+If `docs/ai/<initiative>-status.md` does not exist, stop: "No initiative found for `<initiative>`. Run `/initiative <initiative>` or `/new-project <initiative>` first."
 
 If any slice is in "Needs Fix" state, stop: "Slice <N> has reported bugs. Run `/fix <initiative>` first, then resume with `/loop <initiative>`."
 

@@ -28,7 +28,7 @@ Extract from the request:
 
 **How to identify the initiative name:** The initiative name is a token that matches an existing `docs/ai/<token>-status.md` file. Check each non-flag word in $ARGUMENTS against the filesystem. If one matches, use it as the initiative name and treat the rest as the bug description. If none match, treat the entire argument as a bug description and trigger auto-detection.
 
-**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress, Not Started, or Needs Fix slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature` or `/new-project`.
+**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress, Not Started, or Needs Fix slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/initiative` or `/new-project`.
 
 ## Procedure
 
@@ -47,7 +47,7 @@ Identify the target slice:
 - If the target slice is `In Progress` → tell the user: "This slice is still in progress. Keep working, or use `/continue <initiative>` to resume."
 - If the target slice is `Not Started` → tell the user: "This slice hasn't been started. Use `/continue <initiative>` to implement it."
 - If the target slice is `Blocked` → tell the user: "This slice is blocked. Resolve the blocker first, then use `/continue <initiative>`."
-- If no initiative docs exist → tell the user: "No initiative found. Use `/new-feature` or `/new-project` first."
+- If no initiative docs exist → tell the user: "No initiative found. Use `/initiative` or `/new-project` first."
 
 ### 2. Reopen Slice
 

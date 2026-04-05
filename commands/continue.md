@@ -38,7 +38,7 @@ Which initiative? (number or name)
 **No initiatives found:** Print:
 ```
 No active initiatives in docs/ai/. Start one with:
-  /new-feature <description>   — for existing code
+  /initiative <description>   — for existing code
   /new-project <description>   — for greenfield
 ```
 

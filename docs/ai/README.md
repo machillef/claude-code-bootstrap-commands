@@ -9,8 +9,8 @@ docs/ai/ scales to the size of the change. Three tiers:
 | Tier | Trigger | Files Created |
 |------|---------|---------------|
 | **Quick** | `/quick` | Single entry appended to `quick-changes-log.md` |
-| **Standard** | `/new-feature` (medium scope) | 4 files: status, slices, design, decisions |
-| **Full** | `/new-feature` (large scope), `/new-project` | 10 files: status, slices, design, decisions, scope-map, requirements, plan, contracts, risks, architecture-discovery |
+| **Standard** | `/initiative` (medium scope) | 4 files: status, slices, design, decisions |
+| **Full** | `/initiative` (large scope), `/new-project` | 10 files: status, slices, design, decisions, scope-map, requirements, plan, contracts, risks, architecture-discovery |
 
 **Quick** changes need no initiative files -- just a log entry with date, description, and files touched.
 

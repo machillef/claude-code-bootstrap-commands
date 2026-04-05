@@ -22,5 +22,5 @@ All slices are complete.
 Initiative is complete. The arc learning system captures patterns automatically via observation hooks.
 <if any DoD criterion is NOT MET:>
 If unmet criteria are bugs in completed slices: Run `/fix <initiative>` to address them.
-If unmet criteria require new work or re-design: Run `/new-feature <initiative>-fixes`.
+If unmet criteria require new work or re-design: Run `/initiative <initiative>-fixes`.
 ---

@@ -14,4 +14,4 @@ Use the `workflow-new-repo` skill. Follow it exactly — all steps, all gates, a
 
 The skill handles: confirm greenfield → requirements → design exploration → stack decision (wait for user confirmation) → scaffold → docs/ai/ → arc agent wiring → stop.
 
-If the user already has code, redirect to `/new-feature` instead.
+If the user already has code, redirect to `/initiative` instead.

@@ -15,7 +15,7 @@ Extract from the request:
 
 **How to identify the initiative name:** The initiative name is a token that matches an existing `docs/ai/<token>-status.md` file. If no token matches, trigger auto-detection.
 
-**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask. If none found, stop with guidance to run `/new-feature` or `/new-project`.
+**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask. If none found, stop with guidance to run `/initiative` or `/new-project`.
 
 If the user says "finish detour" or "merge detour" or "complete detour", skip to **Phase: Finish**.
 If the user says "continue detour" or "resume detour", skip to **Phase: Continue**.
@@ -31,7 +31,7 @@ Read:
 - `docs/ai/<initiative>-status.md` — current slice state
 - `docs/ai/<initiative>-slices.md` — slice plan
 
-Identify the current in-progress slice (if any). If no initiative docs exist, stop and tell the user to run `/new-feature` or `/new-project` first.
+Identify the current in-progress slice (if any). If no initiative docs exist, stop and tell the user to run `/initiative` or `/new-project` first.
 
 ### 2. Triage Detour Size
 
