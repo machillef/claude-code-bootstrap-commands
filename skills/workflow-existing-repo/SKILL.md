@@ -21,6 +21,8 @@ description: "Bootstrap existing repo: triage size, detect stack, map scope, cre
 
 If any input is missing, infer conservatively from the repo. Do not invent requirements.
 
+**Critical boundary:** This workflow creates documentation only. Do NOT run execution-loop steps (Step 0: Stale Check, Step 7: Verify, etc.), do NOT dispatch arc agents for code review, do NOT run builds or tests, and do NOT verify existing implementation. Even if the code already exists in the repo, your job is to document the initiative — verification happens when the user runs `/continue`.
+
 **Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
 
 ---

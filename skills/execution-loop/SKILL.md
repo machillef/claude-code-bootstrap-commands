@@ -11,6 +11,13 @@ Use this workflow to continue an existing initiative after bootstrap.
 
 Intentionally conservative: one slice at a time, narrow implementation, clear verification, doc update, stop cleanly.
 
+**Output rule:** Always print every step number, even when skipping. If a step is not applicable (e.g., no research needed, no behavioral changes for TDD, verification-only slice), emit a one-liner:
+```
+Step 4: Research — Skipped (verification-only, no new implementation)
+Step 5: TDD — Skipped (no behavioral changes in this slice)
+```
+Never silently jump from Step 1 to Step 7 — the user needs to see that you considered each step.
+
 ## Skill Contents
 
 - `templates/` — copy these when creating docs/ai entries (status-entry, end-of-plan, stop-output, fix-entry, fix-stop-output)

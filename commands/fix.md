@@ -4,6 +4,18 @@ description: Fix bugs found during manual or acceptance testing of a completed s
 
 **Request:** $ARGUMENTS
 
+## Immediate Acknowledgment
+
+Before doing anything else — before reading files, before thinking — print this immediately so the user knows you're working:
+
+```
+Bug report received. Loading initiative state and diagnosing...
+```
+
+Then proceed with the full workflow below.
+
+---
+
 Bugs were found after a slice passed automated verification. This command re-opens the slice, diagnoses and fixes the bugs with full workflow discipline, and produces structured output.
 
 ## Parse Arguments
