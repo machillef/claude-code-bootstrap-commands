@@ -65,9 +65,11 @@ Answer these questions from the data:
 
 For each pattern identified in Step 3:
 
-1. **Is it a gotcha?** → Create a file in the appropriate skill's `gotchas/` directory
-2. **Is it a workflow improvement?** → Note as a recommendation for the workflow skills
-3. **Is it a new skill candidate?** → Flag for creation
+**Privacy rule:** All learned content is written to `~/.claude/arc/evolved/`, NEVER inside the repo. This prevents learned data from being committed to public repositories.
+
+1. **Is it a gotcha?** → Create a file under `~/.claude/arc/evolved/gotchas/`
+2. **Is it a workflow improvement?** → Note as a recommendation in `~/.claude/arc/evolved/recommendations.md`
+3. **Is it a new skill candidate?** → Flag for creation under `~/.claude/arc/evolved/skills/`
 
 ### Step 5: Append to Initiative History
 

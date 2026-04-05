@@ -14,8 +14,8 @@ Thumbs.db
 # Node.js
 node_modules/
 
-# Learning system data (user-specific, not committed)
-learning/observations/
+# Learning system data (user-specific, never committed)
+.claude/skills/learned/
 
 # Worktrees
 .worktrees/

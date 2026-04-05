@@ -131,10 +131,10 @@ Validated: <exact commands run and pass/fail>
 
 **If applicable:**
 - Update `docs/ai/<initiative>-decisions.md` if the fix changed the implementation approach
-- Cross-initiative learning: ask yourself — why did the original Step 9 re-assessment miss this? If the answer is a reusable pattern, save it:
-  - Execution-loop failure pattern → `gotchas/` in the execution-loop skill
-  - Project-specific → `.claude/skills/learned/`
-  - Cross-project → `~/.claude/skills/learned/`
+- Cross-initiative learning: ask yourself — why did the original Step 9 re-assessment miss this? If the answer is a reusable pattern, save it outside the repo:
+  - Execution-loop failure pattern → `~/.claude/arc/evolved/gotchas/`
+  - Project-specific → `~/.claude/arc/projects/<hash>/learned/`
+  - Cross-project → `~/.claude/arc/evolved/`
 
 ### 8. Review After Fixes (if --review-after)
 

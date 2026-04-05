@@ -21,6 +21,21 @@ const path = require('path');
 const crypto = require('crypto');
 const { getProjectId, getProjectDir } = require('../lib/project-id');
 const { escapeYaml, parseInstinctFrontmatter } = require('../lib/instinct-parser');
+const { SECRET_PATTERNS } = require('../lib/secret-patterns');
+
+/**
+ * Secondary scrub — defense-in-depth. Even though observations are scrubbed
+ * at capture time, we scrub again before writing instincts. This catches
+ * secrets that slipped through pattern gaps in the upstream scrub.
+ */
+function scrub(text) {
+  if (!text) return text;
+  let result = String(text);
+  for (const { pattern } of SECRET_PATTERNS) {
+    result = result.replace(new RegExp(pattern.source, pattern.flags || 'gi'), '[REDACTED]');
+  }
+  return result;
+}
 
 const MIN_OBSERVATIONS = 20;
 const TAIL_COUNT = 50;
@@ -70,10 +85,10 @@ function detectToolPatterns(observations) {
       const [tool, context] = key.split(':');
       patterns.push({
         type: 'tool-pattern',
-        trigger: `When working with ${context || tool} operations`,
-        action: `The ${tool} tool was used frequently (${count} times). This is a common workflow pattern for this project.`,
+        trigger: scrub(`When working with ${context || tool} operations`),
+        action: scrub(`The ${tool} tool was used frequently (${count} times). This is a common workflow pattern for this project.`),
         domain: 'tooling',
-        evidence: `Observed ${count} uses of ${tool} for "${context}" in a single session`,
+        evidence: scrub(`Observed ${count} uses of ${tool} for "${context}" in a single session`),
       });
     }
   }
@@ -106,10 +121,10 @@ function detectErrorRecoveryPatterns(observations) {
     if (isError && next.tool !== current.tool && !nextIsError) {
       patterns.push({
         type: 'error-recovery',
-        trigger: `When ${current.tool} fails with "${current.summary}"`,
-        action: `Switch to ${next.tool} as an alternative approach.`,
+        trigger: scrub(`When ${current.tool} fails with "${current.summary}"`),
+        action: scrub(`Switch to ${next.tool} as an alternative approach.`),
         domain: 'debugging',
-        evidence: `Observed ${current.tool} failure followed by ${next.tool} recovery in session`,
+        evidence: scrub(`Observed ${current.tool} failure followed by ${next.tool} recovery in session`),
       });
     }
   }

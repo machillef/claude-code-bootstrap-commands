@@ -39,7 +39,7 @@ Cluster: debugging (5 instincts, avg confidence: 0.6)
     - "When Bash fails with permission" (0.7)
     - "When build errors mention missing header" (0.5)
     - "Switch to Edit when Write fails on existing file" (0.6)
-  Proposal: Add gotcha file to execution-loop/gotchas/common-tool-failures.md
+  Proposal: Add gotcha file to ~/.claude/arc/evolved/gotchas/common-tool-failures.md
   Action: [approve / skip / modify]
 
 Cluster: git (3 instincts, avg confidence: 0.8)
@@ -53,8 +53,16 @@ Cluster: git (3 instincts, avg confidence: 0.8)
 
 ### 4. Execute Approved Proposals
 
+**Privacy rule:** All evolved content is written to `~/.claude/arc/evolved/`, NEVER inside the repo. This prevents learned data from being committed to public repositories. The structure mirrors the skill layout:
+```
+~/.claude/arc/evolved/
+  gotchas/
+  references/
+  skills/
+```
+
 For each approved proposal:
-- Create the gotcha/reference/skill file
+- Create the gotcha/reference/skill file under `~/.claude/arc/evolved/`
 - Mark the source instincts with `evolved_into: <file-path>` in their YAML
 - Do NOT delete the instincts — they continue to track confidence
 
