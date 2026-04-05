@@ -19,20 +19,23 @@ If `$ARGUMENTS` provides a matching initiative name, use it directly.
 If no match is found or `$ARGUMENTS` is empty, auto-detect from `docs/ai/`:
 
 1. Scan for `docs/ai/*-status.md` files
-2. For each, read the file and check for active slices (In Progress, Not Started, or Needs Fix)
-3. Filter to only initiatives with at least one active slice
+2. For each, read the file and check for slices in any state (In Progress, Not Started, Needs Fix, or all Complete)
+3. Prioritize active initiatives (with In Progress/Not Started/Needs Fix slices) over completed ones
 
-**One active initiative found:** Use it automatically. Print: `Auto-detected initiative: <name>. Continuing...`
+**One initiative found:** Use it automatically. Print: `Auto-detected initiative: <name>. Continuing...`
+If all slices are Complete, the execution-loop will enter Extend Mode — this is expected.
 
-**Multiple active initiatives found:** Present a numbered list and ask the user to pick:
+**Multiple initiatives found:** Present a numbered list and ask the user to pick:
 ```
-Multiple active initiatives found:
+Active initiatives:
   1. auth-feature (Slice 3 of 5 — In Progress)
   2. dark-mode (Slice 1 of 3 — Not Started)
+Completed (extend mode):
+  3. onboarding-flow (all 4 slices Complete)
 Which initiative? (number or name)
 ```
 
-**No active initiatives found:** Print:
+**No initiatives found:** Print:
 ```
 No active initiatives in docs/ai/. Start one with:
   /new-feature <description>   — for existing code

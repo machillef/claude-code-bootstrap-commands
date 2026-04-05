@@ -9,9 +9,13 @@ Temporary diversion from the active slice plan. Works in an isolated git worktre
 ## Parse Arguments
 
 Extract from the request:
-- **Initiative name** (required) — which initiative this detour belongs to
+- **Initiative name** (optional — auto-detected if omitted) — which initiative this detour belongs to
 - **Detour description** — what the diversion is about
 - **Phase hint** — is the user starting a new detour, continuing one, or finishing one?
+
+**How to identify the initiative name:** The initiative name is a token that matches an existing `docs/ai/<token>-status.md` file. If no token matches, trigger auto-detection.
+
+**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask. If none found, stop with guidance to run `/new-feature` or `/new-project`.
 
 If the user says "finish detour" or "merge detour" or "complete detour", skip to **Phase: Finish**.
 If the user says "continue detour" or "resume detour", skip to **Phase: Continue**.

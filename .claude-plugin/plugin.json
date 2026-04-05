@@ -1,7 +1,7 @@
 {
   "name": "arc",
   "description": "Disciplined development workflows for Claude Code & Codex: docs/ai/-driven initiative management, TDD execution loops, multi-pass reviews, self-learning, and worktree-isolated detours",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": {
     "name": "machillef"
   },
