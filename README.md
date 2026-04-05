@@ -44,7 +44,7 @@ Check upstream?      →  /upstream
     ↓
 Design exploration → docs/ai/ created
     ↓
-/continue ── TDD → Build → Verify → Review ──┐
+/continue ── TDD → Build → Verify → Review ────┐
     ↓                                          │
   (next slice)          /fix for bugs ─────────┘
     ↓                   /detour for sidebars
