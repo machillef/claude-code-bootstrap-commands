@@ -150,19 +150,30 @@ Arc orchestrates *what* to do; [superpowers](https://github.com/obra/superpowers
 **Prerequisite:** Node.js v18+
 
 ```bash
-# Claude Code
-/plugin marketplace add machillef/arc
-/plugin install arc
+# Claude Code (simplest — from URL)
+/plugin install https://github.com/machillef/claude-code-bootstrap-commands
+
+# Claude Code (from marketplace)
+/plugin marketplace add machillef/claude-code-bootstrap-commands
+/plugin install arc@claude-code-bootstrap-commands
+
+# Claude Code (from local clone)
+/plugin install /path/to/claude-code-bootstrap-commands
 
 # Codex
 git clone https://github.com/machillef/claude-code-bootstrap-commands && cd claude-code-bootstrap-commands
 codex plugin install ./
 
-# Manual (both)
+# After install, run setup helper (creates learning dirs):
 node scripts/install.js
 
 # Uninstall
 node scripts/uninstall.js
+```
+
+**Recommended companion:** Install [superpowers](https://github.com/obra/superpowers) for the full workflow:
+```
+/plugin install superpowers@claude-plugins-official
 ```
 
 ## Migration from v1
