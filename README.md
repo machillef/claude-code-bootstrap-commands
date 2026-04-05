@@ -1,4 +1,4 @@
-# arc v2.3.0
+# arc v2.3.1
 
 Disciplined development workflows for Claude Code and Codex. One plugin for the full lifecycle: bootstrap, plan, build (TDD), review, ship, learn.
 
