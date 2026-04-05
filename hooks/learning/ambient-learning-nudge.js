@@ -16,7 +16,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const { getProjectId } = require('../lib/project-id');
+const { getProjectId, getProjectDir } = require('../lib/project-id');
 const { parseInstinctFrontmatter } = require('../lib/instinct-parser');
 
 const MARKER_DIR = path.join(os.homedir(), '.claude', 'arc', '.markers');
@@ -74,7 +74,8 @@ process.stdin.on('end', () => {
     const home = process.env.HOME || process.env.USERPROFILE || '/tmp';
     const projectId = getProjectId();
 
-    const projectInstinctsDir = path.join(home, '.claude', 'arc', 'projects', projectId, 'instincts');
+    const projectDir = getProjectDir(projectId);
+    const projectInstinctsDir = path.join(projectDir, 'instincts');
     const globalInstinctsDir = path.join(home, '.claude', 'arc', 'instincts', 'global');
     const evolvedDir = path.join(home, '.claude', 'arc', 'evolved');
 
@@ -84,7 +85,7 @@ process.stdin.on('end', () => {
     const evolvedInstincts = loadInstincts(path.join(evolvedDir, 'gotchas'));
 
     const allInstincts = [...projectInstincts, ...globalInstincts, ...evolvedInstincts];
-    const highConfidence = allInstincts.filter((i) => i.confidence > CONFIDENCE_THRESHOLD);
+    const highConfidence = allInstincts.filter((i) => i.confidence >= CONFIDENCE_THRESHOLD);
 
     if (highConfidence.length > 0) {
       process.stderr.write('[arc] Learned instincts for this project:\n');

@@ -201,7 +201,10 @@ function findMatchingInstinct(pattern, existing) {
 function bumpInstinct(instinctPath, currentConfidence, currentObservations) {
   try {
     let content = fs.readFileSync(instinctPath, 'utf8');
-    const newConfidence = Math.min(currentConfidence + CONFIDENCE_BUMP, MAX_CONFIDENCE);
+    const newConfidence = Math.min(
+      Math.round((currentConfidence + CONFIDENCE_BUMP) * 10) / 10,
+      MAX_CONFIDENCE
+    );
     const newObservations = currentObservations + 1;
     const now = new Date().toISOString();
 

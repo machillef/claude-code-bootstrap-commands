@@ -27,8 +27,14 @@ function parseInstinctFrontmatter(content) {
   const yaml = frontmatter[1];
 
   const extractStr = (key) => {
-    const match = yaml.match(new RegExp(`^${key}:\\s*"?([^"\\n]+)"?`, 'm'));
-    return match ? match[1].trim() : null;
+    // Handle escaped quotes inside double-quoted YAML values
+    const match = yaml.match(new RegExp(`^${key}:\\s*"((?:[^"\\\\]|\\\\.)*)"`, 'm'));
+    if (match) {
+      return match[1].replace(/\\"/g, '"').replace(/\\n/g, '\n').replace(/\\\\/g, '\\').trim();
+    }
+    // Fallback: unquoted value
+    const unquoted = yaml.match(new RegExp(`^${key}:\\s*([^\\n]+)`, 'm'));
+    return unquoted ? unquoted[1].trim() : null;
   };
 
   const extractNum = (key) => {

@@ -34,8 +34,6 @@ function scrub(text) {
   return text.replace(SECRET_RE, '[REDACTED]');
 }
 
-// getProjectId and getProjectDir imported from shared module (see require at top)
-
 function summarize(input) {
   const toolName = input.tool_name || 'unknown';
   const toolInput = input.tool_input || {};
