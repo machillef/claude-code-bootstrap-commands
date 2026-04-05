@@ -70,6 +70,10 @@ Learning system captures patterns automatically
 | `/skill-health` | Audit installed skills for structural quality |
 | `/skill-improve` | Iteratively improve a specific skill |
 | `/upstream` | Check tracked upstream repos for changes |
+| `/instinct-status` | Show learned instincts with confidence scores |
+| `/evolve` | Cluster related instincts into skills or gotchas |
+| `/promote` | Promote high-confidence project instincts to global |
+| `/prune` | Delete stale low-confidence instincts |
 
 ## docs/ai/ — Persistent State
 
@@ -122,7 +126,7 @@ Runs automatically every session — no manual commands needed:
 
 Data: `~/.claude/arc/projects/<hash>/` (per-project), `~/.claude/arc/instincts/global/` (cross-project).
 
-Planned maintenance commands: `evolve` (cluster instincts into skills), `promote` (project → global), `prune` (remove stale). These will be added in a future release.
+Maintenance commands: `/instinct-status` (view learned instincts), `/evolve` (cluster into skills), `/promote` (project → global), `/prune` (remove stale).
 
 ## Architecture
 
