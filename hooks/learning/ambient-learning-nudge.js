@@ -76,11 +76,14 @@ process.stdin.on('end', () => {
 
     const projectInstinctsDir = path.join(home, '.claude', 'arc', 'projects', projectId, 'instincts');
     const globalInstinctsDir = path.join(home, '.claude', 'arc', 'instincts', 'global');
+    const evolvedDir = path.join(home, '.claude', 'arc', 'evolved');
 
     const projectInstincts = loadInstincts(projectInstinctsDir);
     const globalInstincts = loadInstincts(globalInstinctsDir);
+    // Also load evolved gotchas/skills (created by /evolve and /retro)
+    const evolvedInstincts = loadInstincts(path.join(evolvedDir, 'gotchas'));
 
-    const allInstincts = [...projectInstincts, ...globalInstincts];
+    const allInstincts = [...projectInstincts, ...globalInstincts, ...evolvedInstincts];
     const highConfidence = allInstincts.filter((i) => i.confidence > CONFIDENCE_THRESHOLD);
 
     if (highConfidence.length > 0) {
@@ -92,6 +95,17 @@ process.stdin.on('end', () => {
         process.stderr.write(`  - [${conf}%] ${trigger} → ${action}\n`);
       }
       process.stderr.write('\n');
+    }
+
+    // Check for evolved gotchas (markdown files from /evolve and /retro)
+    const gotchaDir = path.join(evolvedDir, 'gotchas');
+    if (fs.existsSync(gotchaDir)) {
+      try {
+        const gotchaFiles = fs.readdirSync(gotchaDir).filter(f => f.endsWith('.md'));
+        if (gotchaFiles.length > 0) {
+          process.stderr.write(`[arc] ${gotchaFiles.length} evolved gotcha(s) available at ~/.claude/arc/evolved/gotchas/\n`);
+        }
+      } catch { /* best-effort */ }
     }
 
     // Always inject learning guidance
