@@ -8,7 +8,7 @@
 
 **What "done" means:**
 - Observer reads observations.jsonl
-- Detects repeated tool patterns (same tool sequence appearing 3+ times)
+- Detects repeated tool patterns (same tool used 5+ times on similar targets)
 - Detects error-recovery patterns (failed tool call followed by successful alternative)
 - Creates instinct YAML files at `~/.claude/arc/projects/<hash>/instincts/`
 - Existing instincts with matching triggers get confidence bumped (not duplicated)

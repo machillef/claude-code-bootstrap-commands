@@ -20,6 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { getProjectId, getProjectDir } = require('../lib/project-id');
+const { escapeYaml, parseInstinctFrontmatter } = require('../lib/instinct-parser');
 
 const MIN_OBSERVATIONS = 20;
 const TAIL_COUNT = 50;
@@ -95,13 +96,20 @@ function detectErrorRecoveryPatterns(observations) {
                     currentSummary.includes('denied') ||
                     currentSummary.includes('blocked');
 
-    if (isError && next.tool !== current.tool) {
+    // Verify the next tool call is NOT also an error (avoid false recovery chains)
+    const nextSummary = (next.summary || '').toLowerCase();
+    const nextIsError = nextSummary.includes('error') ||
+                        nextSummary.includes('fail') ||
+                        nextSummary.includes('denied') ||
+                        nextSummary.includes('blocked');
+
+    if (isError && next.tool !== current.tool && !nextIsError) {
       patterns.push({
         type: 'error-recovery',
         trigger: `When ${current.tool} fails with "${current.summary}"`,
         action: `Switch to ${next.tool} as an alternative approach.`,
         domain: 'debugging',
-        evidence: `Observed ${current.tool} failure followed by successful ${next.tool} in session`,
+        evidence: `Observed ${current.tool} failure followed by ${next.tool} recovery in session`,
       });
     }
   }
@@ -133,15 +141,12 @@ function loadExistingInstincts(instinctsDir) {
     for (const file of files) {
       try {
         const content = fs.readFileSync(path.join(instinctsDir, file), 'utf8');
-        // Simple YAML frontmatter parsing — extract trigger and confidence
-        const triggerMatch = content.match(/^trigger:\s*"(.+)"/m);
-        const confidenceMatch = content.match(/^confidence:\s*([\d.]+)/m);
-        const observationsMatch = content.match(/^observations:\s*(\d+)/m);
-        if (triggerMatch) {
+        const parsed = parseInstinctFrontmatter(content);
+        if (parsed && parsed.trigger) {
           instincts[file] = {
-            trigger: triggerMatch[1],
-            confidence: confidenceMatch ? parseFloat(confidenceMatch[1]) : NEW_INSTINCT_CONFIDENCE,
-            observations: observationsMatch ? parseInt(observationsMatch[1], 10) : 1,
+            trigger: parsed.trigger,
+            confidence: parsed.confidence != null ? parsed.confidence : NEW_INSTINCT_CONFIDENCE,
+            observations: parsed.observations != null ? parsed.observations : 1,
             path: path.join(instinctsDir, file),
           };
         }
@@ -153,9 +158,17 @@ function loadExistingInstincts(instinctsDir) {
 }
 
 /**
- * Check if a detected pattern matches an existing instinct (by trigger substring).
+ * Check if a detected pattern matches an existing instinct.
+ * Fast path: exact trigger match. Fallback: 50% word overlap (fuzzy).
  */
 function findMatchingInstinct(pattern, existing) {
+  // Fast path: exact match
+  for (const [file, instinct] of Object.entries(existing)) {
+    if (instinct.trigger === pattern.trigger) {
+      return { file, ...instinct };
+    }
+  }
+  // Fuzzy match: 50% word overlap (known limitation — broad triggers may over-match)
   const patternWords = pattern.trigger.toLowerCase().split(/\s+/).filter(w => w.length > 3);
   for (const [file, instinct] of Object.entries(existing)) {
     const instinctLower = instinct.trigger.toLowerCase();
@@ -193,16 +206,22 @@ function createInstinct(pattern, projectId, projectName, instinctsDir) {
   const id = generateInstinctId(pattern.trigger);
   const now = new Date().toISOString();
 
+  const eTrigger = escapeYaml(pattern.trigger);
+  const eAction = escapeYaml(pattern.action);
+  const eDomain = escapeYaml(pattern.domain);
+  const eName = escapeYaml(projectName);
+  const eEvidence = escapeYaml(pattern.evidence);
+
   const content = `---
 id: "${id}"
-trigger: "${pattern.trigger}"
-action: "${pattern.action}"
+trigger: "${eTrigger}"
+action: "${eAction}"
 confidence: ${NEW_INSTINCT_CONFIDENCE}
-domain: "${pattern.domain}"
+domain: "${eDomain}"
 source: "session-observation"
 scope: "project"
 project_id: "${projectId}"
-project_name: "${projectName}"
+project_name: "${eName}"
 created: "${now}"
 last_seen: "${now}"
 observations: 1

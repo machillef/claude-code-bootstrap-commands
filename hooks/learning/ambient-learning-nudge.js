@@ -17,38 +17,11 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { getProjectId } = require('../lib/project-id');
+const { parseInstinctFrontmatter } = require('../lib/instinct-parser');
 
 const MARKER_DIR = path.join(os.homedir(), '.claude', 'arc', '.markers');
 const MARKER = path.join(MARKER_DIR, `.arc-learning-nudge-${process.ppid}`);
 const CONFIDENCE_THRESHOLD = 0.5;
-
-/**
- * Parse YAML frontmatter from an instinct file.
- * Simple regex extraction — no full YAML parser needed.
- */
-function parseInstinctYaml(content) {
-  const frontmatter = content.match(/^---\n([\s\S]*?)\n---/);
-  if (!frontmatter) return null;
-
-  const yaml = frontmatter[1];
-  const extract = (key) => {
-    const match = yaml.match(new RegExp(`^${key}:\\s*"?([^"\\n]+)"?`, 'm'));
-    return match ? match[1].trim() : null;
-  };
-  const extractNum = (key) => {
-    const match = yaml.match(new RegExp(`^${key}:\\s*([\\d.]+)`, 'm'));
-    return match ? parseFloat(match[1]) : null;
-  };
-
-  return {
-    id: extract('id'),
-    trigger: extract('trigger'),
-    action: extract('action'),
-    confidence: extractNum('confidence'),
-    domain: extract('domain'),
-    scope: extract('scope'),
-  };
-}
 
 /**
  * Load instincts from a directory of YAML files.
@@ -62,7 +35,7 @@ function loadInstincts(dir) {
     for (const file of files) {
       try {
         const content = fs.readFileSync(path.join(dir, file), 'utf8');
-        const instinct = parseInstinctYaml(content);
+        const instinct = parseInstinctFrontmatter(content);
         if (instinct && typeof instinct.confidence === 'number') {
           instincts.push(instinct);
         }
@@ -92,6 +65,7 @@ process.stdin.on('end', () => {
   try {
     fs.mkdirSync(MARKER_DIR, { recursive: true, mode: 0o700 });
     fs.writeFileSync(MARKER, String(Date.now()));
+    try { fs.chmodSync(MARKER, 0o600); } catch {}
   } catch {
     // Continue anyway
   }

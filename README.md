@@ -54,6 +54,42 @@ Design exploration → docs/ai/ created
 Learning system captures patterns automatically
 ```
 
+### Example: Adding a Feature
+
+```
+> /new-feature Add dark mode to the settings page
+
+Arc triages (medium), detects your React/TypeScript stack,
+runs design exploration, creates docs/ai/dark-mode-*, defines 3 slices.
+
+> /continue dark-mode
+
+Arc picks Slice 1, writes failing test, implements, verifies build+tests,
+dispatches typescript-reviewer, updates status. Stops cleanly.
+
+> /continue dark-mode     ← repeat for each slice
+> /review-loop dark-mode --passes 3
+> /retro dark-mode
+```
+
+### Example: Quick Fix
+
+```
+> /quick Fix the broken import in utils/format.ts
+
+Arc finds the pattern, applies the fix, self-reviews, logs to quick-changes-log.
+No docs/ai/ overhead. Done in 30 seconds.
+```
+
+### Example: Bug in Production
+
+```
+> /fix dark-mode — toggle doesn't persist after page reload
+
+Arc reopens the slice, runs 4-phase debugging (root cause → pattern analysis
+→ hypothesis → TDD fix), verifies, updates docs.
+```
+
 ## Commands
 
 | Command | What it does |
@@ -136,7 +172,7 @@ Maintenance commands: `/instinct-status` (view learned instincts), `/evolve` (cl
 skills/          7 workflow skills (shared across platforms)
 agents/          11 reviewers, resolvers, and specialists
 agent-prompts/   9 shared review rubrics
-commands/        14 slash commands
+commands/        18 slash commands
 hooks/           13 hooks (safety + operational + learning) + 2 shared libs
 learning/        Instinct config and templates
 manifests/       Upstream repo tracking
