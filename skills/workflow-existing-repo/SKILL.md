@@ -21,7 +21,13 @@ description: "Bootstrap existing repo: triage size, detect stack, map scope, cre
 
 If any input is missing, infer conservatively from the repo. Do not invent requirements.
 
-**Critical boundary:** This workflow creates documentation only. Do NOT run execution-loop steps (Step 0: Stale Check, Step 7: Verify, etc.), do NOT dispatch arc agents for code review, do NOT run builds or tests, and do NOT verify existing implementation. Even if the code already exists in the repo, your job is to document the initiative — verification happens when the user runs `/continue`.
+**Critical boundary:** This workflow creates documentation only. Do NOT run any execution-loop steps (Steps 0-12). Specifically:
+- Do NOT run builds, tests, or validation commands to verify implementation correctness
+- Do NOT dispatch arc agents (cpp-reviewer, security-audit, etc.) for code review
+- Do NOT apply TDD, debugging, or re-assessment steps
+- Running a command to *discover* the stack (e.g., checking versions, reading manifests) is allowed. Running commands to *verify* implementation correctness is not.
+
+Even if the code already exists in the repo, your job is to document the initiative — verification happens when the user runs `/continue`.
 
 **Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
 
@@ -55,7 +61,7 @@ Systematically catalog before forming any opinions. Check in order:
 **Build & Test**
 - Build command: `package.json` scripts, `Makefile`, `justfile`, `taskfile.yml`
 - Test framework: identify from deps (Jest, Vitest, pytest, go test, xunit, RSpec) and from CI config
-- Test runner verification: confirm you can run a single test in isolation (needed for TDD cycle)
+- Test runner: identify the command to run a single test in isolation (needed for TDD cycle in `/continue`)
 - Lint/format tooling
 
 **CI/CD**

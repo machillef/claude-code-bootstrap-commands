@@ -6,7 +6,7 @@ description: Fix bugs found during manual or acceptance testing of a completed s
 
 ## Immediate Acknowledgment
 
-Before doing anything else — before reading files, before thinking — print this immediately so the user knows you're working:
+Your first output line must be the message below. Print it before any file reads, argument parsing, or analysis. Use the exact text — do not customize it. Users experience minutes of silence otherwise.
 
 ```
 Bug report received. Loading initiative state and diagnosing...

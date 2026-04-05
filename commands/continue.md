@@ -4,10 +4,13 @@ description: Continue an existing initiative. Loads repo state, picks next slice
 
 **Initiative:** $ARGUMENTS
 
-Before reading any files or thinking, print immediately:
+Your first output line must be the message below. Print it before any file reads or analysis. Use the exact text — do not customize it. Users experience minutes of silence otherwise.
+
 ```
-Continuing initiative: <name>. Loading state...
+Continuing initiative. Loading state...
 ```
+
+If no initiative name is provided in $ARGUMENTS, print: `No initiative specified. Usage: /continue <initiative-name>` and stop.
 
 Then use the `execution-loop` skill. Follow it exactly — all steps, all gates, all output formats.
 
