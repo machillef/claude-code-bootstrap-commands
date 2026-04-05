@@ -24,8 +24,7 @@ Check upstream?      →  /upstream
 
 ```bash
 # 1. Install
-/plugin marketplace add machillef/arc
-/plugin install arc
+/plugin install https://github.com/machillef/claude-code-bootstrap-commands
 
 # 2. Start a feature in your repo
 /new-feature Add user authentication

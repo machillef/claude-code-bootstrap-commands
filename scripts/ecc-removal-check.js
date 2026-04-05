@@ -47,11 +47,13 @@ function checkSettings() {
   ];
   for (const f of settingsFiles) {
     if (!fs.existsSync(f)) continue;
-    const content = fs.readFileSync(f, 'utf8');
-    if (content.includes('everything-claude-code') || content.includes('ecc-')) {
-      found(`ECC references in ${path.basename(f)}`);
-      console.log(`  \u2192 Edit ${f} and remove ECC-related entries`);
-    }
+    try {
+      const content = fs.readFileSync(f, 'utf8');
+      if (content.includes('everything-claude-code') || content.includes('ecc-')) {
+        found(`ECC references in ${path.basename(f)}`);
+        console.log(`  \u2192 Edit ${f} and remove ECC-related entries`);
+      }
+    } catch { /* unreadable file — skip */ }
   }
 }
 
@@ -60,11 +62,13 @@ function checkMcpServers() {
   for (const f of mcpFiles) {
     const fullPath = path.isAbsolute(f) ? f : path.join(process.cwd(), f);
     if (!fs.existsSync(fullPath)) continue;
-    const content = fs.readFileSync(fullPath, 'utf8');
-    if (/"exa"\s*:/.test(content) || content.includes('sequential-thinking') || content.includes('"memory"')) {
-      found(`Potentially ECC-installed MCP servers in ${f}`);
-      console.log('  \u2192 Review and remove servers you don\'t need (arc uses: GitHub, Context7, Playwright)');
-    }
+    try {
+      const content = fs.readFileSync(fullPath, 'utf8');
+      if (/"exa"\s*:/.test(content) || content.includes('sequential-thinking') || content.includes('"memory"')) {
+        found(`Potentially ECC-installed MCP servers in ${f}`);
+        console.log('  \u2192 Review and remove servers you don\'t need (arc uses: GitHub, Context7, Playwright)');
+      }
+    } catch { /* unreadable file — skip */ }
   }
 }
 
