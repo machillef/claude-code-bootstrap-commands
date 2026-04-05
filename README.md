@@ -18,6 +18,8 @@ Small tweak?         →  /quick
 Domain modeling?     →  /glossary
 Meta-maintenance?    →  /skill-health, /skill-improve
 Check upstream?      →  /upstream
+What did I learn?    →  /instinct-status
+Evolve instincts?    →  /evolve, /promote, /prune
 ```
 
 ## Getting Started

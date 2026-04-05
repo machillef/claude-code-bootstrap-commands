@@ -35,6 +35,10 @@ assumptions.
 | `/security` | Security audit of the codebase |
 | `/skill-health` | Audit structural health of installed skills |
 | `/skill-improve` | Iteratively improve a specific skill |
+| `/instinct-status` | Show learned instincts with confidence scores |
+| `/evolve` | Cluster related instincts into skills/gotchas |
+| `/promote` | Promote high-confidence project instincts to global |
+| `/prune` | Delete stale low-confidence instincts |
 
 ## Preferred Codex Roles
 

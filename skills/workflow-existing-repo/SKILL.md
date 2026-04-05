@@ -109,7 +109,9 @@ Write the Definition of Done into `docs/ai/<initiative>-scope-map.md` under a `#
 
 ## Step 3: Design Exploration
 
-For **medium** and **large** changes, invoke the `superpowers:brainstorming` skill before creating docs/ai/ files.
+**Design already exists?** If `docs/ai/<initiative>-design.md` was already created (e.g., from a prior brainstorming session or `/grill-me`), read it, confirm with the user that the design is still valid, and skip to Step 4. Do not re-brainstorm an approved design.
+
+For **medium** and **large** changes that need a new design, invoke the `superpowers:brainstorming` skill before creating docs/ai/ files.
 
 The skill will:
 - Load any existing docs/ai/ context (scope-map from Step 2, if written early)
