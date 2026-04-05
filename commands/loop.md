@@ -9,12 +9,12 @@ Accelerated execution mode: processes multiple slices continuously within a sing
 ## Parse Arguments
 
 Extract from `$ARGUMENTS`:
-- **Initiative name** (required)
+- **Initiative name** (optional — auto-detected if omitted)
 - **--passes N** (optional) — review passes after all slices complete (default: 0)
 - **--max-slices N** (optional) — safety limit on slices to process (default: all remaining)
 - **--converge** (optional flag) — passed through to review-loop in Phase 3. Enables convergence mode where reviewers re-dispatch after fixes until APPROVED (max 3 iterations per pass).
 
-If no initiative name is provided, stop: "Usage: `/loop <initiative> [--passes N] [--max-slices N]`"
+**Initiative resolution:** If no initiative name is provided, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature`.
 
 ## Prerequisites
 

@@ -10,10 +10,37 @@ Your first output line must be the message below. Print it before any file reads
 Continuing initiative. Loading state...
 ```
 
-If no initiative name is provided in $ARGUMENTS, print: `No initiative specified. Usage: /continue <initiative-name>` and stop.
+## Initiative Resolution
+
+If `$ARGUMENTS` provides an initiative name, use it directly.
+
+If `$ARGUMENTS` is empty or missing, auto-detect from `docs/ai/`:
+
+1. Scan for `docs/ai/*-status.md` files
+2. For each, read the file and check for active slices (In Progress, Not Started, or Needs Fix)
+3. Filter to only initiatives with at least one active slice
+
+**One active initiative found:** Use it automatically. Print: `Auto-detected initiative: <name>. Continuing...`
+
+**Multiple active initiatives found:** Present a numbered list and ask the user to pick:
+```
+Multiple active initiatives found:
+  1. auth-feature (Slice 3 of 5 — In Progress)
+  2. dark-mode (Slice 1 of 3 — Not Started)
+Which initiative? (number or name)
+```
+
+**No active initiatives found:** Print:
+```
+No active initiatives in docs/ai/. Start one with:
+  /new-feature <description>   — for existing code
+  /new-project <description>   — for greenfield
+```
+
+---
 
 Then use the `execution-loop` skill. Follow it exactly — all steps, all gates, all output formats.
 
 The skill handles: session start checklist → stale check → load state → select slice → scope → research → TDD → arc agent delegation → verify → debug if needed → re-assess → update docs → learning → stop.
 
-Interpret the argument as the initiative name, optionally with a specific constraint or priority.
+If the argument includes a constraint or priority (e.g., `/continue auth-feature — focus on the API layer`), pass it through to the execution-loop as the current priority.

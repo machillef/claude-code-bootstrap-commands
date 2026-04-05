@@ -21,8 +21,10 @@ Bugs were found after a slice passed automated verification. This command re-ope
 ## Parse Arguments
 
 Extract from the request:
-- **Initiative name** (required) — which initiative this belongs to
+- **Initiative name** (optional — auto-detected if omitted) — which initiative this belongs to
 - **Bug description** (required) — what the user observed (symptoms, steps to reproduce, expected vs actual)
+
+**Initiative resolution:** If no initiative name is provided, scan `docs/ai/*-status.md` for active initiatives. If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature`.
 - **Slice number** (optional) — defaults to the most recently completed slice
 - **--review-after** (optional flag) — run a review pass after all fixes are applied
 

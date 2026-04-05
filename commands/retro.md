@@ -6,6 +6,8 @@ description: Run a retrospective on a completed initiative. Extracts metrics, pa
 
 **Initiative:** $ARGUMENTS
 
+**Initiative resolution:** If no initiative name is provided, scan `docs/ai/*-status.md` for initiatives where all slices are Complete or Blocked (candidates for retro). If exactly one is found, use it. If multiple, list them and ask. If none, stop: "No completed initiatives found for retro."
+
 Analyze a completed (or abandoned) initiative to extract metrics and learnings that improve future work.
 
 ## Procedure
