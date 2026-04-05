@@ -12,9 +12,11 @@ Continuing initiative. Loading state...
 
 ## Initiative Resolution
 
-If `$ARGUMENTS` provides an initiative name, use it directly.
+**How to identify the initiative name:** The initiative name is the token in `$ARGUMENTS` that matches an existing `docs/ai/<token>-status.md` file. Check the first non-flag word against the filesystem. If it matches, use it. If no token matches any status file, treat the entire argument as a description/constraint and trigger auto-detection.
 
-If `$ARGUMENTS` is empty or missing, auto-detect from `docs/ai/`:
+If `$ARGUMENTS` provides a matching initiative name, use it directly.
+
+If no match is found or `$ARGUMENTS` is empty, auto-detect from `docs/ai/`:
 
 1. Scan for `docs/ai/*-status.md` files
 2. For each, read the file and check for active slices (In Progress, Not Started, or Needs Fix)

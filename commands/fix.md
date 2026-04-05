@@ -23,10 +23,12 @@ Bugs were found after a slice passed automated verification. This command re-ope
 Extract from the request:
 - **Initiative name** (optional — auto-detected if omitted) — which initiative this belongs to
 - **Bug description** (required) — what the user observed (symptoms, steps to reproduce, expected vs actual)
-
-**Initiative resolution:** If no initiative name is provided, scan `docs/ai/*-status.md` for active initiatives. If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature`.
 - **Slice number** (optional) — defaults to the most recently completed slice
 - **--review-after** (optional flag) — run a review pass after all fixes are applied
+
+**How to identify the initiative name:** The initiative name is a token that matches an existing `docs/ai/<token>-status.md` file. Check each non-flag word in $ARGUMENTS against the filesystem. If one matches, use it as the initiative name and treat the rest as the bug description. If none match, treat the entire argument as a bug description and trigger auto-detection.
+
+**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress, Not Started, or Needs Fix slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature` or `/new-project`.
 
 ## Procedure
 

@@ -34,7 +34,7 @@ console.log('\n=== LEARNING PIPELINE E2E TEST ===');
 console.log(`  Temp dir: ${arcBase}`);
 console.log(`  Project hash: ${fakeHash}\n`);
 
-// Step 1: Create fake observations (25 entries — above MIN_OBSERVATIONS threshold of 20)
+// Step 1: Create fake observations (23 entries — above MIN_OBSERVATIONS threshold of 20)
 console.log('Step 1: Create mock observations');
 const obsFile = path.join(projectDir, 'observations.jsonl');
 const observations = [];
@@ -155,7 +155,7 @@ check('Instinct 2 parsed: observations = 3', parsed2 && parsed2.observations ===
 console.log('\nStep 5: Test YAML escape round-trip');
 const dangerous = 'echo "hello world" && rm -rf /';
 const escaped = escapeYaml(dangerous);
-check('Escaped string has no raw quotes', !escaped.includes('"') || escaped.indexOf('"') === -1 || escaped.includes('\\"'));
+check('Escaped string matches expected', escaped === 'echo \\"hello world\\" && rm -rf /');
 const yamlDoc = `---\ntrigger: "${escaped}"\n---`;
 const roundTripped = parseInstinctFrontmatter(yamlDoc);
 check('Round-trip: parsed trigger is not null', roundTripped && roundTripped.trigger !== null);

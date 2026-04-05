@@ -14,7 +14,9 @@ Extract from `$ARGUMENTS`:
 - **--max-slices N** (optional) — safety limit on slices to process (default: all remaining)
 - **--converge** (optional flag) — passed through to review-loop in Phase 3. Enables convergence mode where reviewers re-dispatch after fixes until APPROVED (max 3 iterations per pass).
 
-**Initiative resolution:** If no initiative name is provided, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature`.
+**How to identify the initiative name:** The initiative name is the first non-flag token that matches an existing `docs/ai/<token>-status.md` file. If no token matches, trigger auto-detection.
+
+**Initiative resolution:** If no initiative name is identified, scan `docs/ai/*-status.md` for active initiatives (with In Progress or Not Started slices). If exactly one is found, use it automatically. If multiple are found, list them and ask the user to pick. If none found, stop with guidance to run `/new-feature` or `/new-project`.
 
 ## Prerequisites
 
