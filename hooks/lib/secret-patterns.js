@@ -54,7 +54,7 @@ const SECRET_PATTERNS = [
   // CLI password/token flags (common in bash commands)
   { pattern: /--password[= ]\S+/, label: 'CLI Password Flag' },
   { pattern: /--token[= ]\S+/, label: 'CLI Token Flag' },
-  { pattern: /-p[A-Za-z0-9!@#$%^&*]{6,}/, label: 'MySQL-style Password Flag' },
+  { pattern: /(?:^|\s)-p[A-Za-z0-9!@#$%^&*]{6,}/, label: 'MySQL-style Password Flag' },
 
   // Environment variable exports with secrets
   { pattern: /export\s+(PASSWORD|SECRET|TOKEN|API_KEY|APIKEY|AWS_SECRET)[= ]\S+/i, label: 'Environment Secret Export' },

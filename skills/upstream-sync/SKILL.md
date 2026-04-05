@@ -83,10 +83,16 @@ Present the report and wait for user input. The user decides:
 
 ### Step 6: Update manifest
 
-After user review, update `last_checked_sha` in `manifests/upstream-tracking.json` to the current HEAD of each checked repo.
+After user review, update `last_checked_sha` and `last_checked_date` in `manifests/upstream-tracking.json` to the current HEAD and today's date for each checked repo.
 
 ## Important
 
 - This skill is token-heavy by design (spawns sub-agents for deep inspection)
 - Only run when the user explicitly invokes `/upstream`
 - Never run automatically or suggest running automatically
+
+## Known Limitations
+
+- **Hook catch-22:** If upstream changes include fixes to arc's own hook patterns (e.g., secret detection regex), the old cached hooks may block committing the fix. In this case, tell the user to commit manually in a terminal outside Claude Code, then run `/plugin update arc@machillef-arc` to reload.
+- **Tilde expansion:** Manifest paths use `~/projects/...`. Expand `~` to the full home directory before using in shell commands.
+- **Version tracking:** The manifest tracks by git SHA, not by release version. To see what version a repo is at, check its package.json or plugin.json after fetching.

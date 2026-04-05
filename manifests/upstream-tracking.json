@@ -9,7 +9,8 @@
       "type": "plugin-dependency",
       "watch_paths": ["skills/", "hooks/", "agents/"],
       "ignore_paths": ["docs/", "tests/", "scripts/"],
-      "last_checked_sha": "HEAD",
+      "last_checked_sha": "b7a8f76985f1e93e75dd2f2a3b424dc731bd9d37",
+      "last_checked_date": "2026-04-05",
       "notes": "External plugin — do not absorb, track for updates"
     },
     {
@@ -31,7 +32,8 @@
         "skills/carrier-*", "skills/x-api/", "skills/crosspost/",
         "skills/investor-*", "skills/market-*", "skills/social-*"
       ],
-      "last_checked_sha": "HEAD",
+      "last_checked_sha": "5df943ed2bdfaf1297775066d84e1e1e0fc1d579",
+      "last_checked_date": "2026-04-05",
       "notes": "Agents and hooks absorbed into arc v2.0.0. Track for upstream improvements to absorbed assets."
     },
     {
@@ -44,7 +46,8 @@
         "agent/memory_manager.py", "agent/builtin_memory_provider.py"
       ],
       "ignore_paths": ["gateway/", "website/", "environments/", "plugins/"],
-      "last_checked_sha": "HEAD",
+      "last_checked_sha": "d932980c1a7d9b83b7dac7552824192d73fdd635",
+      "last_checked_date": "2026-04-05",
       "notes": "Instinct architecture inspiration. Track memory/skill management for learning system improvements."
     }
   ]
