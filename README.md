@@ -1,4 +1,4 @@
-# arc v2.2.0
+# arc v2.3.0
 
 Disciplined development workflows for Claude Code and Codex. One plugin for the full lifecycle: bootstrap, plan, build (TDD), review, ship, learn.
 
@@ -158,12 +158,24 @@ File set scales with scope:
 
 Runs automatically every session — no manual commands needed:
 
-1. **Observe** — Hooks capture tool calls with secret scrubbing
-2. **Analyze** — Session-end observer detects patterns
-3. **Create** — Atomic instincts with confidence scores (0.3–0.9)
-4. **Nudge** — High-confidence instincts injected into next session
+1. **Observe** — Hooks capture tool calls with double-layer secret scrubbing (25 patterns)
+2. **Analyze** — Session-end observer detects patterns (repeated tools 5+, error-recovery pairs)
+3. **Create** — Atomic instincts with confidence scores (0.3→0.9, bumped on re-observation)
+4. **Nudge** — High-confidence instincts + evolved gotchas injected into next session
 
-Data: `~/.claude/arc/projects/<hash>/` (per-project), `~/.claude/arc/instincts/global/` (cross-project).
+**All learning data stays outside the repo** (inspired by [Hermes](https://github.com/NousResearch/hermes-agent)):
+
+```
+~/.claude/arc/
+├── projects/<hash>/instincts/   ← per-project learned patterns
+├── projects/<hash>/learned/     ← project-specific learnings from /fix
+├── instincts/global/            ← promoted cross-project patterns
+└── evolved/gotchas/             ← evolved content from /evolve and /retro
+```
+
+For user preferences ("I prefer pnpm", "always use tabs"), use Claude Code's built-in `/memory` — arc's instinct system captures tool usage patterns, not conversational preferences.
+
+**Public repos:** Add `docs/ai/` to `.gitignore` if you don't want planning docs committed. Learning data is never in the repo regardless.
 
 Maintenance commands: `/instinct-status` (view learned instincts), `/evolve` (cluster into skills), `/promote` (project → global), `/prune` (remove stale).
 
@@ -174,8 +186,8 @@ skills/          7 workflow skills (shared across platforms)
 agents/          11 reviewers, resolvers, and specialists
 agent-prompts/   9 shared review rubrics
 commands/        18 slash commands
-hooks/           13 hooks (safety + operational + learning) + 2 shared libs
-learning/        Instinct config and templates
+hooks/           13 hooks (safety + operational + learning) + 3 shared libs
+learning/        Instinct templates
 manifests/       Upstream repo tracking
 references/      Claude Code ↔ Codex tool mapping
 scripts/         install.js, uninstall.js, ecc-removal-check.js
