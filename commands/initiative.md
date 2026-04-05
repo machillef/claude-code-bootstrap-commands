@@ -10,7 +10,7 @@ description: Bootstrap an existing-repository initiative. Triages size, discover
 - If the user provides an explicit name like "initiative: my-name", use it verbatim
 - State the derived name to the user before proceeding: "Initiative name: `<slug>`. Proceeding..."
 
-Use the `workflow-existing-repo` skill. Follow it exactly — all steps, all gates, all output formats.
+Invoke the `arc:workflow-existing-repo` skill (use the Skill tool with this exact name). Follow it exactly — all steps, all gates, all output formats.
 
 The skill handles: triage → tech stack → boundaries → design exploration → docs/ai/ → arc agent wiring → first slice → stop.
 

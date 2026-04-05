@@ -138,7 +138,7 @@ Validated: <exact commands run and pass/fail>
 
 ### 8. Review After Fixes (if --review-after)
 
-If `--review-after` was specified, invoke the `review-loop` skill after all fixes are verified:
+If `--review-after` was specified, invoke the `arc:review-loop` skill (use the Skill tool with this exact name) after all fixes are verified:
 
 - Initiative: `<initiative>`
 - Passes: 1 (single code-quality pass is sufficient post-fix)

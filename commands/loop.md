@@ -148,7 +148,7 @@ If a slice is Blocked (dependency not met), skip it:
 
 ## Phase 3: Review Passes (if --passes > 0)
 
-After all slices complete (or max-slices reached), invoke the `review-loop` skill:
+After all slices complete (or max-slices reached), invoke the `arc:review-loop` skill (use the Skill tool with this exact name):
 
 - Initiative: `<initiative>`
 - Passes: `<--passes value>`

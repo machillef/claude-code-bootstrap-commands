@@ -187,7 +187,7 @@ Reference bundled agents in `agents/` for language-specific review and build res
 | `kubernetes-reviewer` | Slice modifies Kubernetes manifests, Helm charts, or YAML configs |
 | `cpp-build-resolver` | C++ build fails (CMake, compilation, linker errors) |
 | `rust-build-resolver` | Rust build fails (cargo, borrow checker, dependency errors) |
-| `security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
+| `arc:security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
 
 For languages without a bundled reviewer (e.g., Go, Java), defer to `superpowers:requesting-code-review` for a language-agnostic review. If superpowers is not installed, review your own code using the standard review rubric (correctness, security, testing, maintainability).
 

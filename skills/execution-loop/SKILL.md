@@ -154,7 +154,7 @@ Check ALL tables below and invoke every matching agent — do not stop at the fi
 | `kubernetes-reviewer` | Slice modifies Kubernetes manifests, Helm charts, or YAML configs |
 | `cpp-build-resolver` | C++ build fails (CMake, compilation, linker errors) |
 | `rust-build-resolver` | Rust build fails (cargo, borrow checker, dependency errors) |
-| `security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
+| `arc:security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
 
 ### Subagent Dispatch (for complex slices)
 

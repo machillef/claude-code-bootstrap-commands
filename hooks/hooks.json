@@ -82,6 +82,12 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/learning/ambient-learning-nudge.js\"",
             "async": true,
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/learning/memory-loader.js\"",
+            "async": true,
+            "timeout": 5
           }
         ]
       },

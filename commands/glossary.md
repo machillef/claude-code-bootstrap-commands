@@ -4,6 +4,6 @@ description: Extract a DDD-style ubiquitous language glossary from the current c
 
 **Request:** $ARGUMENTS
 
-Use the `ubiquitous-language` skill. Follow it exactly.
+Invoke the `arc:ubiquitous-language` skill (use the Skill tool with this exact name). Follow it exactly.
 
 If arguments are provided, treat them as context about which domain areas to focus on.

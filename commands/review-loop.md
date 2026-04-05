@@ -4,7 +4,7 @@ description: Multi-pass code review with fresh subagent isolation per pass. Use 
 
 **Request:** $ARGUMENTS
 
-Use the `review-loop` skill. Follow it exactly — all steps, all gates, all output formats.
+Invoke the `arc:review-loop` skill (use the Skill tool with this exact name). Follow it exactly — all steps, all gates, all output formats.
 
 ## Parse Arguments
 

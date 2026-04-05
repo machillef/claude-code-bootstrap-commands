@@ -10,7 +10,7 @@ description: Bootstrap a brand new project with no existing code. Gathers requir
 - If the user provides an explicit name like "project: my-name", use it verbatim
 - State the derived name to the user before proceeding: "Initiative name: `<slug>`. Proceeding..."
 
-Use the `workflow-new-repo` skill. Follow it exactly — all steps, all gates, all output formats.
+Invoke the `arc:workflow-new-repo` skill (use the Skill tool with this exact name). Follow it exactly — all steps, all gates, all output formats.
 
 The skill handles: confirm greenfield → requirements → design exploration → stack decision (wait for user confirmation) → scaffold → docs/ai/ → arc agent wiring → stop.
 

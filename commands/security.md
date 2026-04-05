@@ -4,7 +4,7 @@ description: "Run a structured security audit on the current repository."
 
 **Request:** $ARGUMENTS
 
-Delegates to the `security-audit` skill.
+Delegates to the `arc:security-audit` skill.
 
 ## Parse Arguments
 
@@ -15,7 +15,7 @@ Delegates to the `security-audit` skill.
 ## Procedure
 
 1. Parse mode and scope from arguments
-2. Invoke the `security-audit` skill with the parsed mode and scope
+2. Invoke the `arc:security-audit` skill (use the Skill tool with this exact name) with the parsed mode and scope
 3. The skill runs Phases 0-4 and produces a structured report
 
 ## Integration

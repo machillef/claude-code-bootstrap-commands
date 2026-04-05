@@ -44,7 +44,7 @@ No active initiatives in docs/ai/. Start one with:
 
 ---
 
-Then use the `execution-loop` skill. Follow it exactly — all steps, all gates, all output formats.
+Then invoke the `arc:execution-loop` skill (use the Skill tool with this exact name). Follow it exactly — all steps, all gates, all output formats.
 
 The skill handles: session start checklist → stale check → load state → select slice → scope → research → TDD → arc agent delegation → verify → debug if needed → re-assess → update docs → learning → stop.
 

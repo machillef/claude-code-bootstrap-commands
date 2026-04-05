@@ -21,7 +21,7 @@ The execution phase after bootstrap is identical — `/continue` uses the same e
 
 ## Step 0: Triage
 
-Confirm this is actually a greenfield project. If the user already has code (even a scaffold, a fork, or a half-started project), use `workflow-existing-repo` instead.
+Confirm this is actually a greenfield project. If the user already has code (even a scaffold, a fork, or a half-started project), invoke the `arc:workflow-existing-repo` skill instead.
 
 **Name collision check:** If `docs/ai/<initiative>-status.md` already exists and contains active slices (Not Started, In Progress, or Needs Fix), warn the user: "An active initiative named `<initiative>` already exists. Use `/continue <initiative>` to resume it, or choose a different name." Do not overwrite active initiative docs.
 
@@ -206,7 +206,7 @@ Reference bundled agents in `agents/` for language-specific review and build res
 | `kubernetes-reviewer` | Slice modifies Kubernetes manifests, Helm charts, or YAML configs |
 | `cpp-build-resolver` | C++ build fails (CMake, compilation, linker errors) |
 | `rust-build-resolver` | Rust build fails (cargo, borrow checker, dependency errors) |
-| `security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
+| `arc:security-audit` skill | Slice touches auth, input validation, data persistence, secrets, or external calls |
 
 For languages without a bundled reviewer (e.g., Go, Java), defer to `superpowers:requesting-code-review` for a language-agnostic review. If superpowers is not installed, review your own code using the standard review rubric (correctness, security, testing, maintainability).
 
